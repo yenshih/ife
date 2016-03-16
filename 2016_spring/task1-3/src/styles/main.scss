@@ -1,0 +1,59 @@
+#container {
+    overflow: hidden;
+    _zoom: 1;
+    padding: 20px;
+    background: #013353;
+    @mixin border-style {
+        border: 2px solid #fff;
+        border-radius: 10px;
+    }
+    .intro-wrap {
+        width: 100%;
+        @media screen and (max-width: 540px) {
+            width: 408px;
+        }
+        .intro {
+            @include border-style;
+            float: left;
+            margin: 0 140px 0 220px;
+            font: 16px/1.5 OpenSans-Light, Tahoma, Helvetica, Arial, sans-serif;
+            color: #fff;
+        }
+    }
+    .team {
+        @include border-style;
+        float: left;
+        width: 196px;
+        margin-left: -100%;
+        @media screen and (max-width: 540px) {
+            margin-left: -468px;
+        }
+        img {
+            width: 80px;
+            height: 80px;
+        }
+        h1 {
+            float: right;
+            margin: 28px 6px 28px;
+            font: 24px/1 OpenSans-Light, Tahoma, Helvetica, Arial, sans-serif;
+            color: #fff;
+        }
+    }
+    .avatar {
+        @include border-style;
+        float: left;
+        width: 76px;
+        margin-left: -120px;
+        padding: 20px;
+        img {
+            display: block;
+            width: 80px;
+            height: 80px;
+            margin-top: 20px;
+            &:first-of-type {
+                margin-top: 0;
+            }
+            opacity: 0.7;
+        }
+    }
+}
