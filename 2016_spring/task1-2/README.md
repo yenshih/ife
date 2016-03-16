@@ -1,4 +1,4 @@
-[**task1-2**](yenshih.com/ife/2016_spring/task1-2/dist/index.html)
+[**task1-2**](http://yenshih.com/ife/2016_spring/task1-2/dist/index.html)
 
 # 任务二：零基础HTML及CSS编码（一）
 
