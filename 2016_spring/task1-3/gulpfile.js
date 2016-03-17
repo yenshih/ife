@@ -1,15 +1,15 @@
 var gulp = require("gulp"), 
     sass = require("gulp-ruby-sass"),
     autoprefixer = require("gulp-autoprefixer"),
-    concat = require("gulp-concat"),
-    htmlmin = require("gulp-htmlmin"),
     cleancss = require("gulp-clean-css"),
+    concat = require("gulp-concat"),
+    rename = require("gulp-rename"),
+    htmlmin = require("gulp-htmlmin"),
     imagemin = require("gulp-imagemin"),
     pngquant = require('imagemin-pngquant'),
     cache = require("gulp-cache"),
     clean = require("gulp-clean"),
-    livereload = require("gulp-livereload"),
-    rename = require("gulp-rename");
+    livereload = require("gulp-livereload");
 
 gulp.task("html", function() {
     return gulp.src("src/*.html")
