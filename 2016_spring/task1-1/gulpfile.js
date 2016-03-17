@@ -10,7 +10,7 @@ gulp.task("html", function() {
     return gulp.src("src/*.html")
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest("dist/"))
-})
+});
 
 gulp.task("images", function() { 
     return gulp.src("src/images/*.{png,jpg,gif,ico}")

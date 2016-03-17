@@ -44,6 +44,9 @@
         float: left;
         width: 76px;
         margin-left: -120px;
+        @media screen and (max-width: 540px) {
+        	margin-left: 0;
+        }
         padding: 20px;
         img {
             display: block;

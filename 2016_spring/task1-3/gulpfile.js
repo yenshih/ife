@@ -15,7 +15,7 @@ gulp.task("html", function() {
     return gulp.src("src/*.html")
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest("dist/"))
-})
+});
 
 gulp.task("styles", function() { 
     return sass("src/styles/*.scss", {style: "compressed"})

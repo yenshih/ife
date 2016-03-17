@@ -1,4 +1,4 @@
-[**task1-3**](http://yenshih.com/ife/2016_spring/task1-3/dist/index.html)
+[**task1-3 Demo**](http://yenshih.com/ife/2016_spring/task1-3/dist/index.html)
 
 # 任务三：三栏式布局
 
