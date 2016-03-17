@@ -1,0 +1,192 @@
+header {
+    width: 980px;
+}
+header #header-wrap {
+    width: 892px;
+    margin: 0 auto;
+}
+header #header-wrap div {
+    float: left;
+    width: 110px;
+    height: 61px;
+    background: #d45d5c;
+}
+header #header-wrap div .site {
+    color: #fff;
+    margin-left: 6px;
+}
+header #header-wrap .date {
+    float: right;
+    color: #d45d5c;
+}
+header #header-wrap p {
+    margin-top: 45px;
+    font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+}
+header hr {
+    width: 892px;
+    margin: 0 auto;
+    border-top: 2px solid #938e8c;
+}
+
+main {
+    width: 980%;
+}
+main .about {
+    overflow: hidden;
+    _zoom: 1;
+    width: 892px;
+    margin: 33px 44px;
+}
+main .about .about-content {
+    float: left;
+    width: 641px;
+}
+main .about .about-content figure {
+    position: relative;
+    height: 301px;
+}
+main .about .about-content figure div {
+    position: absolute;
+    top: 0;
+    width: 191px;
+    height: 301px;
+    opacity: .5;
+}
+main .about .about-content figure div:first-of-type {
+    left: 0;
+    background: #428c59;
+}
+main .about .about-content figure div:last-of-type {
+    right: 0;
+    background: #cc7680;
+}
+main .about .about-content article {
+    position: relative;
+    margin-top: 41px;
+}
+main .about .about-content article section {
+    float: left;
+}
+main .about .about-content article section:nth-of-type(1) {
+    width: 230px;
+}
+main .about .about-content article section:nth-of-type(1) h5 {
+    color: #418c59;
+}
+main .about .about-content article section:nth-of-type(2) {
+    width: 205px;
+    margin-left: 26px;
+}
+main .about .about-content article section:nth-of-type(2) h5 {
+    color: #d2994f;
+}
+main .about .about-content article section:nth-of-type(3) {
+    width: 130px;
+    margin-left: 26px;
+}
+main .about .about-content article section:nth-of-type(3) h5 {
+    color: #cc7680;
+}
+main .about .about-content article section:nth-of-type(3) p {
+    line-height: 1.8;
+}
+main .about .about-content article section h5 {
+    font: 700 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    text-decoration: underline;
+}
+main .about .about-content article section p {
+    margin-top: 12px;
+    font: 12px/1.4 "\5b8b\4f53", Tahoma, Helvetica, Arial, sans-serif;
+    color: #767777;
+}
+main .about .about-content article ul {
+    position: absolute;
+    top: 106px;
+    right: 48px;
+}
+main .about .about-content article ul li span {
+    font: 12px/1.8 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    opacity: .7;
+}
+main .about .about-content article ul li span:first-of-type {
+    color: #231815;
+}
+main .about .about-content article ul li span:last-of-type {
+    font-style: italic;
+    color: #cd4a48;
+}
+main .about aside {
+    float: left;
+    width: 203px;
+    margin-left: 48px;
+}
+main .about aside hr {
+    width: 203px;
+    margin-bottom: 10px;
+    border-top: 2px solid #cc8091;
+}
+main .about aside h4 {
+    margin-top: 5px;
+    font: small-caps 24px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    text-decoration: underline;
+    color: #000;
+}
+main .about aside p {
+    margin-top: 7px;
+    font: italic 12px/0.8 "\6977\4F53", Tahoma, Helvetica, Arial, sans-serif;
+    color: #676767;
+}
+main .about aside div {
+    margin-top: 33px;
+}
+main .about aside div span:nth-of-type(1) {
+    float: left;
+    margin-left: -28px;
+    font: italic 700 116px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    color: #75b86b;
+}
+main .about aside div span:nth-of-type(2) {
+    float: left;
+    margin: 11px 0 0 7px;
+    font: 55px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    color: #cc8091;
+}
+main .about aside div span:nth-of-type(3) {
+    float: left;
+    margin: 34px 0 0 7px;
+    font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    color: #cc8091;
+}
+main .about aside div span:nth-of-type(4) {
+    float: left;
+    margin-left: 6px;
+    font: 6px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+    color: #bbb;
+}
+main .intro article {
+    float: left;
+}
+main .intro aside {
+    float: left;
+}
+
+footer {
+    width: 980px;
+}
+footer hr {
+    width: 892px;
+    margin: 0 auto;
+    border-bottom: 1px solid #938e8c;
+}
+footer #footer-wrap {
+    width: 892px;
+    margin: 0 auto;
+}
+footer #footer-wrap .site {
+    float: right;
+    height: 61px;
+    margin-top: 5px;
+    font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+    color: #d45d5c;
+}
