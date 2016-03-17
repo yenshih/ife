@@ -23,25 +23,164 @@ header {
         }
     }
     hr {
-     	width: 892px;
-     	margin: 0 auto;
+        width: 892px; 
+        margin: 0 auto;
         border-top: 2px solid #938e8c;
-    }    
+    }
 }
 main {
-	.about {
-        
-	}
-	.intro{
-
-	}
+    width: 980%;
+    .about {
+    	overflow: hidden;
+    	_zoom: 1;
+        width: 892px;
+        margin: 33px 44px;
+        .about-content {
+            float: left;
+            width: 641px;
+            figure {
+                position: relative;
+                height: 301px;
+                div {
+                    position: absolute;
+                    top: 0;
+                    width: 191px;
+                    height: 301px;
+                    opacity: .5;
+                    &:first-of-type {
+                        left: 0;
+                        background: #428c59;
+                    }
+                    &:last-of-type {
+                        right: 0;
+                        background: #cc7680;
+                    }
+                }
+            }
+            article {
+                position: relative;
+                margin-top: 41px;
+                section {
+                    float: left;
+                    &:nth-of-type(1) {
+                        width: 230px;
+                        h5 {
+                            color: #418c59;
+                        }
+                    }
+                    &:nth-of-type(2) {
+                        width: 205px;
+                        margin-left: 26px;
+                        h5 {
+                            color: #d2994f;
+                        }
+                    }
+                    &:nth-of-type(3) {
+                        width: 130px;
+                        margin-left: 26px;
+                        h5 {
+                            color: #cc7680;
+                        }
+                        p {
+                            line-height: 1.8;
+                        }
+                    }
+                    h5 {
+                        font: 700 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        text-decoration: underline;
+                    }
+                    p {
+                        margin-top: 12px;
+                        font: 12px/1.4 "\5b8b\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #767777;
+                    }
+                }
+                ul {
+                    position: absolute;
+                    top: 106px;
+                    right: 48px;
+                    li {
+                        span {
+                            font: 12px/1.8 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                            opacity: .7;
+                            &:first-of-type {
+                                color: #231815;
+                            }
+                            &:last-of-type {
+                                font-style: italic;
+                                color: #cd4a48;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        aside {
+            float: left;
+            width: 203px;
+            margin-left: 48px;
+            hr {
+            	width: 203px;
+            	margin-bottom: 10px;
+            	border-top: 2px solid #cc8091;
+            }
+            h4 {
+            	margin-top: 5px;
+            	font: small-caps 24px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+            	text-decoration: underline;
+            	color: #000;
+            }
+            p {
+            	margin-top: 7px;
+            	font: italic 12px/0.8 "\6977\4F53", Tahoma, Helvetica, Arial, sans-serif;
+            	color: #676767;
+            }
+            div {
+            	margin-top: 33px;
+            	span {
+            		&:nth-of-type(1) {
+            			float: left;
+            			margin-left: -28px;
+            			font: italic 700 116px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+            			color: #75b86b;
+            		}
+            		&:nth-of-type(2) {
+            			float: left;
+            			margin: 11px 0 0 7px;
+            			font: 55px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+            			color: #cc8091;
+            		}
+            		&:nth-of-type(3) {
+            			float: left;
+            			margin: 34px 0 0 7px;
+            			font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+            			color: #cc8091;
+            		}
+            		&:nth-of-type(4) {
+            			float: left;
+            			margin-left: 6px;
+            			font: 6px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+            			color: #bbb;
+            		}
+            	}
+            }
+        }
+    }
+    .intro{
+        article {
+        	float: left;
+        }
+        aside {
+        	float: left;
+        }
+    }
 }
 
 footer {
     width: 980px;
     hr {
-    	width: 892px;
-    	margin: 0 auto;
+        width: 892px;
+        margin: 0 auto;
         border-bottom: 1px solid #938e8c;
     }
     #footer-wrap {
