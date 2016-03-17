@@ -1,0 +1,25 @@
+{
+  "name": "task1-5",
+  "version": "1.0.0",
+  "description": "ife_2016_spring task1-5",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yenshih/ife.git"
+  },
+  "keywords": [
+    "ife",
+    "2016",
+    "spring",
+    "task1-5"
+  ],
+  "author": "yenshih",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yenshih/ife/issues"
+  },
+  "homepage": "https://github.com/yenshih/ife#readme"
+}

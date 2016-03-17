@@ -1,0 +1,235 @@
+header {
+    width: 100%;
+    height: 60px;
+    background: #333;
+    img {
+        float: left;
+        width: 60px;
+        height: 60px;
+        margin-left: 20px;
+    }
+    ul {
+        float: right;
+        margin: 24px 20px 24px;
+        li {
+            display: inline-block;
+            margin-left: 12px;
+            a {
+                color: #fff;
+                &:visited {
+                    color: #939496;
+                }
+            }
+        }
+    }
+}
+@mixin box-style {
+    margin: 20px 0 20px;
+    padding: 40px 20px 20px;
+    box-shadow: 2px 2px 5px #848484;
+    background: #fff;
+}
+@mixin font-style($size, $line-height) {
+    font: #{$size}/#{$line-height} Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+@mixin form-style($item, $pos, $gap, $n) {
+    @for $i from 1 to $n + 1 {
+        #{$item}:nth-of-type(#{$i}) {
+            left: $pos;
+        }
+        $pos: $pos + $gap;
+    }
+}
+#container {
+    overflow: hidden;
+    _zoom: 1;
+    background: #dedede;
+    #main-wrap {
+        width: 100%;
+        main {
+            float: left;
+            margin-right: 385px;
+            padding: 20px;
+            article {
+                @include box-style;
+                &:first-of-type {
+                    margin-top: 0;
+                }
+                &:last-of-type {
+                    margin-bottom: 0;
+                    > :last-child {
+                        margin-bottom: 0;
+                    }
+                }
+                > * {
+                    margin-bottom: 20px;
+                }
+                h3 {
+                    color: #6b6267;
+                }
+                h4 {
+                    color: #866463;
+                }
+                p {
+                    @include font-style(14px, 1.5);
+                    text-indent: 2em;
+                }
+                img {
+                    display: block;
+                    width: 300px;
+                    height: 300px;
+                }
+                ul {
+                    margin-left: 20px;
+                }
+                ol {
+                    margin-left: 40px;
+                    li {
+                        list-style: decimal outside;
+                    }
+                }
+                li {
+                    @include font-style(14px, 1.5);
+                }
+                table {
+                    width: 100%;
+                    border: 1px solid #dbdbdb;
+                    border-collapse: collapse;
+                    th, td {
+                        &:last-child {
+                            width: 200px;
+                        }
+                        height: 12px;
+                        padding: 6px;
+                        text-align: left;
+                    }
+                    th {
+                        border: 1px solid #a1a1a1;
+                        color: #fff;
+                        background: #333;
+                    }
+                    td {
+                        border: 1px solid #dbdbdb;
+                        color: #000;
+                        background: #fff;
+                    }
+                    tfoot td {
+                        border: 1px solid #cecece;
+                        font-weight: bold;
+                        background: #cecece;
+                    }
+                }
+            }
+            .gallery {
+                @include box-style;
+                #figure-wrap{
+                    padding-top: 25px;
+                    figure {
+                        display: inline-block;
+                        width: 100px;
+                        height: 124px;
+                        margin: 10px;
+                        padding: 12px 10px 10px;
+                        border: 1px solid #cdcdcd;
+                        figcaption {
+                            @include font-style(12px, 1);
+                            text-align: center;
+                        }
+                        img {
+                            display: block;
+                            width: 100px;
+                            height: 100px;
+                            margin-top: 12px;
+                        }
+                    }
+                }    
+            }
+        }        
+    }
+    aside {
+        @include box-style;
+        float: left;
+        width: 325px;
+        margin-left: -385px;
+        @media screen and (max-width: 750px) {
+            margin-left: 0;
+        }
+        padding: 20px;
+        h1 {
+            padding: 10px;
+            border-left: 3px solid #ccc;
+        }
+        form {
+            div {
+                position: relative;
+                label, input, p, span, select, textarea {
+                    position: absolute;
+                }
+                label:first-child,
+                span {
+                    right: 225px;
+                }
+                height: 24px;
+                input[type="email"],
+                input[type="password"] {
+                    height: 18px;
+                }
+                margin-top: 12px;
+            }
+            .email,
+            .password-confirm {
+                height: 48px;
+                margin-bottom: 24px;
+            }
+            .description {
+                height: 100px;
+            }
+            .email,
+            .password,
+            .password-confirm,
+            .city,
+            .description {
+                @include form-style(input, 110px, 0, 1);
+                @include form-style(p, 110px, 0, 1);
+                @include form-style(select, 110px, 0, 1);
+                @include form-style(textarea, 110px, 0, 1);
+                textarea {
+                    width: 210px;
+                    height: 100px;
+                    @include font-style(16px, 1);
+                }
+                p {
+                    bottom: 0;
+                    color: #a1a1a1;
+                }
+            }
+            .sex {
+                @include form-style(input, 110px, 40px, 2);
+                @include form-style(label, 126px, 40px, 2);
+            }
+            .hobby {
+                @include form-style(input, 110px, 50px, 3);
+                @include form-style(label, 126px, 50px, 3);
+            }
+            #submit {
+                @include font-style(16px, 1);
+                width: 100%;
+                height: 40px;
+                margin-top: 12px;
+                border-radius: 10px;
+                color: #fff;
+                background: #3355d0;
+            }
+        }
+    }
+}
+footer {
+    width: 100%;
+    height: 12px;
+    padding: 22px 0 36px;
+    background: #000;
+    p {
+        text-align: center;
+        color: #fff;
+    }
+}
