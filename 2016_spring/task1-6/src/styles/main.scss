@@ -18,28 +18,41 @@ header {
             color: #d45d5c;
         }
         p {
-        	margin-top: 45px;
+            margin-top: 45px;
             font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
         }
     }
     hr {
-        width: 892px;
-        margin: 0 auto;
+     	width: 892px;
+     	margin: 0 auto;
         border-top: 2px solid #938e8c;
-    }
+    }    
+}
+main {
+	.about {
+        
+	}
+	.intro{
+
+	}
 }
 
 footer {
-	width: 980px;
-	hr {
-		width: 892px;
-		margin: 0 auto;
-		border-bottom: 1px solid #938e8c;
-	}
-	.site {
-		float: right;
-		margin-top: 5px;
-		font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
-		color: #d45d5c;
-	}
+    width: 980px;
+    hr {
+    	width: 892px;
+    	margin: 0 auto;
+        border-bottom: 1px solid #938e8c;
+    }
+    #footer-wrap {
+        width: 892px;
+        margin: 0 auto;
+        .site {
+            float: right;
+            height: 61px;
+            margin-top: 5px;
+            font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+            color: #d45d5c;
+        }
+    }
 }
