@@ -1,0 +1,25 @@
+#container {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+	width: 400px;
+	height: 200px;
+	margin: -100px 0 0 -200px;
+	background: #ccc;
+	div {
+		position: absolute;
+		width: 100px;
+		height: 100px;
+        border-radius: 50px;
+        background: #fc0;
+        &:first-child {
+        	top: -50px;
+        	left: -50px;
+        }
+        &:last-child {
+        	right: -50px;
+        	bottom: -50px;
+        }
+	}
+}
