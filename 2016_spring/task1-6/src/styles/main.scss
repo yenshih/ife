@@ -2,11 +2,12 @@ header {
     width: 980px;
     #header-wrap {
         width: 892px;
+        height: 61px;
         margin: 0 auto;
         div {
             float: left;
             width: 110px;
-            height: 61px;
+            height: 100%;
             background: #d45d5c;
             .site {
                 color: #fff;
@@ -29,10 +30,10 @@ header {
     }
 }
 main {
-    width: 980%;
+    width: 980px;
     .about {
-    	overflow: hidden;
-    	_zoom: 1;
+        overflow: hidden;
+        _zoom: 1;
         width: 892px;
         margin: 33px 44px;
         .about-content {
@@ -46,14 +47,13 @@ main {
                     top: 0;
                     width: 191px;
                     height: 301px;
-                    opacity: .5;
                     &:first-of-type {
                         left: 0;
-                        background: #428c59;
+                        background: rgba(66, 140, 89, .5);
                     }
                     &:last-of-type {
                         right: 0;
-                        background: #cc7680;
+                        background: rgba(204, 118, 128, .5);
                     }
                 }
             }
@@ -64,28 +64,28 @@ main {
                     float: left;
                     &:nth-of-type(1) {
                         width: 230px;
-                        h5 {
+                        h6 {
                             color: #418c59;
                         }
                     }
                     &:nth-of-type(2) {
                         width: 205px;
                         margin-left: 26px;
-                        h5 {
+                        h6 {
                             color: #d2994f;
                         }
                     }
                     &:nth-of-type(3) {
                         width: 130px;
                         margin-left: 26px;
-                        h5 {
+                        h6 {
                             color: #cc7680;
                         }
                         p {
                             line-height: 1.8;
                         }
                     }
-                    h5 {
+                    h6 {
                         font: 700 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
                         text-decoration: underline;
                     }
@@ -102,13 +102,12 @@ main {
                     li {
                         span {
                             font: 12px/1.8 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-                            opacity: .7;
                             &:first-of-type {
-                                color: #231815;
+                                color: rgba(35, 24, 21, .7);
                             }
                             &:last-of-type {
                                 font-style: italic;
-                                color: #cd4a48;
+                                color: rgba(205, 74, 72, .7);
                             }
                         }
                     }
@@ -120,62 +119,209 @@ main {
             width: 203px;
             margin-left: 48px;
             hr {
-            	width: 203px;
-            	margin-bottom: 10px;
-            	border-top: 2px solid #cc8091;
+                width: 203px;
+                margin-bottom: 10px;
+                border-top: 2px solid #cc8091;
             }
             h4 {
-            	margin-top: 5px;
-            	font: small-caps 24px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-            	text-decoration: underline;
-            	color: #000;
+                margin-top: 5px;
+                font: small-caps 24px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                text-decoration: underline;
+                color: #000;
             }
             p {
-            	margin-top: 7px;
-            	font: italic 12px/0.8 "\6977\4F53", Tahoma, Helvetica, Arial, sans-serif;
-            	color: #676767;
+                margin-top: 7px;
+                font: italic 12px/0.8 "\6977\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                color: #676767;
             }
             div {
-            	margin-top: 33px;
-            	span {
-            		&:nth-of-type(1) {
-            			float: left;
-            			margin-left: -28px;
-            			font: italic 700 116px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-            			color: #75b86b;
-            		}
-            		&:nth-of-type(2) {
-            			float: left;
-            			margin: 11px 0 0 7px;
-            			font: 55px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-            			color: #cc8091;
-            		}
-            		&:nth-of-type(3) {
-            			float: left;
-            			margin: 34px 0 0 7px;
-            			font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-            			color: #cc8091;
-            		}
-            		&:nth-of-type(4) {
-            			float: left;
-            			margin-left: 6px;
-            			font: 6px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
-            			color: #bbb;
-            		}
-            	}
+                margin-top: 33px;
+                span {
+                    &:nth-of-type(1) {
+                        float: left;
+                        margin-left: -28px;
+                        font: italic 700 116px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #75b86b;
+                    }
+                    &:nth-of-type(2) {
+                        float: left;
+                        margin: 11px 0 0 7px;
+                        font: 55px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #cc8091;
+                    }
+                    &:nth-of-type(3) {
+                        float: left;
+                        margin: 34px 0 0 7px;
+                        font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #cc8091;
+                    }
+                    &:nth-of-type(4) {
+                        float: left;
+                        font: 6px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #bbb;
+                    }
+                }
             }
         }
     }
     .intro{
+        overflow: hidden;
+        _zoom: 1;
         article {
-        	float: left;
+            float: left;
+            width: 415px;
+            margin: 33px 0 40px 44px;
+            h1 {
+                font: 700 42px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                color: #11456b;
+                span {
+                    font: italic 700 72px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                    color: #f5e327;
+                }
+            }
+            h2 {
+                font: 700 33px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                color: #11456b;
+            }
+            hr {
+                width: 415px;
+                margin: 16px 0 24px;
+                border-top: 2px solid #10456b;
+            }
+            p {
+                font: 12px/1.4 "\5b8b\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                text-indent: 2em;
+                &:first-of-type {
+                    text-indent: 0;
+                }
+                color: #767777;
+                span {
+                    float: left;
+                    margin: -3px 8px 8px -5px;
+                    font: 70px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                    color: #f5e327;
+                }
+                img {
+                    float: right;
+                    margin: 20px 7px 10px 24px;
+                }
+            }
         }
         aside {
-        	float: left;
+            float: left;
+            width: 458px;
+            margin: 44px 0 40px 20px;
+            figure {
+                position: relative;
+                figcaption {
+                    position: absolute;
+                    top: 196px;
+                    width: 458px;
+                    height: 61px;
+                    background: rgba(17, 17, 17, .5);
+                    h3 {
+                        display: inline-block;
+                        height: 24px;
+                        margin: 8px 10px 8px 38px;
+                        padding: 9px 0 9px 13px;
+                        border-left: 3px solid #72b16a;
+                        font: 26px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #fff;
+                    }
+                    h6 {
+                        display: inline-block;
+                        font: italic 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #72b16a;
+                    }
+                }
+            }
+            .list {
+                position: relative;
+                width: 405px;
+                height: 286px;
+                margin-top: 30px;
+                padding: 32px 22px 0 32px; 
+                background: #eeedd6;
+                ul {
+                    li {
+                        margin-bottom: 25px;
+                        font: 16px/1 "\5b8b\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                        color: #5a5b5b;
+                        div {
+                            display: inline-block;
+                            width: 0;
+                            height: 0;
+                            margin-right: 7px;
+                            border: 5px solid transparent;
+                            border-bottom: 8px solid #11456c;
+                        }
+                        span {
+                            font: italic 14px/1 "\5b8b\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                        }
+                    }
+                }
+                > div {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 260px;
+                    height: 160px;
+                    background: #d45d5c;
+                    div {
+                        position: absolute;
+                        color: #fff;
+                        &:first-of-type {
+                            top: 27px;
+                            left: 0;
+                            padding: 0 10px 0 10px;
+                            font: 106px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, sans-serif;
+                        }
+                        &:last-of-type {
+                            top: 37px;
+                            right: 0;
+                            width: 160px;
+                            height: 70px;
+                            padding: 10px;
+                            border-left: 2px solid #fff;
+                            h5 {
+                                font: italic 21px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                            }
+                            p {
+                                margin-top: 7px;
+                                font: 12px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                            }
+                        }
+                    }
+                }
+                > p {
+                    position: absolute;
+                    top: 158px;
+                    right: 0;
+                    width: 163px;
+                    height: 110px;
+                    padding: 10px 20px 40px 16px;
+                    font: italic 14px/1.2 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                    text-indent: 3em;
+                    color: #5a5b5b;
+                    span {
+                        position: absolute;
+                        font: 72px/1 "\9ed1\4f53", Tahoma, Helvetica, Arial, sans-serif;
+                        text-indent: 0;
+                        color: #d45d5c;
+                        &:first-of-type {
+                            top: 0;
+                            left: -20px;
+                        }
+                        &:last-of-type {
+                            right: -20px;
+                            bottom: 0;
+                        }
+                    }
+                }
+            }
         }
     }
 }
-
 footer {
     width: 980px;
     hr {
@@ -185,6 +331,7 @@ footer {
     }
     #footer-wrap {
         width: 892px;
+        height: 61px;
         margin: 0 auto;
         .site {
             float: right;

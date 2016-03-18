@@ -13,14 +13,14 @@ var gulp = require("gulp"),
 
 gulp.task("html", function() {
     return gulp.src("src/*.html")
-        //.pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest("dist/"))
 });
 
 gulp.task("styles", function() { 
-    return sass("src/styles/*.scss", {style: "expanded"})
+    return sass("src/styles/*.scss", {style: "compressed"})
         .pipe(autoprefixer("last 2 version", "safari 5", "ie 8", "ie 9", "opera 12.1", "ios 6", "android 4"))
-        .pipe(gulp.dest("dist/styles"))
+        .pipe(cleancss())
         .pipe(concat("main.css"))
         .pipe(rename({ suffix: ".min" }))
         .pipe(gulp.dest("dist/styles"))
