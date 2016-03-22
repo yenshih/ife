@@ -1,0 +1,21 @@
+main {
+    margin: 50px;
+    label, input, div {
+        font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    }
+    input {
+        height: 35px;
+        border: 1px solid #cbcbcb;
+        border-radius: 3px;
+        &[type="button"] {
+            width: 75px;
+            border: 1px solid #357ebd;
+            background: #428bca;
+            color: #fff;
+            &:hover {
+                cursor: pointer;
+                background: #3276b1;
+            }
+        }
+    }
+}
