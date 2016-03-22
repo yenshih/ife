@@ -1,0 +1,16 @@
+main {
+    margin: 50px;
+    label, input, div {
+        font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    }
+    input {
+    	height: 35px;
+    	border: 1px solid #cbcbcb;
+    	border-radius: 3px;
+    	&[type="button"] {
+            width: 75px;
+            text-align: center;
+    		background: #fff;
+    	}
+    }
+}
