@@ -1,0 +1,96 @@
+#container {
+    margin: 50px;
+    form {
+        fieldset {
+            position: relative;
+            width: 320px;
+            height: 34px;
+            margin: 5px;
+            text-align: right;
+            label,
+            input,
+            #hint {
+                font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+            }
+            input {
+                width: 200px;
+                height: 32px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+            #add-btn {
+                position: absolute;
+                right: 118px;
+                width: 85px;
+                border: 1px solid #357ebd;
+                border-radius: 3px;
+                color: #fff;
+                background: #428bca;
+                &:hover {
+                    cursor: pointer;
+                    background: #3276b1;
+                }
+            }
+            #hint {
+                display: none;
+                position: relative;
+                top: 4px;
+                color: #a94442;
+            }
+            &.correct {
+                color: #3c763d;
+                input {
+                    border: 1px solid #3c763d;
+                }
+            }
+            &.error {
+                color: #a94442;
+                input {
+                    border: 1px solid #a94442;
+                }
+            }
+        }
+    }
+    table {
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        thead, tbody {
+            tr > th, td {
+                width: 120px;
+                padding: 8px;
+                border: 1px solid #ddd;
+                font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+                text-align: center;
+            }
+        }
+        thead > tr > th {
+            border-bottom: 2px solid #ddd;
+            font-weight: 700;
+        }
+        tbody > tr {
+            &.exceed > td {
+                font-weight: 700;
+                color: #d43f3a;
+            }
+            &:hover {
+                background: #f5f5f5;
+            }
+            td {
+                color: #3c763d;
+                input {
+                    width: 85px;
+                    height: 30px;
+                    border: 1px solid #357ebd;
+                    border-radius: 3px;
+                    font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+                    color: #fff;
+                    background: #428bca;
+                    &:hover {
+                        cursor: pointer;
+                        background: #3276b1;
+                    }
+                }
+            }
+        }
+    }
+}
