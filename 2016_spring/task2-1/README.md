@@ -1,3 +1,5 @@
+[**task2-1 Demo**](http://yenshih.com/ife/2016_spring/task2-1/dist/index.html)
+
 # 任务十三：零基础JavaScript编码（一）
 
 ## 任务目的
