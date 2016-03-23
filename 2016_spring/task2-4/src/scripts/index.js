@@ -11,7 +11,7 @@ EventUtil.addEventHandler(window, "load", () => {
         checkInput = (event) => {
             event = EventUtil.getEvent(event);
             let target = EventUtil.getTarget(event);
-            switch(target) {
+            switch (target) {
                 case cityInput:
                     city = target.value.trim();
                     target.parentNode.className = /^[A-Za-z\u4e00-\u9fa5]+$/g.test(city) ? "correct" : "error";
