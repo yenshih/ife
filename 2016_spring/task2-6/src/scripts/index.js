@@ -44,7 +44,7 @@ EventUtil.addEventHandler(window, "load", () => {
         let target = EventUtil.getTarget(event);
         Array.from(dequeDisplay.children).forEach((element, index) => {
             if (target === element) {
-            	console.log(`delete ${element}`);
+            	console.log(`delete ${deque[index]}`);
                 deque.splice(index, 1);
                 dequeDisplay.innerHTML = RenderDeque.render(deque);
                 return;
