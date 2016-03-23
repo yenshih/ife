@@ -14,17 +14,17 @@ EventUtil.addEventHandler(window, "load", () => {
     EventUtil.addEventHandler(unshift, "click", () => {
         let val = text.value.trim();
         if (isNumber(val)) {
-        	deque.unshift(val);
-        	dequeDisplay.innerHTML = RenderDeque.render(deque);
+            deque.unshift(val);
+            dequeDisplay.innerHTML = RenderDeque.render(deque);
             console.log(`unshift ${val}`);
         }
     });
     EventUtil.addEventHandler(push, "click", () => {
-    	let val = text.value.trim();
+        let val = text.value.trim();
         if (isNumber(val)) {
-        	deque.push(val);
-        	dequeDisplay.innerHTML = RenderDeque.render(deque);
-        	console.log(`push ${val}`)
+            deque.push(val);
+            dequeDisplay.innerHTML = RenderDeque.render(deque);
+            console.log(`push ${val}`)
         }
     });
     EventUtil.addEventHandler(shift, "click", () => {
@@ -35,7 +35,7 @@ EventUtil.addEventHandler(window, "load", () => {
     });
     EventUtil.addEventHandler(pop, "click", () => {
         if (deque.length) {
-        	console.log(`pop ${deque.pop()}`);
+            console.log(`pop ${deque.pop()}`);
             dequeDisplay.innerHTML = RenderDeque.render(deque);
         }
     });
@@ -44,7 +44,7 @@ EventUtil.addEventHandler(window, "load", () => {
         let target = EventUtil.getTarget(event);
         Array.from(dequeDisplay.children).forEach((element, index) => {
             if (target === element) {
-            	console.log(`delete ${deque[index]}`);
+                console.log(`delete ${deque[index]}`);
                 deque.splice(index, 1);
                 dequeDisplay.innerHTML = RenderDeque.render(deque);
                 return;

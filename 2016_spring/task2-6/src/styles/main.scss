@@ -1,22 +1,22 @@
 #container {
-	margin: 50px;
+    margin: 50px;
     font: 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     form > fieldset {
-    	width: 375px;
-    	margin-top: 5px;
+        width: 375px;
+        margin-top: 5px;
         input[type="text"] {
             width: 200px;
             height: 40px;
             border: 1px solid #ccc;
             border-radius: 3px;
             &:focus {
-            	height: 42px;
+                height: 42px;
                 border: #66afe9;
                 box-shadow: 0 4px 2px #d6eaf9;
             }
         }
         input[type="button"] {
-        	float: right;
+            float: right;
             width: 80px;
             height: 40px;
             margin-left: 5px;
@@ -26,7 +26,7 @@
             color: #fff;
             background: #4a8bca;
             &:hover {
-            	cursor: pointer;
+                cursor: pointer;
                 background: #3276b1;
             }
         }
@@ -47,7 +47,7 @@
             background: #47a447;
         }
         & ~ div {
-        	margin-left: 10px;
+            margin-left: 10px;
         }
     }
 }
