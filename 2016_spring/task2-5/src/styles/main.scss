@@ -1,0 +1,61 @@
+#container {
+    form {
+        margin: 30px;
+        fieldset {
+            margin-top: 10px;
+            legend,
+            label,
+            input,
+            select {
+                font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+            }
+            label {
+                display: inline-block;
+                margin-left: 20px;
+                cursor: pointer;
+                input {
+                    cursor: pointer;
+                }
+            }
+            input, select {
+                margin-top: 5px;
+            }
+        }
+    }
+    #aqi-chart {
+        width: 100%;
+        div {
+            display: inline-block;
+            &:hover {
+            	opacity: .8;
+            }
+        }
+        .level1 {
+            background: #0289c3;
+        }
+        .level2 {
+            background: #76c0ef;
+        }
+        .level3 {
+            background: #74c141;
+        }
+        .level4 {
+            background: #f09837;
+        }
+        .level5 {
+            background: #ff4401;
+        }
+        .level6 {
+            background: #af0303;
+        }
+        .day {
+            width: 10px;
+        }
+        .week {
+            width: 20px;
+        }
+        .month {
+            width: 40px;
+        }
+    }
+}
