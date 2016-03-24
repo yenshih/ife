@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1">
+    <title>task2-8</title>
+    <link rel="stylesheet" href="styles/main.min.css">
+</head>
+<body>
+    <div id="container">
+        <form action="post">
+            <fieldset>
+                <textarea name="text-input" placeholder="请输入要添加的文本"></textarea>
+            </fieldset>
+            <fieldset>
+                <input type="button" name="unshift" value="unshift">
+                <input type="button" name="push" value="push">
+            </fieldset>
+            <fieldset>
+                <input type="button" name="shift" value="shift">
+                <input type="button" name="pop" value="pop">
+            </fieldset>
+            <fieldset>
+                <input type="text" name="search-input" placeholder="请输入要查询的文本">
+                <input type="button" name="search-btn" value="search">
+            </fieldset>
+        </form>
+        <div id="deque"></div>
+    </div>
+    <script src="scripts/bundle.min.js"></script>
+</body>
+</html>

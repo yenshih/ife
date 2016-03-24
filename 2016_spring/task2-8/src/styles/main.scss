@@ -1,0 +1,80 @@
+#container {
+    margin: 50px;
+    font: 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    form {
+        position: relative;
+        fieldset {
+            &:nth-child(2) {
+                position: absolute;
+                top: 0;
+                left: 212px;
+            }
+            &:nth-child(3) {
+                position: absolute;
+                top: 45px;
+                left: 212px;
+            }
+            &:nth-child(4) {
+                margin-top: 5px;
+                input[type="button"] {
+                    margin-left: 5px;
+                }
+            }
+            @mixin text-style($height) {
+                width: 200px;
+                height: $height;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                &:focus {
+                    width: 202px;
+                    height: $height + 2;
+                    border: #66afe9;
+                    box-shadow: 0 4px 2px #d6eaf9;
+                }
+            }
+            textarea {
+                @include text-style(80px);
+            }
+            input {
+                @include text-style(40px);
+            }
+            input[type="button"] {
+                width: 80px;
+                height: 40px;
+                border: 1px solid #357ebd;
+                border-radius: 3px;
+                text-align: center;
+                color: #fff;
+                background: #4a8bca;
+                &:hover {
+                    cursor: pointer;
+                    background: #3276b1;
+                }
+            }
+        }
+    }
+    #deque {
+        margin-top: 10px;
+        div {
+            width: 200px;
+            margin-top: 5px;
+            padding: 12px 0;
+            border: 1px solid #4cae4c;
+            border-radius: 3px;
+            text-align: center;
+            color: #fff;
+            background: #5cb85c;
+            &:hover {
+                cursor: pointer;
+                background: #47a447;
+            }
+            &.match {
+                border: 1px solid #d43f3a;
+                background: #d9534f;
+                &:hover {
+                    background: #d2322d;
+                }
+            }
+        }
+    }
+}
