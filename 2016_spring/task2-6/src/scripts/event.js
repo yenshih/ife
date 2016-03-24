@@ -1,5 +1,5 @@
 const EventUtil = {
-    addEventHandler(element, type, handler) {
+    addHandler(element, type, handler) {
         if (element.addEventListener) {
             element.addEventListener(type, handler, false);
         }

@@ -1,4 +1,4 @@
-const addEventHandler = (element, type, handler) => {
+const addHandler = (element, type, handler) => {
     if (element.addEventListener) {
         element.addEventListener(type, handler, false);
     }
@@ -10,9 +10,9 @@ const addEventHandler = (element, type, handler) => {
     }
 }
 
-addEventHandler(window, "load", () => {
+addHandler(window, "load", () => {
     let button = document.getElementById("aqi-button");
-    addEventHandler(button, "click", () => {
+    addHandler(button, "click", () => {
         let val = document.getElementById("aqi").value.trim(), display = document.getElementById("aqi-display");
         if (/^\d+$/.test(val)) {
             display.innerHTML = val;

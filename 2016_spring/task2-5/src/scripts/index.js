@@ -3,7 +3,7 @@ import EventUtil from "./event";
 import RenderChart from "./render";
 import { aqiSrcData } from "./random";
 
-EventUtil.addEventHandler(window, "load", () => {
+EventUtil.addHandler(window, "load", () => {
     let timeGra = document.getElementById("time-gra"),
         citySelect = document.getElementById("city-select"),
         graRadios = Array.from(document.forms[0].elements["gra"]),
@@ -11,7 +11,7 @@ EventUtil.addEventHandler(window, "load", () => {
     for (let key of aqiSrcData.keys()) {
         citySelect.add(new Option(key), undefined);
     }
-    EventUtil.addEventHandler(timeGra, "click", (event) => {
+    EventUtil.addHandler(timeGra, "click", (event) => {
         event = EventUtil.getEvent(event);
         let target = EventUtil.getTarget(event);
         graRadios.forEach((element) => {
@@ -21,7 +21,7 @@ EventUtil.addEventHandler(window, "load", () => {
             }
         });
     });
-    EventUtil.addEventHandler(citySelect, "change", () => {
+    EventUtil.addHandler(citySelect, "change", () => {
         graRadios.forEach((element) => {
             if (element.checked) {
                 RenderChart.render(element.value, cityOptions[citySelect.selectedIndex].value);

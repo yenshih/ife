@@ -1,6 +1,6 @@
 import "babel-polyfill";
 
-const addEventHandler = (element, type, handler) => {
+const addHandler = (element, type, handler) => {
     if (element.addEventListener) {
         element.addEventListener(type, handler, false);
     }
@@ -12,7 +12,7 @@ const addEventHandler = (element, type, handler) => {
     }
 }
 
-addEventHandler(window, "load", () => {
+addHandler(window, "load", () => {
     const aqiData = {
         "\u5317\u4eac": 90,
         "\u4e0a\u6d77": 50,

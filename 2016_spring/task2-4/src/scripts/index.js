@@ -1,7 +1,7 @@
 import "babel-polyfill";
 import EventUtil from "./event";
 
-EventUtil.addEventHandler(window, "load", () => {
+EventUtil.addHandler(window, "load", () => {
     let addBtn = document.getElementById("add-btn"),
         tbody = document.getElementById("tbody"),
         cityInput = document.getElementById("city-input"),
@@ -25,9 +25,9 @@ EventUtil.addEventHandler(window, "load", () => {
                 hint.style.display = "none";
             }
         };
-    EventUtil.addEventHandler(cityInput, "blur", checkInput);
-    EventUtil.addEventHandler(aqiInput, "blur", checkInput);
-    EventUtil.addEventHandler(addBtn, "click", () => {
+    EventUtil.addHandler(cityInput, "blur", checkInput);
+    EventUtil.addHandler(aqiInput, "blur", checkInput);
+    EventUtil.addHandler(addBtn, "click", () => {
         if (cityInput.parentNode.className === "correct" && aqiInput.parentNode.className === "correct") {
             let row = `<tr><td>${city}</td><td>${Number(aqi)}</td><td><input type="button" value="\u5220\u9664"></tr>`;
             tbody.innerHTML += row;
@@ -39,7 +39,7 @@ EventUtil.addEventHandler(window, "load", () => {
             hint.style.display = "inline";
         }
     });
-    EventUtil.addEventHandler(tbody, "click", (event) => {
+    EventUtil.addHandler(tbody, "click", (event) => {
         event = EventUtil.getEvent(event);
         let target = EventUtil.getTarget(event);
         Array.from(tbody.rows).forEach((element, index) => {
