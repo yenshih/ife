@@ -14,17 +14,23 @@ EventUtil.addEventHandler(window, "load", () => {
     EventUtil.addEventHandler(unshift, "click", () => {
         let val = text.value.trim();
         if (isNumber(val)) {
-            deque.unshift(val);
+            deque.unshift(Number(val));
             dequeDisplay.innerHTML = RenderDeque.render(deque);
             console.log(`unshift ${val}`);
+        }
+        else {
+            console.log("NaN");
         }
     });
     EventUtil.addEventHandler(push, "click", () => {
         let val = text.value.trim();
         if (isNumber(val)) {
-            deque.push(val);
+            deque.push(Number(val));
             dequeDisplay.innerHTML = RenderDeque.render(deque);
             console.log(`push ${val}`)
+        }
+        else {
+            console.log("NaN");
         }
     });
     EventUtil.addEventHandler(shift, "click", () => {

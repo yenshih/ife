@@ -18,7 +18,7 @@ EventUtil.addEventHandler(window, "load", () => {
                     break;
                 case aqiInput:
                     aqi = target.value.trim();
-                    target.parentNode.className = /^\d+$/g.test(aqi) ? "correct" : "error";
+                    target.parentNode.className = /^\+?\d+$/g.test(aqi) ? "correct" : "error";
                     break;
             }
             if (cityInput.parentNode.className === "correct" && aqiInput.parentNode.className === "correct") {
@@ -29,7 +29,7 @@ EventUtil.addEventHandler(window, "load", () => {
     EventUtil.addEventHandler(aqiInput, "blur", checkInput);
     EventUtil.addEventHandler(addBtn, "click", () => {
         if (cityInput.parentNode.className === "correct" && aqiInput.parentNode.className === "correct") {
-            let row = `<tr><td>${city}</td><td>${aqi}</td><td><input type="button" value="\u5220\u9664"></tr>`;
+            let row = `<tr><td>${city}</td><td>${Number(aqi)}</td><td><input type="button" value="\u5220\u9664"></tr>`;
             tbody.innerHTML += row;
             if (aqi >= 60) {
                 tbody.lastChild.className = "exceed";
