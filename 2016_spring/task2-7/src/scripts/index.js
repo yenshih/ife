@@ -5,8 +5,7 @@ import SortDisplay from "./sort";
 
 EventUtil.addHandler(window, "load", () => {
     const isNumber = (val) => /^[+-]?\d+(?:\.\d+)?$/g.test(val);
-    let container = document.getElementById("container"),
-        form = document.forms[0],
+    let form = document.forms[0],
         text = form.elements["input-num"],
         unshiftBtn = form.elements["unshift"],
         pushBtn = form.elements["push"],
