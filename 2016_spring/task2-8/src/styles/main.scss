@@ -28,6 +28,7 @@
                 height: $height;
                 border: 1px solid #ccc;
                 border-radius: 3px;
+                font: inherit;
                 &:focus {
                     width: 202px;
                     height: $height + 2;
