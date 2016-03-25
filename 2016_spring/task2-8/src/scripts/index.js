@@ -18,19 +18,19 @@ EventUtil.addHandler(window, "load", () => {
             let target = EventUtil.getTarget(event);
             if (target === unshiftBtn || target === pushBtn) {
                 contents = text.value.trim().split(/[\n\s\u3000,\uff0c\u3001\u003b\uff1b]+/g);
-                if (contents[0]) {
-                    switch (target) {
-                        case unshiftBtn: contents.forEach((element) => {
+                switch (target) {
+                    case unshiftBtn: contents.forEach((element) =>
+                        if (element) {
                             deque.unshift(element);
                             dequeState.unshift("");
                         }); break;
-                        case pushBtn: contents.forEach((element) => {
+                    case pushBtn: contents.forEach((element) =>
+                        if (element) {
                             deque.push(element);
                             dequeState.push("");
                         }); break;
-                    }
-                    dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
                 }
+                dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
                 text.value = "";
             }
             else if (target === shiftBtn || target === popBtn) {
