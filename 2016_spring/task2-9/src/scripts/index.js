@@ -29,7 +29,7 @@ EventUtil.addHandler(window, "load", () => {
         event = EventUtil.getEvent(event);
         let keyCode = event.keyCode;
         if (keyCode === 13 || keyCode === 32 || keyCode === 188) {
-            tags.add(keyCode === 13 ? tagInput.value.trim() : tagInput.value.slice(0, -1).trim());
+            tags.add(keyCode === 188 ? tagInput.value.slice(0, -1).trim() : tagInput.value.trim());
             tagInput.value = "";
             RenderList.render(tagDisplay, tags);
         }
