@@ -1,0 +1,73 @@
+#container {
+    margin: 50px;
+    font: 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    #tag-display, #hobby-display {
+        margin-top: 5px;
+        div {
+            display: inline-block;
+            width: 80px;
+            padding: 12px 0;
+            border: 1px solid #4cae4c;
+            border-radius: 3px;
+            font: inherit;
+            text-align: center;
+            color: #fff;
+            background: #5cb85c;
+            transition: width 1s, border 1s;
+            &:hover {
+                cursor: pointer;
+                background: #47a447;
+                transition: background 1s;
+            }
+            span {
+                display: none;
+            }
+        }
+    }
+    #tag-display > div:hover {
+        width: 115px;
+        border: 1px solid #ac2925;
+        background: #d2322d;
+        span {
+            display: inline;
+        }
+    }
+    fieldset {
+        margin-top: 5px;
+        @mixin text-style($height) {
+            width: 200px;
+            height: $height;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font: inherit;
+            &:focus {
+                width: 202px;
+                height: $height + 2;
+                border: #66afe9;
+                box-shadow: 0 4px 2px #d6eaf9;
+            }
+        }
+        textarea {
+            @include text-style(83px);
+        }
+        input[type="text"] {
+            @include text-style(40px);
+        }
+        input[type="button"] {
+            display: block;
+            width: 200px;
+            height: 40px;
+            margin-top: 5px;
+            border: 1px solid #357ebd;
+            border-radius: 3px;
+            font: inherit;
+            text-align: center;
+            color: #fff;
+            background: #4a8bca;
+            &:hover {
+                cursor: pointer;
+                background: #3276b1;
+            }
+        }
+    }
+}
