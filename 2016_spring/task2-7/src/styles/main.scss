@@ -3,6 +3,7 @@
     font: 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     form > fieldset {
         width: 380px;
+        height: 42px;
         margin-top: 5px;
         input[type="text"] {
             width: 200px;
@@ -21,6 +22,7 @@
             width: 80px;
             height: 40px;
             margin-left: 5px;
+            padding: 1px 0;
             border: 1px solid #357ebd;
             border-radius: 3px;
             text-align: center;

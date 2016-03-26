@@ -14,51 +14,43 @@ EventUtil.addHandler(window, "load", () => {
         randomBtn = form.elements["random"],
         sortBtn = form.elements["sort"],
         dequeDisplay = document.getElementById("deque"),
-        deque = [], dequeState = new Array(60).fill(""),
+        deque = {
+            data: [],
+            state: new Array(60).fill("")
+        },
         formEvent = (event) => {
             event = EventUtil.getEvent(event);
             let target = EventUtil.getTarget(event);
             if (target === unshiftBtn || target === pushBtn) {
                 let val = text.value.trim();
-                if (isNumber(val)) {
-                    if (deque.length < 60 && val >= 10 && val <= 100) {
-                        switch (target) {
-                            case unshiftBtn: deque.unshift(Number(val)); console.log(`unshift ${val}`); break;
-                            case pushBtn: deque.push(Number(val)); console.log(`push ${val}`); break;
-                        }
-                        dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
+                if (isNumber(val) && deque.data.length < 60 && val >= 10 && val <= 100) {
+                    switch (target) {
+                        case unshiftBtn: deque.data.unshift(Number(val)); break;
+                        case pushBtn: deque.data.push(Number(val)); break;
                     }
-                    else {
-                        console.log("overflow");
-                    }
-                }
-                else {
-                    console.log("NaN");
+                    dequeDisplay.innerHTML = RenderDeque.render(deque);
                 }
             }
             else if (target === shiftBtn || target === popBtn) {
-                if (deque.length) {
+                if (deque.data.length) {
                     switch (target) {
-                        case shiftBtn: console.log(`shift ${deque.shift()}`); break;
-                        case popBtn: console.log(`pop ${deque.pop()}`); break;
+                        case shiftBtn: deque.data.shift(); break;
+                        case popBtn: deque.data.pop(); break;
                     }
-                    dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
-                }
-                else {
-                    console.log("overflow");
+                    dequeDisplay.innerHTML = RenderDeque.render(deque);
                 }
             }
             else if (target === randomBtn) {
-                deque = [];
+                deque.data = [];
                 for (let i = 0; i < 60; i++) {
-                    deque.push(Math.round(10 + Math.random() * 90));
+                    deque.data.push(Math.round(10 + Math.random() * 90));
                 }
-                dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
+                dequeDisplay.innerHTML = RenderDeque.render(deque);
             }
             else if (target === sortBtn) {
                 EventUtil.removeHandler(form, "click", formEvent);
                 EventUtil.removeHandler(dequeDisplay, "click", dequeEvent);
-                let sort = SortDisplay.sort(0, deque.length - 1, deque, dequeState),
+                let sort = SortDisplay.sort(0, deque.data.length - 1, deque),
                     interval = setInterval(() => {
                         let sortState = sort.next();
                         if (!sortState.done) {
@@ -77,9 +69,8 @@ EventUtil.addHandler(window, "load", () => {
             let target = EventUtil.getTarget(event);
             Array.from(dequeDisplay.children).forEach((element, index) => {
                 if (target === element) {
-                    console.log(`delete ${deque[index]}`);
-                    deque.splice(index, 1);
-                    dequeDisplay.innerHTML = RenderDeque.render(deque, dequeState);
+                    deque.data.splice(index, 1);
+                    dequeDisplay.innerHTML = RenderDeque.render(deque);
                     return;
                 }
             });

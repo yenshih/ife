@@ -1,7 +1,7 @@
 const RenderDeque = {
-    render(deque, dequeState) {
+    render(deque) {
         let dequeDOM = "";
-        deque.forEach((element, index) => dequeDOM += `<div title="${element}" class="${dequeState[index]}" style="height: ${element * 5}px;"></div>`);
+        deque.data.forEach((element, index) => dequeDOM += `<div title="${element}" class="${deque.state[index]}" style="height: ${element * 5}px;"></div>`);
         return dequeDOM;
     }
 };
