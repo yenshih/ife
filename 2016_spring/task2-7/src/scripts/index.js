@@ -51,17 +51,18 @@ EventUtil.addHandler(window, "load", () => {
                 EventUtil.removeHandler(form, "click", formEvent);
                 EventUtil.removeHandler(dequeDisplay, "click", dequeEvent);
                 let sort = SortDisplay.sort(0, deque.data.length - 1, deque),
-                    interval = setInterval(() => {
+                    nextState = () => {
                         let sortState = sort.next();
                         if (!sortState.done) {
                             dequeDisplay.innerHTML = sortState.value;
+                            setTimeout(nextState, 200);
                         }
                         else {
-                            clearInterval(interval);
                             EventUtil.addHandler(form, "click", formEvent);
                             EventUtil.addHandler(dequeDisplay, "click", dequeEvent);
                         }
-                    }, 200);
+                    };
+                nextState();
             }
         },
         dequeEvent = (event) => {
