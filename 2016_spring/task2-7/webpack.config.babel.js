@@ -1,13 +1,13 @@
 export default {
     entry: {
-        index: "./src/scripts/index.js"
+        index: "./src/scripts/index.jsx"
     },
     output: {
         filename: "bundle.js"
     },  
     module: {
         loaders: [{
-            test: /\.js$/,
+            test: /\.jsx?$/,
             loader: "babel"
         }]
     }
