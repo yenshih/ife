@@ -2,6 +2,14 @@ import "babel-polyfill";
 import EventUtil from "./event";
 import RenderDeque from "./render";
 import SortDisplay from "./sort";
+import delay from "./delay";
+
+class Element {
+    constructor(value, state) {
+        this.value = value;
+        this.state = state;
+    }
+}
 
 EventUtil.addHandler(window, "load", () => {
     const isNumber = (val) => /^[+-]?\d+(?:\.\d+)?$/g.test(val);
@@ -14,50 +22,52 @@ EventUtil.addHandler(window, "load", () => {
         randomBtn = form.elements["random"],
         sortBtn = form.elements["sort"],
         dequeDisplay = document.getElementById("deque"),
-        deque = {
-            data: [],
-            state: new Array(60).fill("")
-        },
+        deque = Array(60).fill(new Element(10, "")),
         formEvent = (event) => {
             event = EventUtil.getEvent(event);
             let target = EventUtil.getTarget(event);
             if (target === unshiftBtn || target === pushBtn) {
                 let val = text.value.trim();
-                if (isNumber(val) && deque.data.length < 60 && val >= 10 && val <= 100) {
+                if (isNumber(val) && deque.length < 60 && val >= 10 && val <= 100) {
                     switch (target) {
-                        case unshiftBtn: deque.data.unshift(Number(val)); break;
-                        case pushBtn: deque.data.push(Number(val)); break;
+                        case unshiftBtn: deque.unshift(new Element(Number(val)), ""); break;
+                        case pushBtn: deque.push(new Element(Number(val), "")); break;
                     }
                     dequeDisplay.innerHTML = RenderDeque.render(deque);
                 }
             }
             else if (target === shiftBtn || target === popBtn) {
-                if (deque.data.length) {
+                if (deque.length) {
                     switch (target) {
-                        case shiftBtn: deque.data.shift(); break;
-                        case popBtn: deque.data.pop(); break;
+                        case shiftBtn: deque.shift(); break;
+                        case popBtn: deque.pop(); break;
                     }
                     dequeDisplay.innerHTML = RenderDeque.render(deque);
                 }
             }
             else if (target === randomBtn) {
-                deque.data = [];
+                deque = [];
                 for (let i = 0; i < 60; i++) {
-                    deque.data.push(Math.round(10 + Math.random() * 90));
+                    deque.push(new Element(Math.round(10 + Math.random() * 90), ""));
                 }
                 dequeDisplay.innerHTML = RenderDeque.render(deque);
             }
             else if (target === sortBtn) {
                 EventUtil.removeHandler(form, "click", formEvent);
                 EventUtil.removeHandler(dequeDisplay, "click", dequeEvent);
-                let sort = SortDisplay.sort(0, deque.data.length - 1, deque),
-                    nextState = () => {
-                        let sortState = sort.next();
-                        if (!sortState.done) {
-                            dequeDisplay.innerHTML = sortState.value;
-                            setTimeout(nextState, 200);
-                        }
-                        else {
+                let sort = SortDisplay.sort(deque, 0, deque.length - 1, (x, y) => x.value - y.value),
+                    nextState = async () => {
+                        let sortStep = sort.next();
+                        if (!sortStep.done) {
+                            let [step, ...indexs] = sortStep.value;
+                            procedure(deque, step, indexs);
+
+                            let sortState = RenderDeque.render(deque);
+                            dequeDisplay.innerHTML = sortState;
+                            await delay(50);
+                            nextState();
+                            // setTimeout(nextState, 200);
+                        } else {
                             EventUtil.addHandler(form, "click", formEvent);
                             EventUtil.addHandler(dequeDisplay, "click", dequeEvent);
                         }
@@ -70,7 +80,7 @@ EventUtil.addHandler(window, "load", () => {
             let target = EventUtil.getTarget(event);
             Array.from(dequeDisplay.children).forEach((element, index) => {
                 if (target === element) {
-                    deque.data.splice(index, 1);
+                    deque.splice(index, 1);
                     dequeDisplay.innerHTML = RenderDeque.render(deque);
                     return;
                 }
@@ -79,3 +89,40 @@ EventUtil.addHandler(window, "load", () => {
     EventUtil.addHandler(form, "click", formEvent);
     EventUtil.addHandler(dequeDisplay, "click", dequeEvent);
 });
+
+const ClassUtil = {
+    addClass(className, newClassName) {
+        return className + " " + newClassName;
+    },
+    removeClass(className, oldClassName) {
+        let pattern = new RegExp("(?:^|\\s*)" + oldClassName);
+        return className.replace(pattern, "");
+    }
+}
+
+function procedure (deque, step, indexs) {
+    switch (step) {
+        case "iterate":
+        case "swap":
+            deque.forEach((element, index) => {
+                if (indexs.includes(index))
+                    element.state = ClassUtil.addClass(element.state, step);
+                else {
+                    element.state = ClassUtil.removeClass(element.state, "iterate");
+                    element.state = ClassUtil.removeClass(element.state, "swap");
+                }
+            })
+            break;
+        case "mid":
+            deque.forEach((element, index) => {
+                if (indexs.includes(index))
+                    element.state = ClassUtil.addClass(element.state, step);
+                else
+                    element.state = ClassUtil.removeClass(element.state, step);
+            })
+            break;
+        case "end":
+            deque.forEach(element => element.state = "");
+    }
+}
+

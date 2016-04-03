@@ -1,8 +1,8 @@
 const RenderDeque = {
     render(deque) {
-        let dequeDOM = "";
-        deque.data.forEach((element, index) => dequeDOM += `<div title="${element}" class="${deque.state[index]}" style="height: ${element * 5}px;"></div>`);
-        return dequeDOM;
+        let list = deque
+            .map(_ => `<div title="${_.value}" class="${_.state}" style="height: ${_.value * 5}px;"></div>`);
+        return String.prototype.concat.call(...list);
     }
 };
 
