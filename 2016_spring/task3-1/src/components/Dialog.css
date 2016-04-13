@@ -1,0 +1,112 @@
+@keyframes fade-in {
+    from {
+        background: rgba(0, 0, 0, 0);
+    }
+    to {
+        background: rgba(0, 0, 0, .5);
+    }
+}
+@keyframes fade-out {
+    from {
+        background: rgba(0, 0, 0, .5);
+    }
+    to {
+        background: rgba(0, 0, 0, 0);
+    }
+}
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+}
+.appear {
+    animation: fade-in .5s;
+}
+.disappear {
+    animation: fade-out .5s;
+}
+@keyframes zoom-in {
+    from {
+        top: 200px;
+        left: 350px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 300px;
+        opacity: 1;
+    }
+}
+@keyframes zoom-out {
+    from {
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 300px;
+        opacity: 1;
+    }
+    to {
+        top: 200px;
+        left: 350px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+}
+.dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 300px;
+    margin: -151px 0 0 -301px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 1;
+}
+.enter {
+    animation: zoom-in .5s;
+}
+.leave {
+    animation: zoom-out .5s;
+}
+.title {
+    padding: 16px;
+    font: 20px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    border-bottom: 1px solid #eee;
+}
+.hint {
+    margin: 16px;
+    font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+.btn {
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    border: 1px solid #357ebd;
+    border-radius: 3px;
+    font: 16px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    text-align: center;
+    color: #fff;
+    background: #4a8bca;
+}
+.btn:hover {
+    cursor: pointer;
+    background: #3276b1;
+}
+.confirm {
+    right: 104px;
+    bottom: 16px;
+}
+.cancel {
+    right: 16px;
+    bottom: 16px;
+}

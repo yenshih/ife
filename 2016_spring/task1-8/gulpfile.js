@@ -5,9 +5,6 @@ var gulp = require("gulp"),
     concat = require("gulp-concat"),
     rename = require("gulp-rename"),
     htmlmin = require("gulp-htmlmin"),
-    imagemin = require("gulp-imagemin"),
-    pngquant = require('imagemin-pngquant'),
-    cache = require("gulp-cache"),
     clean = require("gulp-clean"),
     livereload = require("gulp-livereload");
 
@@ -28,29 +25,17 @@ gulp.task("styles", function() {
         .pipe(livereload());
 });
 
-gulp.task("images", function() {
-    return gulp.src("src/images/*.{png,jpg,gif,ico}")
-        .pipe(cache(imagemin({
-            progressive: true,
-            svgoPlugins: [{ removeViewBox: false }, { cleanupIDs: false }],
-            use: [pngquant()]
-        })))
-        .pipe(gulp.dest("dist/images"))
-        .pipe(livereload());
-});
-
 gulp.task("clean", function() {
     return gulp.src(["dist/", "dist/styles", "dist/images"], { read: false })
         .pipe(clean());
 });
 
 gulp.task("default", ["clean"], function() {
-    gulp.start("html", "styles", "images");
+    gulp.start("html", "styles");
 });
 
 gulp.task("watch", function() {
     livereload.listen();
     gulp.watch("src/*.html", ["html"]);
     gulp.watch("src/styles/*.scss", ["styles"]);
-    gulp.watch("src/images/*.{png,jpg,gif,ico}", ["images"]);
 });
