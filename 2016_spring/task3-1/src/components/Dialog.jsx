@@ -22,6 +22,7 @@ class Dialog extends Component {
         const { hideDialog, initDialog } = this.props;
         hideDialog();
         setTimeout(() => initDialog(), 500);
+        document.body.style["overflow-y"] = "scroll";
     }
     render() {
         const { enter, visible, leave, title, hint, confirm, cancel } = this.props;

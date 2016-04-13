@@ -30,8 +30,8 @@
 }
 @keyframes zoom-in {
     from {
-        top: 200px;
-        left: 350px;
+        top: 50px;
+        left: 50px;
         width: 0;
         height: 0;
         opacity: 0;
@@ -53,8 +53,8 @@
         opacity: 1;
     }
     to {
-        top: 200px;
-        left: 350px;
+        top: 50px;
+        left: 50px;
         width: 0;
         height: 0;
         opacity: 0;
@@ -66,9 +66,9 @@
     left: 50%;
     width: 600px;
     height: 300px;
-    margin: -151px 0 0 -301px;
     border: 1px solid #999;
     border-radius: 5px;
+    transform: translate(-50%, -50%);
     background: #fff;
     opacity: 1;
 }
