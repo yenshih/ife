@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Dialog from "../components/Dialog";
 import DialogActions from "../actions/dialog";
-import styles from "./App.css"
+import styles from "./App.css";
 import "../reset.css";
 
 class App extends Component {
