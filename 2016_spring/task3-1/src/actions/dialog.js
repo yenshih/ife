@@ -5,10 +5,10 @@ const DialogActions = {
         return { type: types.ALERT_DIALOG }
     },
     hideDialog() {
-    	return { type: types.HIDE_DIALOG }
+        return { type: types.HIDE_DIALOG }
     },
     initDialog() {
-    	return { type: types.INIT_DIALOG }
+        return { type: types.INIT_DIALOG }
     }
 };
 
