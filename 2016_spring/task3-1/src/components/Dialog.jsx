@@ -24,8 +24,14 @@ class Dialog extends Component {
         this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
     handleClick() {
-        this.props.hideDialog();
+        const { visible, hideDialog, initDialog } = this.props;
+        hideDialog();
         document.body.style["overflow-y"] = "scroll";
+        setTimeout(() => {
+            if (visible) {
+                initDialog();
+            }
+        }, 516);
     }
     handleAnimationEnd(event) {
         if (event.animationName.includes("zoom-out")) {
