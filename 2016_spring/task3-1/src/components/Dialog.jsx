@@ -12,7 +12,11 @@ class Dialog extends Component {
         title: PropTypes.string.isRequired,
         hint: PropTypes.string.isRequired,
         confirm: PropTypes.string.isRequired,
-        cancel: PropTypes.string.isRequired
+        cancel: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+        height: PropTypes.number.isRequired,
+        srcTop: PropTypes.number.isRequired,
+        srcLeft: PropTypes.number.isRequired
     }
     constructor(props) {
         super(props);
@@ -22,6 +26,7 @@ class Dialog extends Component {
     handleClick() {
         this.props.hideDialog();
         document.body.style["overflow-y"] = "scroll";
+        console.log()
     }
     handleAnimationEnd(event) {
         if (event.animationName.includes("zoom-out")) {
@@ -29,20 +34,38 @@ class Dialog extends Component {
         }
     }
     render() {
-        const { enter, visible, leave, title, hint, confirm, cancel } = this.props;
+        const {
+            enter, visible, leave,
+            title, hint, confirm, cancel,
+            width, height, srcTop, srcLeft
+        } = this.props;
+        const [top, left] = [window.innerHeight / 2 - srcTop, window.innerWidth / 2 - srcLeft];
         return (
             <div className={styles["wrap"]}>
-                <div className={classNames({
-                    [styles.mask]: true,
-                    [styles.appear]: enter,
-                    [styles.disappear]: leave
-                })} onClick={this.handleClick}>
+                <div
+                    className={classNames({
+                        [styles.mask]: true,
+                        [styles.appear]: enter,
+                        [styles.disappear]: leave
+                    })}
+                    onClick={this.handleClick}
+                >
                 </div>
-                <div className={classNames({
-                    [styles.dialog]: true,
-                    [styles.enter]: enter,
-                    [styles.leave]: leave
-                })} onAnimationEnd={this.handleAnimationEnd}>
+                <div
+                    style={{
+                        width: width,
+                        height: height,
+                        top: srcTop,
+                        left: srcLeft,
+                        transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
+                    }}
+                    className={classNames({
+                        [styles.dialog]: true,
+                        [styles.enter]: enter,
+                        [styles.leave]: leave
+                    })}
+                    onAnimationEnd={this.handleAnimationEnd}
+                >
                     <h3 className={styles.title}>{title}</h3>
                     <p className={styles.hint}>{hint}</p>
                     <input

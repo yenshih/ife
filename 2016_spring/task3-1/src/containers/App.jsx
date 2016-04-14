@@ -30,6 +30,10 @@ class App extends Component {
                     hint="this is a dialog"
                     confirm="confirm"
                     cancel="cancel"
+                    width={600}
+                    height={300}
+                    srcTop={50}
+                    srcLeft={50}
                 />
             );
         }
