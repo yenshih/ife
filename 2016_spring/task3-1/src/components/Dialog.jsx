@@ -17,12 +17,16 @@ class Dialog extends Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
+        this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
     handleClick() {
-        const { hideDialog, initDialog } = this.props;
-        hideDialog();
-        setTimeout(() => initDialog(), 490);
+        this.props.hideDialog();
         document.body.style["overflow-y"] = "scroll";
+    }
+    handleAnimationEnd(event) {
+        if (event.animationName.includes("zoom-out")) {
+            this.props.initDialog();
+        }
     }
     render() {
         const { enter, visible, leave, title, hint, confirm, cancel } = this.props;
@@ -38,7 +42,7 @@ class Dialog extends Component {
                     [styles.dialog]: true,
                     [styles.enter]: enter,
                     [styles.leave]: leave
-                })}>
+                })} onAnimationEnd={this.handleAnimationEnd}>
                     <h3 className={styles.title}>{title}</h3>
                     <p className={styles.hint}>{hint}</p>
                     <input
