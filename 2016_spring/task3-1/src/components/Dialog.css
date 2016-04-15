@@ -30,7 +30,7 @@
 }
 @keyframes zoom-in {
     from {
-        transform: scale(.05, .05);
+        transform: scale3d(.05, .05, 1);
         opacity: 0;
     }
     to {
@@ -42,7 +42,7 @@
         opacity: 1;
     }
     to {
-        transform: scale(.05, .05);
+        transform: scale3d(.05, .05, 1);
         opacity: 0;
     }
 }

@@ -28,7 +28,7 @@ class App extends Component {
     renderDialog(dialog, actions) {
         if (dialog.visible) {
             const { displayDialog, hideDialog, initDialog } = actions;
-            const { top, left } = this.refs.btn.getBoundingClientRect();
+            const [top, left] = [50, 50];
             return (
                 <Dialog
                     {...dialog}
