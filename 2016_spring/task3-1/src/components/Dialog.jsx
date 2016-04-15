@@ -50,7 +50,6 @@ class Dialog extends Component {
         } = this.props;
         const [top, left] = [window.innerHeight / 2 - srcTop, window.innerWidth / 2 - srcLeft];
         const scrollTop = document.body.scrollTop;
-        console.log(scrollTop);
         return (
             <div className={styles["wrap"]}>
                 <div
