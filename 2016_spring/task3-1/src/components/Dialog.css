@@ -15,7 +15,7 @@
     }
 }
 .mask {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -48,7 +48,7 @@
     }
 }
 .dialog {
-    position: absolute;
+    position: fixed;
     border: 1px solid #999;
     border-radius: 5px;
     transform-origin: 0 0;
