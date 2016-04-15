@@ -27,7 +27,6 @@ class Dialog extends Component {
     handleClick() {
         const { visible, hideDialog, initDialog } = this.props;
         hideDialog();
-        document.body.style["overflow-y"] = "scroll";
         setTimeout(() => {
             if (visible) {
                 initDialog();
@@ -49,11 +48,9 @@ class Dialog extends Component {
             width, height, srcTop, srcLeft
         } = this.props;
         const [top, left] = [window.innerHeight / 2 - srcTop, window.innerWidth / 2 - srcLeft];
-        const scrollTop = document.body.scrollTop;
         return (
             <div className={styles["wrap"]}>
                 <div
-                    style={{ top: scrollTop }}
                     className={classNames({
                         [styles.mask]: true,
                         [styles.appear]: enter,
@@ -65,13 +62,13 @@ class Dialog extends Component {
                 <div
                     style={Object.assign({ width: width, height: height }, 
                         enter || leave ? {
-                            top: srcTop + scrollTop,
+                            top: srcTop,
                             left: srcLeft,
                             transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
                         } : {
                             top: "50%",
                             left: "50%",
-                            transform: `translate(0, ${scrollTop}px) translate(-50%, -50%)`
+                            transform: `translate(-50%, -50%)`
                         }
                     )}
                     className={classNames({
