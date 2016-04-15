@@ -93,3 +93,57 @@
     right: 16px;
     bottom: 16px;
 }
+@media screen and (min-width: 481px) and (max-width: 960px) {
+    .dialog {
+        width: 300px !important;
+        height: 150px !important;
+    }
+    .title {
+        padding: 14px;
+        font-size: 18px;
+    }
+    .hint {
+        margin: 14px;
+        font-size: 14px;
+    }
+    .btn {
+        width: 60px;
+        height: 30px;
+        font-size: 14px;
+    }
+    .confirm {
+        right: 81px;
+        bottom: 14px;
+    }
+    .cancel {
+        right: 14px;
+        bottom: 14px;
+    }
+}
+@media screen and (max-width: 480px) {
+    .dialog {
+        width: 240px !important;
+        height: 120px !important;
+    }
+    .title {
+        padding: 12px;
+        font-size: 16px;
+    }
+    .hint {
+        margin: 12px;
+        font-size: 12px;
+    }
+    .btn {
+        width: 60px;
+        height: 30px;
+        font-size: 12px;
+    }
+    .confirm {
+        right: 78px;
+        bottom: 12px;
+    }
+    .cancel {
+        right: 12px;
+        bottom: 12px;
+    }
+}

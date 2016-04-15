@@ -7,6 +7,7 @@ class Dialog extends Component {
         enter: PropTypes.bool.isRequired,
         visible: PropTypes.bool.isRequired,
         leave: PropTypes.bool.isRequired,
+        displayDialog: PropTypes.func.isRequired,
         hideDialog: PropTypes.func.isRequired,
         initDialog: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
@@ -34,6 +35,9 @@ class Dialog extends Component {
         }, 516);
     }
     handleAnimationEnd(event) {
+        if (event.animationName.includes("zoom-in")) {
+            this.props.displayDialog();
+        }
         if (event.animationName.includes("zoom-out")) {
             this.props.initDialog();
         }
@@ -57,12 +61,18 @@ class Dialog extends Component {
                 >
                 </div>
                 <div
-                    style={{
+                    style={enter || leave ? {
                         width: width,
                         height: height,
                         top: srcTop,
                         left: srcLeft,
                         transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
+                    } : {
+                        width: width,
+                        height: height,
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                     className={classNames({
                         [styles.dialog]: true,
