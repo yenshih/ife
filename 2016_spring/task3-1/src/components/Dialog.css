@@ -95,8 +95,8 @@
 }
 @media screen and (min-width: 481px) and (max-width: 960px) {
     .dialog {
-        width: 300px !important;
-        height: 150px !important;
+        width: 400px !important;
+        height: 200px !important;
     }
     .title {
         padding: 14px;

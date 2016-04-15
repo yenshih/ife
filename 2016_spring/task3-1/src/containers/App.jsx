@@ -16,12 +16,12 @@ class App extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick() {
-        const { enter, actions } = this.props;
+        const { enter, actions: { alertDialog, displayDialog } } = this.props;
+        alertDialog();
         document.body.style["overflow-y"] = "hidden";
-        actions.alertDialog();
         setTimeout(() => {
             if (enter) {
-                actions.displayDialog();
+                displayDialog();
             }
         }, 500);
     }

@@ -61,19 +61,17 @@ class Dialog extends Component {
                 >
                 </div>
                 <div
-                    style={enter || leave ? {
-                        width: width,
-                        height: height,
-                        top: srcTop,
-                        left: srcLeft,
-                        transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
-                    } : {
-                        width: width,
-                        height: height,
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)"
-                    }}
+                    style={Object.assign({ width: width, height: height }, 
+                        enter || leave ? {
+                            top: srcTop,
+                            left: srcLeft,
+                            transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
+                        } : {
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)"
+                        }
+                    )}
                     className={classNames({
                         [styles.dialog]: true,
                         [styles.enter]: enter,
