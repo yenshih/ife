@@ -61,7 +61,7 @@ class Dialog extends Component {
                 >
                 </div>
                 <div
-                    style={Object.assign({ width: width, height: height }, 
+                    style={Object.assign({}, { width: width, height: height }, 
                         enter || leave ? {
                             top: srcTop,
                             left: srcLeft,
