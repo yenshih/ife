@@ -71,10 +71,9 @@ class Dialog extends Component {
                         } : {
                             width: width,
                             height: height,
-                            top: "50%",
-                            left: "50%",
-                            //transform: `translate(-50%, -50%)`
-                            margin: "-60px 0 0 -120px"
+                            top: "240px",
+                            left: "160px",
+                            transform: `translate(-50%, -50%)`
                         }
                     }
                     className={classNames({
