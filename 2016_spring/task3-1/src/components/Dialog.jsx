@@ -67,7 +67,7 @@ class Dialog extends Component {
                             height: height,
                             top: srcTop,
                             left: srcLeft,
-                            transform: `translate(${left+100}px, ${top+100}px) translate(-50%, -50%)`
+                            transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
                         } : {
                             width: width,
                             height: height,
