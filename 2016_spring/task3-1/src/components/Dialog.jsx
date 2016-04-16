@@ -52,6 +52,7 @@ class Dialog extends Component {
         height: PropTypes.number.isRequired,
         srcTop: PropTypes.number.isRequired,
         srcLeft: PropTypes.number.isRequired,
+        duration: PropTypes.number.isRequired,
         currentOffset: PropTypes.shape({
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired
@@ -65,14 +66,14 @@ class Dialog extends Component {
         this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
     handleClick() {
-        const { visible, hideDialog, initDialog } = this.props;
+        const { visible, hideDialog, initDialog, duration } = this.props;
         hideDialog();
         document.body.style["overflow-y"] = "scroll";
         setTimeout(() => {
             if (visible) {
                 initDialog();
             }
-        }, 516);
+        }, duration * 1000 + 16);
     }
     handleAnimationEnd(event) {
         if (event.animationName.includes("zoom-in")) {
@@ -87,12 +88,9 @@ class Dialog extends Component {
             enter, visible, leave, drag,
             offsetX, offsetY,
             title, hint, confirm, cancel,
-            width, height, srcTop, srcLeft,
+            width, height, srcTop, srcLeft, duration,
             currentOffset, connectDragSource
         } = this.props;
-        const [top, left] = drag ?
-            [offsetY - srcTop, offsetX - srcLeft] :
-            [(window.innerHeight >> 1) - srcTop, (window.innerWidth >> 1) - srcLeft];
         return connectDragSource(
             <div
                 style={
@@ -101,13 +99,14 @@ class Dialog extends Component {
                         height: height,
                         top: srcTop,
                         left: srcLeft,
-                        transform: `translate(${left}px, ${top}px)`
+                        transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`
                     } : enter || leave ? {
                         width: width,
                         height: height,
                         top: srcTop,
                         left: srcLeft,
-                        transform: `translate(${left}px, ${top}px) translate(-50%, -50%)`
+                        transform: `translate(${(window.innerWidth >> 1) - srcLeft}px, ${(window.innerHeight >> 1) - srcTop}px) translate(-50%, -50%)`,
+                        animationDuration: `${duration}s`
                     } : {
                         width: width,
                         height: height,

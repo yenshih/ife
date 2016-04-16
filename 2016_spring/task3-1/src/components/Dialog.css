@@ -56,10 +56,10 @@
     opacity: 1;
 }
 .enter {
-    animation: zoom-in .5s;
+    animation-name: zoom-in;
 }
 .leave {
-    animation: zoom-out .5s;
+    animation-name: zoom-out;
 }
 .title {
     padding: 16px;
