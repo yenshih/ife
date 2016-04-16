@@ -83,38 +83,45 @@ class Dialog extends Component {
             this.props.initDialog();
         }
     }
+    getDialogStyle() {
+        const { enter, drag, leave, drag, offsetX, offsetY, width, height, srcTop, srcLeft, duration } = this.props;
+        let dialogStyle;
+        if (drag) {
+            dialogStyle = {
+                width: width,
+                height: height,
+                top: srcTop,
+                left: srcLeft,
+                transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`,
+                animationDuration: `${duration}s`                
+            }
+        }
+        else if (enter || leave) {
+            dialogStyle = {
+                width: width,
+                height: height,
+                top: srcTop,
+                left: srcLeft,
+                transform: `translate(${(window.innerWidth >> 1) - srcLeft}px, ${(window.innerHeight >> 1) - srcTop}px) translate(-50%, -50%)`,
+                animationDuration: `${duration}s`                
+            }
+        }
+        else {
+            dialogStyle = {
+                width: width,
+                height: height,
+                top: "50%",
+                left: "50%",
+                 transform: `translate(-50%, -50%)`                
+            }
+        }
+        return dialogStyle;
+    }
     renderDialog() {
-        const { 
-            enter, visible, leave, drag, offsetX, offsetY,
-            title, hint, confirm, cancel,
-            width, height, srcTop, srcLeft, duration,
-            currentOffset, connectDragSource
-        } = this.props;
+        const { enter, visible, leave, title, hint, confirm, cancel, connectDragSource } = this.props;
         return connectDragSource(
             <div
-                style={
-                    drag ? {
-                        width: width,
-                        height: height,
-                        top: srcTop,
-                        left: srcLeft,
-                        transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`,
-                        animationDuration: `${duration}s`
-                    } : enter || leave ? {
-                        width: width,
-                        height: height,
-                        top: srcTop,
-                        left: srcLeft,
-                        transform: `translate(${(window.innerWidth >> 1) - srcLeft}px, ${(window.innerHeight >> 1) - srcTop}px) translate(-50%, -50%)`,
-                        animationDuration: `${duration}s`
-                    } : {
-                        width: width,
-                        height: height,
-                        top: "50%",
-                        left: "50%",
-                        transform: `translate(-50%, -50%)`
-                    }
-                }
+                style={getDialogStyle()}
                 className={classNames({
                     [styles.dialog]: visible,
                     [styles.enter]: enter,
