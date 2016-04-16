@@ -99,7 +99,8 @@ class Dialog extends Component {
                         height: height,
                         top: srcTop,
                         left: srcLeft,
-                        transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`
+                        transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`,
+                        animationDuration: `${duration}s`
                     } : enter || leave ? {
                         width: width,
                         height: height,
@@ -140,13 +141,11 @@ class Dialog extends Component {
         );
     }
     render() {
-        const {
-            enter, visible, leave,
-            connectDropTarget
-        } = this.props;
+        const { enter, visible, leave, duration, connectDropTarget } = this.props;
         return connectDropTarget(
             <div className={styles.wrap}>
                 <div
+                    style={ enter || leave ? { animationDuration: `${duration}s` } : {} }
                     className={classNames({
                         [styles.appear]: enter,
                         [styles.mask]: visible,

@@ -24,10 +24,10 @@
     opacity: .5;
 }
 .appear {
-    animation: fade-in .5s;
+    animation-name: fade-in;
 }
 .disappear {
-    animation: fade-out .5s;
+    animation-name: fade-out;
 }
 @keyframes zoom-in {
     from {
