@@ -84,7 +84,7 @@ class Dialog extends Component {
         }
     }
     getDialogStyle() {
-        const { enter, drag, leave, drag, offsetX, offsetY, width, height, srcTop, srcLeft, duration } = this.props;
+        const { enter, drag, leave, offsetX, offsetY, width, height, srcTop, srcLeft, duration } = this.props;
         let dialogStyle;
         if (drag) {
             dialogStyle = {
@@ -112,7 +112,7 @@ class Dialog extends Component {
                 height: height,
                 top: "50%",
                 left: "50%",
-                 transform: `translate(-50%, -50%)`                
+                transform: `translate(-50%, -50%)`                
             }
         }
         return dialogStyle;
@@ -121,7 +121,7 @@ class Dialog extends Component {
         const { enter, visible, leave, title, hint, confirm, cancel, connectDragSource } = this.props;
         return connectDragSource(
             <div
-                style={getDialogStyle()}
+                style={this.getDialogStyle()}
                 className={classNames({
                     [styles.dialog]: visible,
                     [styles.enter]: enter,
