@@ -85,8 +85,7 @@ class Dialog extends Component {
     }
     renderDialog() {
         const { 
-            enter, visible, leave, drag,
-            offsetX, offsetY,
+            enter, visible, leave, drag, offsetX, offsetY,
             title, hint, confirm, cancel,
             width, height, srcTop, srcLeft, duration,
             currentOffset, connectDragSource
