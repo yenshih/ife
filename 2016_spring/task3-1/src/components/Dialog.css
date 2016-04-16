@@ -66,6 +66,9 @@
     font: 20px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     border-bottom: 1px solid #eee;
 }
+.title:hover {
+    cursor: move;
+}
 .hint {
     margin: 16px;
     font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;

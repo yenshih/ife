@@ -14,7 +14,9 @@ module.exports = {
             "react",
             "react-dom",
             "react-redux",
-            "redux"
+            "redux",
+            "react-dnd",
+            "react-dnd-html5-backend"
         ]
     },
     output: {
