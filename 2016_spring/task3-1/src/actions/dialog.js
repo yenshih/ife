@@ -1,17 +1,20 @@
-import * as types from "../constants/DialogActionTypes";
+import * as DialogActionTypes from "../constants/DialogActionTypes";
 
 const DialogActions = {
     alertDialog() {
-        return { type: types.ALERT_DIALOG }
+        return { type: DialogActionTypes.ALERT_DIALOG }
     },
     displayDialog() {
-    	return { type: types.DISPLAY_DIALOG }
+        return { type: DialogActionTypes.DISPLAY_DIALOG }
+    },
+    dragDialog(offsetX, offsetY) {
+        return { type: DialogActionTypes.DRAG_DIALOG, offsetX, offsetY }
     },
     hideDialog() {
-        return { type: types.HIDE_DIALOG }
+        return { type: DialogActionTypes.HIDE_DIALOG }
     },
     initDialog() {
-        return { type: types.INIT_DIALOG }
+        return { type: DialogActionTypes.INIT_DIALOG }
     }
 };
 

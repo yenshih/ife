@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { DragDropContext} from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 import Dialog from "../components/Dialog";
 import DialogActions from "../actions/dialog";
 import styles from "./App.css";
@@ -15,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
+@DragDropContext(HTML5Backend)
 class App extends Component {
     static propTypes = {
         dialog: PropTypes.object.isRequired,
@@ -24,6 +27,7 @@ class App extends Component {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
+    
     handleClick() {
         const { enter, actions: { alertDialog, displayDialog } } = this.props;
         alertDialog();
@@ -36,12 +40,13 @@ class App extends Component {
     }
     renderDialog(dialog, actions) {
         if (dialog.visible) {
-            const { displayDialog, hideDialog, initDialog } = actions;
+            const { displayDialog, dragDialog, hideDialog, initDialog } = actions;
             const { top, left } = this.refs.btn.getBoundingClientRect();
             return (
                 <Dialog
                     {...dialog}
                     displayDialog={displayDialog}
+                    dragDialog={dragDialog}
                     hideDialog={hideDialog}
                     initDialog={initDialog}
                     title="Dialog"
