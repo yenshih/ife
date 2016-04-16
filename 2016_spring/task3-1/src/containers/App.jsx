@@ -27,7 +27,6 @@ class App extends Component {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
-
     handleClick() {
         const { enter, actions: { alertDialog, displayDialog } } = this.props;
         alertDialog();
@@ -36,7 +35,7 @@ class App extends Component {
             if (enter) {
                 displayDialog();
             }
-        }, 500);
+        }, 516);
     }
     renderDialog(dialog, actions) {
         if (dialog.visible) {
