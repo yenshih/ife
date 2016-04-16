@@ -6,6 +6,15 @@ import DialogActions from "../actions/dialog";
 import styles from "./App.css";
 import "../reset.css";
 
+const mapStateToProps = state => ({
+    dialog: state.dialog
+});
+
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(DialogActions, dispatch)
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
     static propTypes = {
         dialog: PropTypes.object.isRequired,
@@ -59,12 +68,4 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    dialog: state.dialog
-});
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(DialogActions, dispatch)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

@@ -50,7 +50,7 @@ class Dialog extends Component {
         } = this.props;
         const [top, left] = [window.innerHeight / 2 - srcTop, window.innerWidth / 2 - srcLeft];
         return (
-            <div className={styles["wrap"]}>
+            <div className={styles.wrap}>
                 <div
                     className={classNames({
                         [styles.mask]: true,
