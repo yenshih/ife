@@ -93,7 +93,7 @@ class Dialog extends Component {
                 top: srcTop,
                 left: srcLeft,
                 transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`,
-                animationDuration: `${duration}s`                
+                animationDuration: `${duration}s`
             }
         }
         else if (enter || leave) {
@@ -103,7 +103,7 @@ class Dialog extends Component {
                 top: srcTop,
                 left: srcLeft,
                 transform: `translate(${(window.innerWidth >> 1) - srcLeft}px, ${(window.innerHeight >> 1) - srcTop}px) translate(-50%, -50%)`,
-                animationDuration: `${duration}s`                
+                animationDuration: `${duration}s`
             }
         }
         else {
@@ -112,7 +112,7 @@ class Dialog extends Component {
                 height: height,
                 top: "50%",
                 left: "50%",
-                transform: `translate(-50%, -50%)`                
+                transform: `translate(-50%, -50%)`
             }
         }
         return dialogStyle;
