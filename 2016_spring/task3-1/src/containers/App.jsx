@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { DragDropContext} from "react-dnd";
+import { DragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import Dialog from "../components/Dialog";
 import DialogActions from "../actions/dialog";
@@ -40,7 +40,8 @@ class App extends Component {
     renderDialog(dialog, actions) {
         if (dialog.visible) {
             const { displayDialog, dragDialog, hideDialog, initDialog } = actions;
-            const { top, left } = this.refs.btn.getBoundingClientRect();
+            const { top, right, bottom, left } = this.refs.btn.getBoundingClientRect();
+            const [ animationX, animationY ] = [left + right >> 1, top + bottom >> 1];
             return (
                 <Dialog
                     {...dialog}
@@ -54,8 +55,8 @@ class App extends Component {
                     cancel="cancel"
                     width={600}
                     height={300}
-                    srcTop={top}
-                    srcLeft={left}
+                    animationX={animationX}
+                    animationY={animationY}
                     duration={.5}
                 />
             );

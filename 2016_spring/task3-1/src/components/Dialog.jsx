@@ -50,8 +50,8 @@ class Dialog extends Component {
         cancel: PropTypes.string.isRequired,
         width: PropTypes.number.isRequired,
         height: PropTypes.number.isRequired,
-        srcTop: PropTypes.number.isRequired,
-        srcLeft: PropTypes.number.isRequired,
+        animationX: PropTypes.number.isRequired,
+        animationY: PropTypes.number.isRequired,
         duration: PropTypes.number.isRequired,
         currentOffset: PropTypes.shape({
             x: PropTypes.number.isRequired,
@@ -84,15 +84,15 @@ class Dialog extends Component {
         }
     }
     getDialogStyle() {
-        const { enter, drag, leave, offsetX, offsetY, width, height, srcTop, srcLeft, duration } = this.props;
+        const { enter, drag, leave, offsetX, offsetY, width, height, animationX, animationY, duration } = this.props;
         let dialogStyle;
         if (drag) {
             dialogStyle = {
                 width: width,
                 height: height,
-                top: srcTop,
-                left: srcLeft,
-                transform: `translate(${offsetX - srcLeft}px, ${offsetY - srcTop}px)`,
+                top: animationY,
+                left: animationX,
+                transform: `translate(${offsetX - animationX}px, ${offsetY - animationY}px)`,
                 animationDuration: `${duration}s`
             }
         }
@@ -100,9 +100,9 @@ class Dialog extends Component {
             dialogStyle = {
                 width: width,
                 height: height,
-                top: srcTop,
-                left: srcLeft,
-                transform: `translate(${(window.innerWidth >> 1) - srcLeft}px, ${(window.innerHeight >> 1) - srcTop}px) translate(-50%, -50%)`,
+                top: animationY,
+                left: animationX,
+                transform: `translate(${(window.innerWidth >> 1) - animationX}px, ${(window.innerHeight >> 1) - animationY}px) translate(-50%, -50%)`,
                 animationDuration: `${duration}s`
             }
         }
