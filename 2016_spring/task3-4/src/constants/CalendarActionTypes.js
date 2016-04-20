@@ -1,2 +1,3 @@
-export const SELECT_DATE = "SELECT_DATE";
+export const SELECT = "SELECT";
 export const SLIDE = "SLIDE";
+export const ZOOM = "ZOOM";

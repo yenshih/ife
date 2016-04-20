@@ -10,11 +10,24 @@
 }
 .head,
 .data {
-    width: 36px;
-    height: 32px;
     border: 1px solid transparent;
-    font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    font: 14px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     text-align: center;
+}
+.line {
+    border-bottom: 1px solid #ddd;
+}
+.body {
+    transform-origin: 0 0;
+}
+.head,
+.sm-data {
+    width: 36px;
+    height: 25px;
+}
+.lg-data {
+    width: 64px;
+    height: 61px;
 }
 .next {
     position: absolute;
@@ -23,11 +36,12 @@
 }
 .data:hover,
 .selected {
-    border: 1px solid #99d9ea;
-    background: linear-gradient(transparent, #99d9ea);
+    border: 1px solid #9dd;
+    background: linear-gradient(transparent, #9dd);
 }
 .current {
-    border: 1px solid #00a2e8;
+    border: 1px solid #0ae;
+    color: #0ae;
 }
 .outside {
     color: #999;
@@ -65,14 +79,58 @@
     }
 }
 .slide-in-left {
-    animation: slide-in-left .4s;
+    animation: slide-in-left .3s;
 }
 .slide-in-right {
-    animation: slide-in-right .4s;
+    animation: slide-in-right .3s;
 }
 .slide-out-left {
-    animation: slide-out-left .4s;
+    animation: slide-out-left .3s;
 }
 .slide-out-right {
-    animation: slide-out-right .4s;
+    animation: slide-out-right .3s;
+}
+@keyframes zoom-in-enter {
+    from {
+        transform: scale3d(.05, .05, 1);
+    }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zoom-in-leave {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        transform: scale3d(20, 20, 1);
+    }
+}
+@keyframes zoom-out-enter {
+    from {
+        transform: scale3d(20, 20, 1);
+    }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zoom-out-leave {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        transform: scale3d(.05, .05, 1);
+    }
+}
+.zoom-in-enter {
+    animation: zoom-in-enter 5s;
+}
+.zoom-in-leave {
+    animation: zoom-in-leave 5s;
+}
+.zoom-out-enter {
+    animation: zoom-out-enter 5s;
+}
+.zoom-out-leave {
+    animation: zoom-out-leave 5s;
 }

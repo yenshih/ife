@@ -1,22 +1,33 @@
 import * as CalendarActionTypes from "../constants/CalendarActionTypes";
-import * as CalendarDisplayTypes from "../constants/CalendarDisplayTypes";
 
 const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()], initialState = {
     currentDate: { year, month, date },
     selectedDate: { year, month, date },
-    animation: { direction: "" },
-    display: CalendarDisplayTypes.MONTH
+    animation: { direction: "", year, month, date },
+    display: 0
 };
 
 const calendar = (state = initialState, action) => {
     switch(action.type) {
-        case CalendarActionTypes.SELECT_DATE: {
-            const { year, month, date } = action;
-            return Object.assign({}, state, { selectedDate: { year, month, date } });
+        case CalendarActionTypes.SELECT: {
+            const { year, month, date, display } = action;
+            return Object.assign({}, state, { selectedDate: { year, month, date }, display });
         }
         case CalendarActionTypes.SLIDE: {
-            const { direction } = action;
-            return Object.assign({}, state, { animation: { direction } });
+            let { direction, year, month, date } = action;
+            switch (direction) {
+                case "left": [year, month] = month === 12 ? [year + 1, 1] : [year, month + 1]; break;
+                case "right": [year, month] = month === 1 ? [year - 1, 12] : [year, month - 1]; break;
+            }
+            return Object.assign({}, state, { animation: { direction, year, month, date } });
+        }
+        case CalendarActionTypes.ZOOM: {
+            let { direction, year, month, date} = action;
+            switch (direction) {
+                case "in": return Object.assign({}, state, { selectedDate: { year, month, date }, animation : { direction, year, month, date } });
+                case "out": return Object.assign({}, state, { animation: { direction, year, month, date } });
+                default: return Object.assign({}, state, { animation: { direction: "", year, month, date } });
+            }
         }
         default:
             return state;
