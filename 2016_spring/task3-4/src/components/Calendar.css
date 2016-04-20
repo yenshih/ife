@@ -1,0 +1,78 @@
+.table {
+    position: relative;
+    overflow: hidden;
+    border-collapse: separate;
+    user-select: none;
+    cursor: default;
+}
+.caption {
+    font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+.head,
+.data {
+    width: 36px;
+    height: 32px;
+    border: 1px solid transparent;
+    font: 14px/1 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    text-align: center;
+}
+.next {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.data:hover,
+.selected {
+    border: 1px solid #99d9ea;
+    background: linear-gradient(transparent, #99d9ea);
+}
+.current {
+    border: 1px solid #00a2e8;
+}
+.outside {
+    color: #999;
+}
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-266px);
+    }
+    to  {
+        transform: translateX(0);
+    }
+}
+@keyframes slide-in-right {
+    from {
+        transform: translateX(266px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes slide-out-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-266px);
+    }
+}
+@keyframes slide-out-right {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(266px);
+    }
+}
+.slide-in-left {
+    animation: slide-in-left .4s;
+}
+.slide-in-right {
+    animation: slide-in-right .4s;
+}
+.slide-out-left {
+    animation: slide-out-left .4s;
+}
+.slide-out-right {
+    animation: slide-out-right .4s;
+}

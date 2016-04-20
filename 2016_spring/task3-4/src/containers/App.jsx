@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Calendar from "../components/Calendar";
 import CalendarActions from "../actions/calendar";
+import styles from "./App.css";
 import "../reset.css";
 
 const mapStateToProps = state => ({
@@ -25,10 +26,12 @@ class App extends Component {
     render() {
         const { calendar, actions } = this.props;
         return (
-            <div><Calendar
-                calendar={calendar}
-                actions={actions}
-            /></div>
+            <div className={styles.wrap}>
+                <Calendar
+                    calendar={calendar}
+                    actions={actions}
+                />
+            </div>
         );
     }
 }
