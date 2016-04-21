@@ -8,31 +8,38 @@
 .caption {
     font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
 }
+.caption:hover {
+    color: #0ae;
+}
+.next-caption {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
 .head,
 .data {
     border: 1px solid transparent;
     font: 14px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
     text-align: center;
 }
-.line {
+.head {
+    width: 38px;
+    height: 25px;
     border-bottom: 1px solid #ddd;
 }
-.body {
-    transform-origin: 0 0;
-}
-.head,
-.sm-data {
-    width: 36px;
-    height: 25px;
-}
-.lg-data {
-    width: 64px;
-    height: 61px;
-}
-.next {
+.next-body {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+.sm-data {
+    width: 38px;
+    height: 26px;
+}
+.lg-data {
+    width: 68px;
+    height: 63px;
 }
 .data:hover,
 .selected {
@@ -45,6 +52,34 @@
 }
 .outside {
     color: #999;
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    70% {
+        opacity: 1;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0;
+    }
+    to {
+        opacity: 0;
+    }
+}
+.fade-in {
+    animation-name: fade-in;
+}
+.fade-out {
+    animation-name: fade-out;
 }
 @keyframes slide-in-left {
     from {
@@ -92,7 +127,8 @@
 }
 @keyframes zoom-in-enter {
     from {
-        transform: scale3d(.05, .05, 1);
+        transform: scale3d(.1, .1, 1);
+        opacity: 0;
     }
     to {
         transform: scale3d(1, 1, 1);
@@ -103,12 +139,14 @@
         transform: scale3d(1, 1, 1);
     }
     to {
-        transform: scale3d(20, 20, 1);
+        transform: scale3d(10, 10, 1);
+        opacity: 0;
     }
 }
 @keyframes zoom-out-enter {
     from {
-        transform: scale3d(20, 20, 1);
+        transform: scale3d(10, 10, 1);
+        opacity: 0;
     }
     to {
         transform: scale3d(1, 1, 1);
@@ -119,18 +157,19 @@
         transform: scale3d(1, 1, 1);
     }
     to {
-        transform: scale3d(.05, .05, 1);
+        transform: scale3d(.1, .1, 1);
+        opacity: 0;
     }
 }
 .zoom-in-enter {
-    animation: zoom-in-enter 5s;
+    animation: zoom-in-enter .5s;
 }
 .zoom-in-leave {
-    animation: zoom-in-leave 5s;
+    animation: zoom-in-leave .5s;
 }
 .zoom-out-enter {
-    animation: zoom-out-enter 5s;
+    animation: zoom-out-enter .5s;
 }
 .zoom-out-leave {
-    animation: zoom-out-leave 5s;
+    animation: zoom-out-leave .5s;
 }

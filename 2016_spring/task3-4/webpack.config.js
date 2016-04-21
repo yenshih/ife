@@ -61,13 +61,13 @@ module.exports = {
     ],
     plugins: [
         new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
-        /*new webpack.optimize.UglifyJsPlugin({
+        new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
             }
-        }),*/
+        }),
         new webpack.DefinePlugin({
-            "process.env": { NODE_ENV: JSON.stringify("development") }
+            "process.env": { NODE_ENV: JSON.stringify("production") }
         })
     ],
     devServer: {

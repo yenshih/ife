@@ -7,8 +7,8 @@ const CalendarActions = {
     slide(direction, year, month, date) {
         return { type: CalendarActionTypes.SLIDE, direction, year, month, date }
     },
-    zoom(direction, year, month, date, display) {
-        return { type: CalendarActionTypes.ZOOM, direction, year, month, date }
+    zoom(direction, year, month, date, outside) {
+        return { type: CalendarActionTypes.ZOOM, direction, year, month, date, outside }
     }
 };
 

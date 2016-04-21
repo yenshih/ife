@@ -22,11 +22,11 @@ const calendar = (state = initialState, action) => {
             return Object.assign({}, state, { animation: { direction, year, month, date } });
         }
         case CalendarActionTypes.ZOOM: {
-            let { direction, year, month, date} = action;
+            let { direction, year, month, date, outside } = action;
             switch (direction) {
-                case "in": return Object.assign({}, state, { selectedDate: { year, month, date }, animation : { direction, year, month, date } });
-                case "out": return Object.assign({}, state, { animation: { direction, year, month, date } });
-                default: return Object.assign({}, state, { animation: { direction: "", year, month, date } });
+                case "in": return Object.assign({}, state, { selectedDate: { year, month, date }, animation : { direction, year, month, date, outside } });
+                case "out": return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
+                default: return Object.assign({}, state, { animation: { direction: "", year, month, date, outside } });
             }
         }
         default:
