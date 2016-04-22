@@ -1,36 +1,56 @@
-import * as CalendarActionTypes from "../constants/CalendarActionTypes";
+import { SELECT, SLIDE, ZOOM } from "../constants/CalendarActionTypes";
+import { LEFT, RIGHT, IN, OUT } from "../constants/CalendarDirectionTypes";
 
 const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()], initialState = {
-    currentDate: { year, month, date },
-    selectedDate: { year, month, date },
-    animation: { direction: "", year, month, date },
+    begin: { year: 1979, month: 10, date: 21 },
+    end: { year: 2270, month: 11, date: 28 },
+    current: { year, month, date },
+    selected: { year, month, date },
+    animation: { direction: "", year, month, date, outside: false },
     display: 0
 };
 
 const calendar = (state = initialState, action) => {
     switch(action.type) {
-        case CalendarActionTypes.SELECT: {
+        case SELECT: {
             const { year, month, date, display } = action;
-            return Object.assign({}, state, { selectedDate: { year, month, date }, display });
+            return Object.assign({}, state, { selected: { year, month, date }, display });
         }
-        case CalendarActionTypes.SLIDE: {
-            let { direction, year, month, date } = action;
+        case SLIDE: {
+            const countDate = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            const { direction, display } = action;
+            let { year, month, date } = action;
             switch (direction) {
-                case "left": [year, month] = month === 12 ? [year + 1, 1] : [year, month + 1]; break;
-                case "right": [year, month] = month === 1 ? [year - 1, 12] : [year, month - 1]; break;
+                case LEFT: {
+                    switch (display) {
+                        case 0: [year, month, date] = month === 12 ? [year + 1, 1, date] : [year, month + 1, Math.min(date, countDate[month + 1])]; break;
+                        case 1: year++; break;
+                        case 2: year += 10; break;
+                        case 3: year += 100; break;
+                    }
+                    break;
+                }
+                case RIGHT: {
+                    switch (display) {
+                        case 0: [year, month, date] = month === 1 ? [year - 1, 12, date] : [year, month - 1, Math.min(date, countDate[month - 1])]; break;
+                        case 1: year--; break;
+                        case 2: year -= 10; break;
+                        case 3: year -= 100; break;
+                    }
+                    break;
+                }
             }
-            return Object.assign({}, state, { animation: { direction, year, month, date } });
+            return Object.assign({}, state, { animation: { direction, year, month, date, outside: false } });
         }
-        case CalendarActionTypes.ZOOM: {
-            let { direction, year, month, date, outside } = action;
+        case ZOOM: {
+            const { direction, year, month, date, outside } = action;
             switch (direction) {
-                case "in": return Object.assign({}, state, { selectedDate: { year, month, date }, animation : { direction, year, month, date, outside } });
-                case "out": return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
+                case IN: return Object.assign({}, state, { selected: { year, month, date }, animation : { direction, year, month, date, outside } });
+                case OUT: return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
                 default: return Object.assign({}, state, { animation: { direction: "", year, month, date, outside } });
             }
         }
-        default:
-            return state;
+        default: return state;
     }
 }
 
