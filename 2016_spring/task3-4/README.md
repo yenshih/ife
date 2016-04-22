@@ -11,7 +11,7 @@
 ## 任务描述
 
  - 如下示例图中所示的各种日历组件，参考并实现一个日历选择组件
- - ![calendar1](http://7xrp04.com1.z0.glb.clouddn.com/task_3_40_1.jpg)![calendar2](http://7xrp04.com1.z0.glb.clouddn.com/task_3_40_1.jpg)![calendar3](http://7xrp04.com1.z0.glb.clouddn.com/task_3_40_1.jpg)
+ - ![calendar](http://7xrp04.com1.z0.glb.clouddn.com/task_3_40_1.jpg)
  - 组件默认一直呈显示状态
  - 通过某种方式选择年、月，选择了年月后，日期列表做相应切换
  - 通过单击某个具体的日期进行日期选择
