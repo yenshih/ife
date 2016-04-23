@@ -1,0 +1,235 @@
+.input {
+    width: 150px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+.input:focus {
+    border: 1px solid #357ebd;
+}
+.mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.wrap {
+    width: 280px;
+    padding: 4px;
+    border: 1px solid #446d88;
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+}
+.table {
+    position: relative;
+    overflow: hidden;
+    border-collapse: separate;
+    user-select: none;
+    cursor: default;
+}
+.caption {
+    position: relative;
+    width: 180px;
+    font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+.enable-caption:hover {
+    color: #0ae;
+}
+.next-caption {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nav {
+    position: absolute;
+    top: 6px;
+    border: 6px solid transparent;
+}
+.nav-left {
+    right: 6px;
+    border-left: 10px solid #000;
+}
+.nav-right {
+    left: 6px;
+    border-right: 10px solid #000;
+}
+.nav-left:hover {
+    border-left: 10px solid #0ae;
+}
+.nav-right:hover {
+    border-right: 10px solid #0ae;
+}
+.forbidden-left,
+.forbidden-left:hover {
+    border-left: 10px solid #ddd;
+}
+.forbidden-right,
+.forbidden-right:hover {
+    border-right: 10px solid #ddd;
+}
+.head,
+.data {
+    border: 1px solid transparent;
+    font: 14px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    text-align: center;
+}
+.head {
+    width: 38px;
+    height: 25px;
+    border-bottom: 1px solid #ddd;
+}
+.next-body {
+    position: absolute;
+    top: 24px;
+    left: 0;
+}
+.sm-data {
+    width: 38px;
+    height: 26px;
+}
+.lg-data {
+    width: 68px;
+    height: 63px;
+}
+.hidden {
+    visibility: hidden;
+}
+.current {
+    border: 1px solid #446d88;
+    border-radius: 4px;
+    color: #0ae;
+}
+.data:hover,
+.selected {
+    border: 1px solid #446d88;
+    border-radius: 4px;
+    text-shadow: 0 -1px 1px #335166;
+    color: #fff;
+    background: #58a linear-gradient(#77a0bb, #58a);
+}
+.outside {
+    color: #999;
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    70% {
+        opacity: 1;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0;
+    }
+    to {
+        opacity: 0;
+    }
+}
+.fade-in {
+    animation-name: fade-in;
+}
+.fade-out {
+    animation-name: fade-out;
+}
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-266px);
+    }
+    to  {
+        transform: translateX(0);
+    }
+}
+@keyframes slide-in-right {
+    from {
+        transform: translateX(266px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes slide-out-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-266px);
+    }
+}
+@keyframes slide-out-right {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(266px);
+    }
+}
+.slide-in-left {
+    animation: slide-in-left .3s;
+}
+.slide-in-right {
+    animation: slide-in-right .3s;
+}
+.slide-out-left {
+    animation: slide-out-left .3s;
+}
+.slide-out-right {
+    animation: slide-out-right .3s;
+}
+@keyframes zoom-in-enter {
+    from {
+        transform: scale3d(.1, .1, 1);
+        opacity: 0;
+    }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zoom-in-leave {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        transform: scale3d(10, 10, 1);
+        opacity: 0;
+    }
+}
+@keyframes zoom-out-enter {
+    from {
+        transform: scale3d(10, 10, 1);
+        opacity: 0;
+    }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zoom-out-leave {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        transform: scale3d(.1, .1, 1);
+        opacity: 0;
+    }
+}
+.zoom-in-enter {
+    animation: zoom-in-enter .5s;
+}
+.zoom-in-leave {
+    animation: zoom-in-leave .5s;
+}
+.zoom-out-enter {
+    animation: zoom-out-enter .5s;
+}
+.zoom-out-leave {
+    animation: zoom-out-leave .5s;
+}
