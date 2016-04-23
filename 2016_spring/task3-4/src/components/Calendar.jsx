@@ -15,13 +15,16 @@ class Calendar extends Component {
         this.handleDataClick = this.handleDataClick.bind(this);
         this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
-    handleNavClick(direction, { year, month, date }, display, slide) {
+    handleNavClick(direction) {
+        const { calendar: { selected: { year, month, date }, display }, actions: { slide } } = this.props;
         return () => slide(direction, year, month, date, display);
     }
-    handleCaptionClick({ year, month, date }, display, zoom) {
-        return () => display ^ 3 ? zoom(OUT, year, month, date, false) : display;
+    handleCaptionClick() {
+        const { calendar: { selected: { year, month, date }, display }, actions: { zoom } } = this.props;
+        display ^ 3 ? zoom(OUT, year, month, date, false) : display;
     }
-    handleDataClick({ year, month, date }, display, { select, slide, zoom }, i, j, isOutside) {
+    handleDataClick(i, j, isOutside) {
+        const { calendar: { selected: { year, month, date }, display }, actions: { select, slide, zoom } } = this.props;
         return (event) => {
             switch (display) {
                 case 0: {
@@ -39,8 +42,9 @@ class Calendar extends Component {
             }
         }
     }
-    handleAnimationEnd({ direction, year, month, date }, display, { select, slide, zoom }, next) {
+    handleAnimationEnd(display, next) {
         if (next) {
+            const { calendar: { animation: { direction, year, month, date } }, actions: { select, slide, zoom } } = this.props;
             return (event) => {
                 if (event.animationName.includes("slide")) {
                     select(year, month, date, display);
@@ -81,7 +85,13 @@ class Calendar extends Component {
             return memorize[i][j];
         }
     }
-    isHidden(element, { year: beginYear, month: beginMonth, date: beginDate }, { year: endYear, month: endMonth, date: endDate }, selectedYear, selectedMonth, direction, nextYear, nextMonth, display, i, j, next) {
+    isHidden(element, display, i, j, next) {
+        const { calendar: { 
+            begin: { year: beginYear, month: beginMonth, date: beginDate },
+            end: { year: endYear, month: endMonth, date: endDate },
+            selected: { year: selectedYear, month: selectedMonth },
+            animation: { direction, year: nextYear, month: nextMonth, outside }
+        } } = this.props;
         const begin = new Date(beginYear, beginMonth - 1, beginDate), end = new Date(endYear, endMonth - 1, endDate);
         switch (display) {
             case 0: {
@@ -98,80 +108,120 @@ class Calendar extends Component {
             }
             case 3: {
                 const offset = ((i << 2) + j - 1) * 10;
-                const year = next ? nextYear - nextYear % 100 + offset : selectedYear - selectedYear % 100 + offset;
+                let year = next ? nextYear : selectedYear;
+                if (direction === IN && outside && !next) {
+                    year = year + 10 - (year + 10) % 10 - (year + 10 - (year + 10) % 10) % 100 * 11 + offset;
+                }
+                else {
+                    year = year - year % 100 + offset;
+                }
                 return new Date(year + 9, 11, 31) < begin || new Date(year, 0, 1) > end;
             }
         }
     }
-    isCurrent(element, currentYear, currentMonth, currentDate, selectedYear, selectedMonth, nextYear, nextMonth, display, i, next, isNotThisMonth) {
-        return !display && element === currentDate && !isNotThisMonth(i, element) && (next ? nextYear === currentYear && nextMonth === currentMonth : selectedYear === currentYear && selectedMonth === currentMonth);
+    isCurrent(element, display, i, next, isNotThisMonth) {
+        const { calendar: {
+            current: { year: currentYear, month: currentMonth, date: currentDate },
+            selected: { year: selectedYear, month: selectedMonth },
+            animation: { year: nextYear, month: nextMonth }
+        } } = this.props;
+        return !display && element === currentDate && !isNotThisMonth(i, element)
+            && (next ? nextYear === currentYear && nextMonth === currentMonth
+                : selectedYear === currentYear && selectedMonth === currentMonth);
     }
-    isSelected(element, selectedDate, direction, nextYear, nextMonth, nextDate, display, i, j, next, isNotThisMonth) {
+    isSelected(element, display, i, j, next, isNotThisMonth, isOutside) {
+        const { calendar: {
+            selected: { date: selectedDate },
+            animation: { direction, year: nextYear, month: nextMonth, date: nextDate, outside }
+        } } = this.props;
         switch (display) {
-            case 0: return element === nextDate && ((direction === LEFT || direction === RIGHT) && next ^ isNotThisMonth(i, element) || (direction === IN || direction === OUT) && !isNotThisMonth(i, element)) || element === selectedDate && !direction && !isNotThisMonth(i, element);
+            case 0: return element === nextDate
+                && ((direction === LEFT || direction === RIGHT) && next ^ isNotThisMonth(i, element)
+                    || (direction === IN || direction === OUT) && !isNotThisMonth(i, element))
+                || element === selectedDate && !direction && !isNotThisMonth(i, element);
             case 1: return (i << 2) + j + 1 === nextMonth;
-            case 2: return (i << 2) + j - 1 === element % 10 && element % 10 === nextYear % 10;
-            case 3: return ((i << 2) + j - 1) * 10 === (nextYear - nextYear % 10) % 100;
-        }
-    }
-    getTable({ year, month, date }, direction, outside, display, next) {
-        const table = {};
-        switch (display) {
-            case 0: {
-                const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                const offset = 7 - (date - new Date(year, month - 1, date).getDay() + 6) % 7;
-                table.caption = `${year}年${month}月`;
-                table.head = ["日", "一", "二", "三", "四", "五", "六"];
-                table.body = [[], [], [], [], [], []];
-                for (let i = 0, k = count[(month + 10) % 12 + 1] - offset + 1; i < 6; i++) {
-                    for (let j = 0; j < 7; j++, k = !i && j ^ offset || i && k ^ count[month] ? k + 1 : 1) {
-                        table.body[i][j] = k;
-                    }
-                }
-                break;
-            }
-            case 1: {
-                table.caption = `${year}年`;
-                table.head = [];
-                table.body = [
-                    ["一月", "二月", "三月", "四月"],
-                    ["五月", "六月", "七月", "八月"],
-                    ["九月", "十月", "十一月", "十二月"]
-                ];
-                break;
-            }
             case 2: {
-                const offset = direction === IN && outside && !next ? year + 1 - (year + 1) % 10 * 11 : year - year % 10;
-                table.caption = `${offset}-${offset + 9}`;
-                table.head = [];
-                table.body = [[], [], [], [], [], []];
-                for (let i = 0, k = offset - 1; i < 3; i++){
-                    for (let j = 0; j < 4; j++, k++) {
-                        table.body[i][j] = k;
-                    }
+                if (direction === IN && outside && !next) {
+                    return element % 10 === nextYear % 10 && isOutside(i, j);
                 }
-                break;
+                else {
+                    return (i << 2) + j - 1 === element % 10 && element % 10 === nextYear % 10;
+                }
             }
             case 3: {
-                const offset = direction === IN && outside && !next ? (year + 10 - (year + 10) % 10) - (year + 10 - (year + 10) % 10) % 100 * 11 : year - year % 100;
-                table.caption = `${offset}-${offset + 99}`;
-                table.head = [];
-                table.body = [[], [], [], [], [], []];
-                for (let i = 0, k = offset - 10; i < 3; i++) {
-                    for (let j = 0; j < 4; j++, k += 10) {
-                        table.body[i][j] = `${k}-${k + 9}`;
-                    }
+                const offset = ((i << 2) + j) * 10;
+                if (direction === IN && outside && !next) {
+                    return offset === (nextYear + 10 - (nextYear + 10) % 10) % 100 * 11;
                 }
-                break;
+                else {
+                    return offset === (nextYear - nextYear % 10) % 100 + 10;
+                }
+            }
+        }
+    }
+    getTable({ year, month, date }, display, next) {
+        const { calendar: { animation: { direction, outside } } } = this.props;
+        const table = { caption: "", head: [], body: [] };
+        if (!next || next && direction) {
+            switch (display) {
+                case 0: {
+                    const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                    const offset = 7 - (date - new Date(year, month - 1, date).getDay() + 6) % 7;
+                    table.caption = `${year}年${month}月`;
+                    table.head = ["日", "一", "二", "三", "四", "五", "六"];
+                    table.body = [[], [], [], [], [], []];
+                    for (let i = 0, k = count[(month + 10) % 12 + 1] - offset + 1; i < 6; i++) {
+                        for (let j = 0; j < 7; j++, k = !i && j ^ offset || i && k ^ count[month] ? k + 1 : 1) {
+                            table.body[i][j] = k;
+                        }
+                    }
+                    break;
+                }
+                case 1: {
+                    table.caption = `${year}年`;
+                    table.head = [];
+                    table.body = [
+                        ["一月", "二月", "三月", "四月"],
+                        ["五月", "六月", "七月", "八月"],
+                        ["九月", "十月", "十一月", "十二月"]
+                    ];
+                    break;
+                }
+                case 2: {
+                    const offset = direction === IN && outside && !next ? year + 1 - (year + 1) % 10 * 11 : year - year % 10;
+                    table.caption = `${offset}-${offset + 9}`;
+                    table.head = [];
+                    table.body = [[], [], [], [], [], []];
+                    for (let i = 0, k = offset - 1; i < 3; i++){
+                        for (let j = 0; j < 4; j++, k++) {
+                            table.body[i][j] = k;
+                        }
+                    }
+                    break;
+                }
+                case 3: {
+                    const offset = direction === IN && outside && !next
+                        ? (year + 10 - (year + 10) % 10) - (year + 10 - (year + 10) % 10) % 100 * 11
+                        : year - year % 100;
+                    table.caption = `${offset}-${offset + 99}`;
+                    table.head = [];
+                    table.body = [[], [], [], [], [], []];
+                    for (let i = 0, k = offset - 10; i < 3; i++) {
+                        for (let j = 0; j < 4; j++, k += 10) {
+                            table.body[i][j] = `${k}-${k + 9}`;
+                        }
+                    }
+                    break;
+                }
             }
         }
         return table;
     }
-    getNextTable(animation, outside, display) {
+    getNextTable(animation, display) {
         const { direction } = animation;
         display -= direction === IN;
         display += direction === OUT;
-        return this.getTable(animation, direction, outside, display, true);
+        return this.getTable(animation, display, true);
     }
     getFadeStyle(direction) {
         switch (direction) {
@@ -179,12 +229,31 @@ class Calendar extends Component {
             case IN: case OUT: return { animationDuration: ".5s" }
         }
     }
-    getZoomStyle({ direction, year, month, date, outside }, display, next) {
+    getZoomStyle(display, next) {
+        const { calendar: { animation: { direction, year, month, date, outside } } } = this.props;
         display += direction === OUT;
         switch (display) {
             case 1: return { transformOrigin: `${(month - 1 & 3) * 70 + 35}px ${(month - 1 >> 2) * 65 + 32.5}px` }
-            case 2: return outside ? { transformOrigin: `${(year + 1) % 10 * 210 + 35}px ${(year + 1) % 10 * 130 + 32.5}px`} : { transformOrigin: `${(year % 10 + 1 & 3) * 70 + 35}px ${(year % 10 + 1 >> 2) * 65 + 32.5}px` }
-            case 3: return outside ? { transformOrigin: `${(year - year % 10 + 10) % 100 * 21 + 35}px ${(year - year % 10 + 10) % 100 * 13 + 32.5}px`} : { transformOrigin: `${((year - year % 10) % 100 + 10) % 40 * 7 + 35}px ${(((year - year % 10) % 100 + 10) / 10 >> 2) * 65 + 32.5}px`}
+            case 2: {
+                if (outside) {
+                    const offset = (year + 1) % 10;
+                    return { transformOrigin: `${offset * 210 + 35}px ${offset * 130 + 32.5}px`}
+                }
+                else {
+                    const offset = year % 10 + 1;
+                    return { transformOrigin: `${(offset & 3) * 70 + 35}px ${(offset >> 2) * 65 + 32.5}px` }
+                }
+            }
+            case 3: {
+                if (outside) {
+                    const offset = (year - year % 10 + 10) % 100;
+                    return { transformOrigin: `${offset * 21 + 35}px ${offset * 13 + 32.5}px` }
+                }
+                else {
+                    const offset = (year - year % 10) % 100 + 10;
+                    return { transformOrigin: `${offset % 40 * 7 + 35}px ${(offset / 10 >> 2) * 65 + 32.5}px`}
+                }
+            }
         }
     }
     getCalendarClassName(direction, next) {
@@ -200,26 +269,26 @@ class Calendar extends Component {
             [styles["zoom-out-leave"]]: !next && direction === OUT
         })
     }
-    getDataClassName(element, begin, end, { year: currentYear, month: currentMonth, date: currentDate }, { year: selectedYear, month: selectedMonth, date: selectedDate }, { direction, year: nextYear, month: nextMonth, date: nextDate }, display, i, j, next, isNotThisMonth, isOutside) {
+    getDataClassName(element, direction, display, i, j, next, isNotThisMonth, isOutside) {
         display -= next && direction === IN;
         display += next && direction === OUT;
         return classNames({
             [styles.data]: true,
             [styles["sm-data"]]: !display,
             [styles["lg-data"]]: display,
-            [styles.hidden]: this.isHidden(element, begin, end, selectedYear, selectedMonth, direction, nextYear, nextMonth, display, i, j, next),
-            [styles.current]: this.isCurrent(element, currentYear, currentMonth, currentDate, selectedYear, selectedMonth, nextYear, nextMonth, display, i, next, isNotThisMonth),
-            [styles.selected]: this.isSelected(element, selectedDate, direction, nextYear, nextMonth, nextDate, display, i, j, next, isNotThisMonth),
+            [styles.hidden]: this.isHidden(element, display, i, j, next),
+            [styles.current]: this.isCurrent(element, display, i, next, isNotThisMonth),
+            [styles.selected]: this.isSelected(element, display, i, j, next, isNotThisMonth, isOutside),
             [styles.outside]: !display && isNotThisMonth(i, element) || (display === 2 || display === 3) && isOutside(i, j)
         })
     }
-    renderCaption(selected, direction, display, { slide, zoom }, caption, next) {
+    renderCaption(direction, display, caption, next) {
         if (caption.length) {
             return (
                 <caption>
                     <div
                         className={classNames(styles.nav, styles["nav-left"])}
-                        onClick={this.handleNavClick(RIGHT, selected, display, slide)}
+                        onClick={this.handleNavClick(RIGHT)}
                     >
                     </div>
                     <div
@@ -230,13 +299,13 @@ class Calendar extends Component {
                             [styles["fade-in"]]: next && direction,
                             [styles["fade-out"]]: !next && direction
                         })}
-                        onClick={this.handleCaptionClick(selected, display, zoom)}
+                        onClick={this.handleCaptionClick}
                     >
                         {caption}
                     </div>
                     <div
                         className={classNames(styles.nav, styles["nav-right"])}
-                        onClick={this.handleNavClick(LEFT, selected, display, slide)}
+                        onClick={this.handleNavClick(LEFT)}
                     >
                     </div>
                 </caption>
@@ -259,14 +328,13 @@ class Calendar extends Component {
             );
         }
     }
-    renderCalendar({ begin, end, current, selected, animation, display }, actions, head, body, next, isNotThisMonth, isOutside) {
-        const { direction } = animation;
+    renderCalendar(direction, display, head, body, next, isNotThisMonth, isOutside) {
         if (body.length) {
             return (
                 <tbody
-                    style={this.getZoomStyle(animation, display, next)}
+                    style={this.getZoomStyle(display, next)}
                     className={this.getCalendarClassName(direction, next)}
-                    onAnimationEnd={this.handleAnimationEnd(animation, display, actions, next)}
+                    onAnimationEnd={this.handleAnimationEnd(display, next)}
                 >
                     {this.renderCalendarHead(head)}
                     {body.map((row, i) =>
@@ -274,8 +342,8 @@ class Calendar extends Component {
                             {row.map((element, j) =>
                                 <td
                                     key={j}
-                                    className={this.getDataClassName(element, begin, end, current, selected, animation, display, i, j, next, isNotThisMonth, isOutside)}
-                                    onClick={this.handleDataClick(selected, display, actions, i, j, isOutside)}
+                                    className={this.getDataClassName(element, direction, display, i, j, next, isNotThisMonth, isOutside)}
+                                    onClick={this.handleDataClick(i, j, isOutside)}
                                 >
                                     {element}
                                 </td>
@@ -289,16 +357,16 @@ class Calendar extends Component {
     render() {
         const { calendar, actions } = this.props;
         const { selected, animation, display } = calendar;
-        const { direction, outside } = animation;
-        const { caption, head, body } = this.getTable(selected, direction, outside, display, false);
-        const { caption: nextCaption, head: nextHead, body: nextBody } = direction ? this.getNextTable(animation, outside, display) : { caption: "", head: [], body: [] };
+        const { direction } = animation;
+        const { caption, head, body } = this.getTable(selected, display, false);
+        const { caption: nextCaption, head: nextHead, body: nextBody } = this.getNextTable(animation, display);
         const isNotThisMonth = this.isNotThisMonth(), isOutside = this.isOutside();
         return (
             <table className={styles.table}>
-                {this.renderCaption(selected, direction, display, actions, caption, false)}
-                {this.renderCaption(selected, direction, display, actions, nextCaption, true)}
-                {this.renderCalendar(calendar, actions, head, body, false, isNotThisMonth, isOutside)}
-                {this.renderCalendar(calendar, actions, nextHead, nextBody, true, isNotThisMonth, isOutside)}
+                {this.renderCaption(direction, display, caption, false)}
+                {this.renderCaption(direction, display, nextCaption, true)}
+                {this.renderCalendar(direction, display, head, body, false, isNotThisMonth, isOutside)}
+                {this.renderCalendar(direction, display, nextHead, nextBody, true, isNotThisMonth, isOutside)}
             </table>
         );
     }
