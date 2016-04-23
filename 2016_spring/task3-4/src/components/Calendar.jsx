@@ -17,7 +17,7 @@ class Calendar extends Component {
     }
     handleNavClick(direction) {
         const { calendar: { selected: { year, month, date }, display }, actions: { slide } } = this.props;
-        return () => slide(direction, year, month, date, display);
+        return () => slide(direction, year, month, date, display, false);
     }
     handleCaptionClick() {
         const { calendar: { selected: { year, month, date }, display }, actions: { zoom } } = this.props;
@@ -30,8 +30,8 @@ class Calendar extends Component {
                 case 0: {
                     const date = Number(event.target.innerHTML);
                     switch (true) {
-                        case this.isPrevMonth(i, date): slide(RIGHT, year, month, date, display); break;
-                        case this.isNextMonth(i, date): slide(LEFT, year, month, date, display); break;
+                        case this.isPrevMonth(i, date): slide(RIGHT, year, month, date, display, true); break;
+                        case this.isNextMonth(i, date): slide(LEFT, year, month, date, display, true); break;
                         default: select(year, month, date, display);
                     }
                     break;
@@ -48,7 +48,7 @@ class Calendar extends Component {
             return (event) => {
                 if (event.animationName.includes("slide")) {
                     select(year, month, date, display);
-                    slide("", year, month, date, display);
+                    slide("", year, month, date, display, false);
                 }
                 if (event.animationName.includes("zoom")) {
                     switch (direction) {
@@ -163,8 +163,10 @@ class Calendar extends Component {
         } } = this.props;
         switch (display) {
             case 0: return element === nextDate
-                && ((direction === LEFT || direction === RIGHT) && next ^ isNotThisMonth(i, element)
-                    || (direction === IN || direction === OUT) && !isNotThisMonth(i, element))
+                && ((direction === LEFT || direction === RIGHT)
+                        && (!(outside ^ isNotThisMonth(i, element)) || next && !isNotThisMonth(i, element))
+                    || (direction === IN || direction === OUT)
+                        && !isNotThisMonth(i, element))
                 || element === selectedDate && !direction && !isNotThisMonth(i, element);
             case 1: return (i << 2) + j + 1 === nextMonth;
             case 2: {

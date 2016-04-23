@@ -18,7 +18,7 @@ const calendar = (state = initialState, action) => {
         }
         case SLIDE: {
             const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            const { direction, display } = action;
+            const { direction, display, outside } = action;
             let { year, month, date } = action;
             switch (direction) {
                 case LEFT: {
@@ -40,7 +40,7 @@ const calendar = (state = initialState, action) => {
                     break;
                 }
             }
-            return Object.assign({}, state, { animation: { direction, year, month, date, outside: false } });
+            return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
         }
         case ZOOM: {
             const { direction, year, month, date, outside } = action;
