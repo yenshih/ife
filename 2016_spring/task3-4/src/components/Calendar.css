@@ -186,14 +186,14 @@
     }
 }
 .zoom-in-enter {
-    animation: zoom-in-enter 10s;
+    animation: zoom-in-enter .5s;
 }
 .zoom-in-leave {
-    animation: zoom-in-leave 10s;
+    animation: zoom-in-leave .5s;
 }
 .zoom-out-enter {
-    animation: zoom-out-enter 10s;
+    animation: zoom-out-enter .5s;
 }
 .zoom-out-leave {
-    animation: zoom-out-leave 10s;
+    animation: zoom-out-leave .5s;
 }
