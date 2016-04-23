@@ -164,7 +164,7 @@ class Calendar extends Component {
             selected: { year: selectedYear, month: selectedMonth },
             animation: { year: nextYear, month: nextMonth }
         } } = this.props;
-        return !display && element === currentDate && !isNotThisMonth(i, element)
+        return display === 1 && element === currentDate && !isNotThisMonth(i, element)
             && (next ? nextYear === currentYear && nextMonth === currentMonth
                 : selectedYear === currentYear && selectedMonth === currentMonth);
     }

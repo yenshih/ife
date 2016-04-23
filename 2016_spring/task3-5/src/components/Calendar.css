@@ -100,7 +100,7 @@
 .current {
     border: 1px solid #446d88;
     border-radius: 4px;
-    color: #0ae;
+    color: #446d88;
 }
 .data:hover,
 .selected {
