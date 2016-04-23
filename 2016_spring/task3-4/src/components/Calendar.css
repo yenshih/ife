@@ -10,7 +10,7 @@
     width: 180px;
     font: 16px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
 }
-.caption:hover {
+.enable-caption:hover {
     color: #0ae;
 }
 .next-caption {
@@ -25,18 +25,26 @@
     border: 6px solid transparent;
 }
 .nav-left {
-    left: 6px;
-    border-right: 10px solid #000;
-}
-.nav-right {
     right: 6px;
     border-left: 10px solid #000;
 }
+.nav-right {
+    left: 6px;
+    border-right: 10px solid #000;
+}
 .nav-left:hover {
-    border-right: 10px solid #0ae;
+    border-left: 10px solid #0ae;
 }
 .nav-right:hover {
-    border-left: 10px solid #0ae;
+    border-right: 10px solid #0ae;
+}
+.forbidden-left,
+.forbidden-left:hover {
+    border-left: 10px solid #ddd;
+}
+.forbidden-right,
+.forbidden-right:hover {
+    border-right: 10px solid #ddd;
 }
 .head,
 .data {

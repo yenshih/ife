@@ -85,6 +85,33 @@ class Calendar extends Component {
             return memorize[i][j];
         }
     }
+    isForbidden(direction, display) {
+        const { calendar: {
+            begin: { year: beginYear, month: beginMonth, date: beginDate },
+            end: { year: endYear, month: endMonth, date: endDate},
+            selected: { year, month, date }
+        } } = this.props;
+        const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        const begin = new Date(beginYear, beginMonth - 1, beginDate), end = new Date(endYear, endMonth - 1, endDate);
+        switch (direction) {
+            case LEFT: {
+                switch (display) {
+                    case 0: return new Date(year, month - 1, count[month]) >= end;
+                    case 1: return new Date(year, 12, 31) >= end;
+                    case 2: return new Date(year - year % 10 + 9, 12, 31) >= end;
+                    case 3: return new Date(year - year % 100 + 99, 12, 31) >= end;
+                }
+            }
+            case RIGHT: {
+                switch (display) {
+                    case 0: return new Date(year, month - 1, 1) <= begin;
+                    case 1: return new Date(year, 1, 1) <= begin;
+                    case 2: return new Date(year - year % 10, 1, 1) <= begin;
+                    case 3: return new Date(year - year % 100, 1, 1) <= begin;
+                }
+            }
+        }
+    }
     isHidden(element, display, i, j, next) {
         const { calendar: { 
             begin: { year: beginYear, month: beginMonth, date: beginDate },
@@ -284,17 +311,25 @@ class Calendar extends Component {
     }
     renderCaption(direction, display, caption, next) {
         if (caption.length) {
+            display -= next && direction === IN;
+            display += next && direction === OUT;
+            const isForbiddenLeft = this.isForbidden(LEFT, display), isForbiddenRight = this.isForbidden(RIGHT, display);
             return (
                 <caption>
                     <div
-                        className={classNames(styles.nav, styles["nav-left"])}
-                        onClick={this.handleNavClick(RIGHT)}
+                        className={classNames({
+                            [styles.nav]: true,
+                            [styles["nav-right"]]: true,
+                            [styles["forbidden-right"]]: isForbiddenRight
+                        })}
+                        onClick={isForbiddenRight ? () => {} : this.handleNavClick(RIGHT)}
                     >
                     </div>
                     <div
                         style={this.getFadeStyle(direction)}
                         className={classNames({
                             [styles.caption]: true,
+                            [styles["enable-caption"]]: display ^ 3,
                             [styles["next-caption"]]: next,
                             [styles["fade-in"]]: next && direction,
                             [styles["fade-out"]]: !next && direction
@@ -304,8 +339,12 @@ class Calendar extends Component {
                         {caption}
                     </div>
                     <div
-                        className={classNames(styles.nav, styles["nav-right"])}
-                        onClick={this.handleNavClick(LEFT)}
+                        className={classNames({
+                            [styles.nav]: true,
+                            [styles["nav-left"]]: true,
+                            [styles["forbidden-left"]]: isForbiddenLeft
+                        })}
+                        onClick={isForbiddenLeft ? () => {} : this.handleNavClick(LEFT)}
                     >
                     </div>
                 </caption>

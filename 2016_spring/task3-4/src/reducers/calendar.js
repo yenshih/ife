@@ -17,13 +17,13 @@ const calendar = (state = initialState, action) => {
             return Object.assign({}, state, { selected: { year, month, date }, display });
         }
         case SLIDE: {
-            const countDate = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             const { direction, display } = action;
             let { year, month, date } = action;
             switch (direction) {
                 case LEFT: {
                     switch (display) {
-                        case 0: [year, month, date] = month === 12 ? [year + 1, 1, date] : [year, month + 1, Math.min(date, countDate[month + 1])]; break;
+                        case 0: [year, month, date] = month === 12 ? [year + 1, 1, date] : [year, month + 1, Math.min(date, count[month + 1])]; break;
                         case 1: year++; break;
                         case 2: year += 10; break;
                         case 3: year += 100; break;
@@ -32,7 +32,7 @@ const calendar = (state = initialState, action) => {
                 }
                 case RIGHT: {
                     switch (display) {
-                        case 0: [year, month, date] = month === 1 ? [year - 1, 12, date] : [year, month - 1, Math.min(date, countDate[month - 1])]; break;
+                        case 0: [year, month, date] = month === 1 ? [year - 1, 12, date] : [year, month - 1, Math.min(date, count[month - 1])]; break;
                         case 1: year--; break;
                         case 2: year -= 10; break;
                         case 3: year -= 100; break;
