@@ -1,0 +1,15 @@
+$font-size-base:         20px !default;
+$gray-base:              #000 !default;
+$gray-darker:            lighten($gray-base, 13.5%) !default; // #222
+$gray-dark:              lighten($gray-base, 33.5%) !default; // #555
+$gray:                   lighten($gray-base, 53.3%) !default; // #888
+$gray-light:             lighten($gray-base, 80%) !default;   // #ccc
+$gray-lighter:           lighten($gray-base, 93.3%) !default; // #eee
+$white:                  #fff !default;
+$orange:                 #ee7419 !default;
+$pink:                   #fef1e8 !default;
+
+$add:                    "\e600";
+$radio:                  "\e601";
+$checkbox:               "\e602";
+$content:                "\e603";

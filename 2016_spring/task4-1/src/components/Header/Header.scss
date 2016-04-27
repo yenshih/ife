@@ -1,0 +1,42 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/flex-center.scss";
+
+.header {
+    display: flex;
+    align-items: center;
+    height: 2.5em;
+    margin-bottom: 3em;
+    font-size: $font-size-base;
+    background: $orange;
+    color: $white;
+    .title {
+        line-height: .8;
+        margin: 0 3em 0 12.5%;
+    }
+    .title::before {
+        @include flex-center;
+        content: "?";
+        float: left;
+        width: 1em;
+        height: 1em;
+        margin-right: .2em;
+        border-radius: .5em;
+        font-family: Helvetica, Arial;
+        color: $orange;
+        background: $white;
+    }
+    .link {
+        text-decoration: none;
+        color: $white;
+        .tabs {
+            @include flex-center;
+            width: 6em;
+            height: 3.125em;
+            font-size: 80%;
+            text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
+            &:hover {
+                background: $orange linear-gradient(transparent, rgba(255, 255, 255, .1));
+            }
+        }
+    }
+}

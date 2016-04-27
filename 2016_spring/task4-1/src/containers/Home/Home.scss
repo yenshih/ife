@@ -1,0 +1,32 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/flex-center.scss";
+@import "../../styles/mixins/iconfont.scss";
+
+.wrap {
+    @include flex-center;
+    width: 75%;
+    height: 30%;
+    margin: 0 auto;
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    font-size: $font-size-base;
+    background: $white;
+    .link {
+        text-decoration: none;
+        .add {
+            @include flex-center;
+            width: 9.5em;
+            height: 2.25em;
+            border-radius: .2em;
+            box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+            text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
+            color: $white;
+            background: $orange linear-gradient(rgba(255, 255, 255, .2), transparent);
+            &::before {
+                @include iconfont($add, 1.5em);
+                padding-right: .8em;
+            }
+        }
+    }
+    
+}
