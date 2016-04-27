@@ -23,19 +23,19 @@ const calendar = (state = initialState, action) => {
             switch (direction) {
                 case LEFT: {
                     switch (display) {
-                        case 0: [year, month, date] = month === 12 ? [year + 1, 1, date] : [year, month + 1, Math.min(date, count[month + 1])]; break;
-                        case 1: year++; break;
-                        case 2: year += 10; break;
-                        case 3: year += 100; break;
+                        case 1: [year, month, date] = month === 12 ? [year + 1, 1, date] : [year, month + 1, Math.min(date, count[month + 1])]; break;
+                        case 2: year++; break;
+                        case 3: year += 10; break;
+                        case 4: year += 100; break;
                     }
                     break;
                 }
                 case RIGHT: {
                     switch (display) {
-                        case 0: [year, month, date] = month === 1 ? [year - 1, 12, date] : [year, month - 1, Math.min(date, count[month - 1])]; break;
-                        case 1: year--; break;
-                        case 2: year -= 10; break;
-                        case 3: year -= 100; break;
+                        case 1: [year, month, date] = month === 1 ? [year - 1, 12, date] : [year, month - 1, Math.min(date, count[month - 1])]; break;
+                        case 2: year--; break;
+                        case 3: year -= 10; break;
+                        case 4: year -= 100; break;
                     }
                     break;
                 }
