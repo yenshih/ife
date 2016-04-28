@@ -4,13 +4,18 @@
 
 .wrap {
     width: 75%;
+    height: auto;
     margin: 0 auto;
     padding: 1em 0 2.5em;
     border-radius: .2em;
     box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
     font-size: $font-size-base;
     background: $white;
-    .title {
+    @media screen and (max-width: 480px) {
+        padding: 0 0 1.5em;
+    }
+    .title,
+    .edit-title {
         @include flex-center;
         width: 90%;
         height: 3em;
@@ -21,10 +26,83 @@
             background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
         }
     }
+    .edit-title {
+        width: calc(90% - 4px);
+        height: calc(3em - 4px);
+        text-align: center;
+    }
     .line {
         width: 93.5%;
         border-top: 2px solid $gray-light;
         margin: 0 auto;
+    }
+    .type-wrap {
+        @include flex-center;
+        width: 90%;
+        height: 5em;
+        border: 1px solid $gray-light;
+        border-bottom: none;
+        margin: 1.5em auto -1.5em;
+        font-size: 80%;
+        transform-origin: top;
+        &::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        .type {
+            @include flex-center;
+            z-index: 1;
+            width: 6.25em;
+            height: 2em;
+            margin: 0 1em;
+            border: 1px solid $gray-light;
+            border-radius: .2em;
+            box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+            color: $gray;
+            background: $gray-lighter;
+            &:hover {
+                border-color: $orange;
+                color: $white;
+                background: $orange;
+                cursor: pointer;
+            }
+            @media screen and (max-width: 480px) {
+                margin: 0 .4em;
+            }
+        }
+        .radio::before {
+            @include iconfont($radio, .8em, .8em);
+        }
+        .checkbox::before {
+            @include iconfont($checkbox, .8em, .8em);
+        }
+        .text::before {
+            @include iconfont($text, .8em, .8em);
+        }
+    }
+    @keyframes pull-down {
+        from {
+            height: .25em;
+            opacity: 0;
+            transform: scaleY(.05);
+        }
+    }
+    @keyframes pull-up {
+        to {
+            height: .25em;
+            opacity: 0;
+            transform: scaleY(.05);
+        }
+    }
+    .pull-down {
+        animation: pull-down .3s;
+    }
+    .pull-up {
+        animation: pull-up .3s;
     }
     .add {
         @include flex-center;
@@ -60,6 +138,15 @@
                 border-radius: .2em;
                 cursor: pointer;
             }
+            @media screen and (max-width: 480px) {
+                .deadline {
+                    margin-right: 0;
+                }
+                .input {
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
         }
         @media screen and (max-width: 960px) {
             .date {
@@ -67,20 +154,26 @@
                 margin: 0 auto 1em;
             }
         }
-        .save,
-        .release {
+        .link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .btn {
             display: inline-block;
             width: 6em;
             height: 1.8em;
+            margin: 0 .6em;
             border: 1px solid $gray;
             border-radius: .2em;
             box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
             color: inherit;
             cursor: pointer;
             background: $white;
-        }
-        .release {
-            margin-left: 1.2em;
+            &:hover {
+                border-color: $orange;
+                color: $white;
+                background: $orange;
+            }
         }
     }
 }

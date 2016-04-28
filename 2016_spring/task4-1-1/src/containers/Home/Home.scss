@@ -23,7 +23,8 @@
             color: $white;
             background: $orange linear-gradient(rgba(255, 255, 255, .2), transparent);
             &::before {
-                @include iconfont($add, 1.5em, .8em);
+                @include iconfont($add, 1.5em);
+                padding-right: .8em;
             }
         }
     }

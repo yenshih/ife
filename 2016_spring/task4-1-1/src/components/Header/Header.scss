@@ -9,9 +9,6 @@
     font-size: $font-size-base;
     background: $orange;
     color: $white;
-    @media screen and (max-width: 480px) {
-        margin-bottom: 1.5em;
-    }
     .title {
         line-height: .8;
         margin: 0 3em 0 12.5%;

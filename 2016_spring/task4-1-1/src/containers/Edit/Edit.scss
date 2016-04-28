@@ -1,0 +1,86 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/flex-center.scss";
+@import "../../styles/mixins/iconfont.scss";
+
+.wrap {
+    width: 75%;
+    margin: 0 auto;
+    padding: 1em 0 2.5em;
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    font-size: $font-size-base;
+    background: $white;
+    .title {
+        @include flex-center;
+        width: 90%;
+        height: 3em;
+        margin: 0 auto 1em;
+        font-size: 100%;
+        color: $gray-dark;
+        &:hover {
+            background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
+        }
+    }
+    .line {
+        width: 93.5%;
+        border-top: 2px solid $gray-light;
+        margin: 0 auto;
+    }
+    .add {
+        @include flex-center;
+        width: 90%;
+        height: 5em;
+        margin: 1.5em auto;
+        border: 1px solid $gray-light;
+        font-size: 80%;
+        color: $gray;
+        background: $gray-lighter;
+        cursor: pointer;
+        &::before {
+            @include iconfont($add, 1.25em);
+            padding-right: 1em;
+        }
+    }
+    .footer {
+        font-size: 80%;
+        margin-top: 2em;
+        text-align: center;
+        color: $gray;
+        .date {
+            display: inline-block;
+            margin-right: 15%;
+            line-height: 1.5;
+            .deadline {
+                margin-right: 1em;
+            }
+            .input {
+                width: 12em;
+                height: 2em;
+                border: 1px solid $gray;
+                border-radius: .2em;
+                cursor: pointer;
+            }
+        }
+        @media screen and (max-width: 960px) {
+            .date {
+                display: block;
+                margin: 0 auto 1em;
+            }
+        }
+        .save,
+        .release {
+            display: inline-block;
+            width: 6em;
+            height: 1.8em;
+            border: 1px solid $gray;
+            border-radius: .2em;
+            box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+            color: inherit;
+            cursor: pointer;
+            background: $white;
+        }
+        .release {
+            margin-left: 1.2em;
+        }
+    }
+}

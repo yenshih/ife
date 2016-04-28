@@ -20,11 +20,7 @@ class Home extends Component {
     };
     constructor(props) {
         super(props);
-        this.handleAddQuestionnaire = this.handleAddQuestionnaire.bind(this);
-    }
-    handleAddQuestionnaire() {
-        const { addQuestionnaire } = this.props.actions;
-        addQuestionnaire();
+
     }
     render() {
         const { questionnaires } = this.props;
@@ -56,10 +52,7 @@ class Home extends Component {
         ) : (
             <div className={styles.wrap}>
                 <Link to="/edit" className={styles.link}>
-                    <div
-                        className={styles.add}
-                        onClick={this.handleAddQuestionnaire}
-                    >
+                    <div className={styles.add}>
                         <span>新建问卷</span>
                     </div>
                 </Link>
