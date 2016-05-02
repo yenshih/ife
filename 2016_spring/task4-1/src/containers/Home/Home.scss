@@ -1,22 +1,16 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
 @import "../../styles/mixins/flex-center.scss";
 @import "../../styles/mixins/iconfont.scss";
 
 .wrap {
     @include flex-center;
-    width: 75%;
-    height: 30%;
-    margin: 0 auto;
-    border-radius: .2em;
-    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
-    font-size: $font-size-base;
-    background: $white;
+    margin: 6em auto 4.5em;
     .link {
         text-decoration: none;
         .add {
             @include flex-center;
-            width: 9.5em;
-            height: 2.25em;
+            @include size(9.5em, 2.25em);
             border-radius: .2em;
             box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
             text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
@@ -27,5 +21,4 @@
             }
         }
     }
-    
 }

@@ -1,0 +1,214 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
+
+.date {
+    @include size(11em, 2em);
+    margin-left: 1em;
+    padding-left: 1em;
+    border: 1px solid $gray;
+    border-radius: .2em;
+    cursor: pointer;
+}
+.wrap {
+    position: absolute;
+    right: 0;
+    bottom: 2.125em;
+    width: $calendar-width-base;
+    padding: .25em;
+    border: 1px solid $gray;
+    border-radius: 0.5em;
+    box-shadow: 0 .0625em .3125em rgba(0, 0, 0, .5);
+    background: $white;
+    .table {
+        position: relative;
+        overflow: hidden;
+        border-collapse: separate;
+        color: $gray-darker;
+        user-select: none;
+        cursor: default;
+        .caption {
+            position: relative;
+            width: 10em;
+        }
+        .enable-caption:hover {
+            color: $orange;
+        }
+        .next-caption {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .nav {
+            position: absolute;
+            top: .375em;
+            border: .375em solid transparent;
+        }
+        .nav-left {
+            right: .375em;
+            border-left: .625em solid $gray-darker;
+        }
+        .nav-right {
+            left: .375em;
+            border-right: .625em solid $gray-darker;
+        }
+        .nav-left:hover {
+            border-left: .625em solid $orange;
+        }
+        .nav-right:hover {
+            border-right: .625em solid $orange;
+        }
+        .forbidden-left,
+        .forbidden-left:hover {
+            border-left: .625em solid $gray-lighter;
+        }
+        .forbidden-right,
+        .forbidden-right:hover {
+            border-right: .625em solid $gray-lighter;
+        }
+        .head,
+        .data {
+            border: 1px solid transparent;
+            text-align: center;
+        }
+        .head {
+            @include size(2.375em, 1.5625em);
+            border-bottom: 1px solid $gray-light;
+        }
+        .next-body {
+            position: absolute;
+            top: 1.5em;
+            left: 0;
+        }
+        .sm-data {
+            @include size(2.375em, 1.625em);
+        }
+        .lg-data {
+            @include size(4.25em, 3.9375em);
+        }
+        .hidden {
+            visibility: hidden;
+        }
+        .current {
+            border: 1px solid $orange;
+            border-radius: .25em;
+            color: $orange;
+        }
+        .data:hover,
+        .selected {
+            border: 1px solid $orange;
+            border-radius: .25em;
+            text-shadow: 0 -.0625em .0625em  rgba(0, 0, 0, .5);
+            color: $white;
+            background: $orange linear-gradient(rgba(255, 255, 255, .2), transparent);
+        }
+        .outside {
+            color: $gray;
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            70% {
+                opacity: 1;
+            }
+        }
+        @keyframes fade-out {
+            30% {
+                opacity: 0;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        .fade-in {
+            animation-name: fade-in;
+        }
+        .fade-out {
+            animation-name: fade-out;
+        }
+        @keyframes slide-in-left {
+            from {
+                transform: translateX(-$calendar-slide-offset);
+            }
+        }
+        @keyframes slide-in-right {
+            from {
+                transform: translateX($calendar-slide-offset);
+            }
+        }
+        @keyframes slide-out-left {
+            to {
+                transform: translateX(-$calendar-slide-offset);
+            }
+        }
+        @keyframes slide-out-right {
+            to {
+                transform: translateX($calendar-slide-offset);
+            }
+        }
+        .slide-in-left {
+            animation: slide-in-left $calendar-slide-duration;
+        }
+        .slide-in-right {
+            animation: slide-in-right $calendar-slide-duration;
+        }
+        .slide-out-left {
+            animation: slide-out-left $calendar-slide-duration;
+        }
+        .slide-out-right {
+            animation: slide-out-right $calendar-slide-duration;
+        }
+        @keyframes zoom-in-enter {
+            from {
+                transform: scale3d(1 / $calendar-zoom-times, 1 / $calendar-zoom-times, 1);
+                opacity: 0;
+            }
+        }
+        @keyframes zoom-in-leave {
+            to {
+                transform: scale3d($calendar-zoom-times, $calendar-zoom-times, 1);
+                opacity: 0;
+            }
+        }
+        @keyframes zoom-out-enter {
+            from {
+                transform: scale3d($calendar-zoom-times, $calendar-zoom-times, 1);
+                opacity: 0;
+            }
+        }
+        @keyframes zoom-out-leave {
+            to {
+                transform: scale3d(1 / $calendar-zoom-times, 1 / $calendar-zoom-times, 1);
+                opacity: 0;
+            }
+        }
+        .zoom-in-enter {
+            animation: zoom-in-enter $calendar-zoom-duration;
+        }
+        .zoom-in-leave {
+            animation: zoom-in-leave $calendar-zoom-duration;
+        }
+        .zoom-out-enter {
+            animation: zoom-out-enter $calendar-zoom-duration;
+        }
+        .zoom-out-leave {
+            animation: zoom-out-leave $calendar-zoom-duration;
+        }
+    }
+}
+@media screen and (max-width: $medium-page-max-width) {
+    .wrap {
+        right: 50%;
+        transform: translateX($calendar-wrap-width / 2);
+    }
+}
+@media screen and (max-width: $small-page-max-width) {
+    .date {
+        display: block;
+        margin: 0 auto;
+    }
+    .wrap {
+        bottom: 3.625em;
+    }
+}

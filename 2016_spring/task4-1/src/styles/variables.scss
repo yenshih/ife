@@ -1,15 +1,33 @@
-$font-size-base:         20px !default;
-$gray-base:              #000 !default;
-$gray-darker:            lighten($gray-base, 13.5%) !default; // #222
-$gray-dark:              lighten($gray-base, 33.5%) !default; // #555
-$gray:                   lighten($gray-base, 53.3%) !default; // #888
-$gray-light:             lighten($gray-base, 80%) !default;   // #ccc
-$gray-lighter:           lighten($gray-base, 93.3%) !default; // #eee
-$white:                  #fff !default;
-$orange:                 #ee7419 !default;
-$pink:                   #fef1e8 !default;
+$font-size-base:          20px !default;
 
-$add:                    "\e600";
-$radio:                  "\e601";
-$checkbox:               "\e602";
-$text:                   "\e603";
+$small-page-max-width:    480px !default;
+$medium-page-max-width:   960px !default;
+
+$gray-base:               #000 !default;
+$gray-darker:             lighten($gray-base, 13.5%) !default; // #222
+$gray-dark:               lighten($gray-base, 33.5%) !default; // #555
+$gray:                    lighten($gray-base, 53.3%) !default; // #888
+$gray-light:              lighten($gray-base, 80%)   !default; // #ccc
+$gray-lighter:            lighten($gray-base, 93.3%) !default; // #eee
+$white:                   #fff    !default;
+$orange:                  #ee7419 !default;
+$red:                     #cc9a9a !default;
+$pink:                    #fef1e8 !default;
+
+$add:                     "\e600" !default;
+$radio:                   "\e601" !default;
+$checkbox:                "\e602" !default;
+$text:                    "\e603" !default;
+$radio-option:            "\e604" !default;
+$checkbox-option:         "\e605" !default;
+$remove:                  "\e606" !default;
+$back:                    "\e607" !default;
+
+$calendar-width-base:     280px !default;
+$calendar-wrap-width:     $calendar-width-base + 10px    !default; // 290px
+$calendar-slide-offset:   $calendar-width-base - 2px * 7 !default; // 266px
+$calendar-slide-duration: .3s !default;
+$calendar-zoom-times:     10  !default;
+$calendar-zoom-duration:  .5s !default;
+
+$edit-pull-duration:      .3s !default;

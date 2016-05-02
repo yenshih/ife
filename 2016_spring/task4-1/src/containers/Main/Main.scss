@@ -1,0 +1,14 @@
+@import "../../styles/variables.scss";
+
+.wrap {
+    width: 75%;
+    margin: 3em auto;
+    padding: 1em 0 2.5em;
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    font-size: $font-size-base;
+    background: $white;
+    @media screen and (max-width: 480px) {
+        padding: .5em 0 2em;
+    }
+}

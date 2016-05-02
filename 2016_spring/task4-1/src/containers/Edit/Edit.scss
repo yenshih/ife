@@ -1,48 +1,150 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
 @import "../../styles/mixins/flex-center.scss";
 @import "../../styles/mixins/iconfont.scss";
 
-.wrap {
-    width: 75%;
-    height: auto;
-    margin: 0 auto;
-    padding: 1em 0 2.5em;
-    border-radius: .2em;
-    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
-    font-size: $font-size-base;
-    background: $white;
-    @media screen and (max-width: 480px) {
-        padding: 0 0 1.5em;
+.questionnaire-title,
+.edit-questionnaire-title {
+    @include flex-center;
+    @include size(90%, 3em);
+    margin: 0 auto 1em;
+    font-size: 100%;
+    color: $gray-dark;
+    &:hover {
+        background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
     }
-    .title,
-    .edit-title {
-        @include flex-center;
-        width: 90%;
-        height: 3em;
-        margin: 0 auto 1em;
-        font-size: 100%;
-        color: $gray-dark;
+}
+.edit-questionnaire-title {
+    @include size(calc(90% - 4px), calc(3em - 4px));
+    text-align: center;
+}
+.line {
+    width: 93.5%;
+    border-top: 2px solid $gray-light;
+    margin: 0 auto;
+}
+.question-wrap {
+    width: 90%;
+    margin: 1.875em auto;
+    font-size: 80%;
+    .question {
+        padding: 1em 1.5em;
+        line-height: 1.5;
         &:hover {
-            background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
+            background: $pink;
+            .caption {
+                font-weight: 700;
+            }
+            .text {
+                background: inherit;
+            }
+            .operation-wrap {
+                visibility: visible;
+            }
+        }
+        .question-title,
+        .edit-question-title {
+            @include size(calc(100% - 4.8em), calc(1.5em - 4px));
+            display: inline-block;
+            margin-left: 1em;
+        }
+        .edit-question-title {
+            margin-left: calc(1em - 2px);
+            background: inherit;
+        }
+        .option-wrap {
+            padding-left: 2.4em;
+            .edit-option {
+                @include size(calc(100% - 5.6em), calc(1.5em - 4px));
+                margin-left: -2px;
+                background: inherit;
+            }
+            .radio-option-icon::before {
+                @include iconfont($radio-option, .8em, 1em);
+            }
+            .checkbox-option-icon::before {
+                @include iconfont($checkbox-option, .8em, 1em);
+            }
+            .remove-option-btn {
+                display: none;
+                &::before {
+                    @include iconfont($remove, .8em);
+                    padding-left: 1em;
+                }
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            &:hover {
+                .remove-option-btn {
+                    display: inline;
+                    color: $red;
+                }
+            }
+        }
+        .add-option-btn {
+            @include flex-center;
+            width: calc(100% - 4.8em);
+            margin: .25em auto;
+            &::before {
+                @include iconfont($add, .8em);
+                visibility: hidden;
+            }
+            &:hover {
+                margin: calc(.25em - 1px) 2.4em;
+                border: 1px dashed $gray;
+                cursor: pointer;
+                &::before {
+                    visibility: visible;
+                }
+            }
+        }
+        .text {
+            @include size(calc(100% - 4.8em), 5em);
+            margin-top: .25em;
+            margin-left: 2.4em;
+        }
+        .operation-wrap {
+            visibility: hidden;
+            width: 100%;
+            text-align: right;
+            .operation {
+                display: inline-block;
+                margin-left: 1em;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+        .required,
+        .not-required {
+            width: 7.6em;
+            margin-left: 2.4em;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .required {
+            &::before {
+                @include iconfont($checkbox, .8em, 1em);
+            }
+        }
+        .not-required {
+            &::before {
+                @include iconfont($checkbox-option, .8em, 1em);
+            }
         }
     }
-    .edit-title {
-        width: calc(90% - 4px);
-        height: calc(3em - 4px);
-        text-align: center;
-    }
-    .line {
-        width: 93.5%;
-        border-top: 2px solid $gray-light;
-        margin: 0 auto;
-    }
+}
+.add-question {
+    width: 90%;
+    margin: 1.5em auto;
     .type-wrap {
         @include flex-center;
-        width: 90%;
         height: 5em;
         border: 1px solid $gray-light;
         border-bottom: none;
-        margin: 1.5em auto -1.5em;
+        margin: 0 auto;
         font-size: 80%;
         transform-origin: top;
         &::before {
@@ -55,9 +157,8 @@
         }
         .type {
             @include flex-center;
+            @include size(6.25em, 2em);
             z-index: 1;
-            width: 6.25em;
-            height: 2em;
             margin: 0 1em;
             border: 1px solid $gray-light;
             border-radius: .2em;
@@ -70,8 +171,8 @@
                 background: $orange;
                 cursor: pointer;
             }
-            @media screen and (max-width: 480px) {
-                margin: 0 .4em;
+            @media screen and (max-width: $small-page-max-width) {
+                margin: 0 .2em;
             }
         }
         .radio::before {
@@ -84,31 +185,9 @@
             @include iconfont($text, .8em, .8em);
         }
     }
-    @keyframes pull-down {
-        from {
-            height: .25em;
-            opacity: 0;
-            transform: scaleY(.05);
-        }
-    }
-    @keyframes pull-up {
-        to {
-            height: .25em;
-            opacity: 0;
-            transform: scaleY(.05);
-        }
-    }
-    .pull-down {
-        animation: pull-down .3s;
-    }
-    .pull-up {
-        animation: pull-up .3s;
-    }
-    .add {
+    .add-question-btn {
         @include flex-center;
-        width: 90%;
         height: 5em;
-        margin: 1.5em auto;
         border: 1px solid $gray-light;
         font-size: 80%;
         color: $gray;
@@ -119,61 +198,62 @@
             padding-right: 1em;
         }
     }
-    .footer {
-        font-size: 80%;
-        margin-top: 2em;
-        text-align: center;
-        color: $gray;
-        .date {
-            display: inline-block;
-            margin-right: 15%;
-            line-height: 1.5;
-            .deadline {
-                margin-right: 1em;
-            }
-            .input {
-                width: 12em;
-                height: 2em;
-                border: 1px solid $gray;
-                border-radius: .2em;
-                cursor: pointer;
-            }
-            @media screen and (max-width: 480px) {
-                .deadline {
-                    margin-right: 0;
-                }
-                .input {
-                    display: block;
-                    margin: 0 auto;
-                }
-            }
+}
+@keyframes pull-down {
+    from {
+        height: 0;
+        opacity: 0;
+        transform: scaleY(0);
+    }
+}
+@keyframes pull-up {
+    to {
+        height: 0;
+        opacity: 0;
+        transform: scaleY(0);
+    }
+}
+.pull-down {
+    animation: pull-down $edit-pull-duration;
+}
+.pull-up {
+    animation: pull-up $edit-pull-duration;
+}
+.footer {
+    margin-top: 2em;
+    font-size: 80%;
+    text-align: center;
+    color: $gray;
+    .date-wrap {
+        position: relative;
+        display: inline-block;
+        margin-right: 15%;
+        line-height: 1.5;
+    }
+    @media screen and (max-width: $medium-page-max-width) {
+        .date-wrap {
+            display: block;
+            margin: 0 auto 1em;
         }
-        @media screen and (max-width: 960px) {
-            .date {
-                display: block;
-                margin: 0 auto 1em;
-            }
-        }
-        .link {
-            text-decoration: none;
-            color: inherit;
-        }
-        .btn {
-            display: inline-block;
-            width: 6em;
-            height: 1.8em;
-            margin: 0 .6em;
-            border: 1px solid $gray;
-            border-radius: .2em;
-            box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
-            color: inherit;
-            cursor: pointer;
-            background: $white;
-            &:hover {
-                border-color: $orange;
-                color: $white;
-                background: $orange;
-            }
+    }
+    .link {
+        text-decoration: none;
+        color: inherit;
+    }
+    .btn {
+        @include size(6em, 1.8em);
+        display: inline-block;
+        margin: 0 .6em;
+        border: 1px solid $gray;
+        border-radius: .2em;
+        box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+        color: inherit;
+        cursor: pointer;
+        background: $white;
+        &:hover {
+            border-color: $orange;
+            color: $white;
+            background: $orange;
         }
     }
 }

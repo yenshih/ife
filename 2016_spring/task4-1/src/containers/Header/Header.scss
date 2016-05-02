@@ -1,30 +1,29 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
 @import "../../styles/mixins/flex-center.scss";
 
 .header {
     display: flex;
     align-items: center;
     height: 2.5em;
-    margin-bottom: 3em;
     font-size: $font-size-base;
-    background: $orange;
     color: $white;
-    @media screen and (max-width: 480px) {
+    background: $orange;
+    @media screen and (max-width: $small-page-max-width) {
         margin-bottom: 1.5em;
     }
     .title {
-        line-height: .8;
         margin: 0 3em 0 12.5%;
+        line-height: .8;
     }
     .title::before {
         @include flex-center;
+        @include size(1em, 1em);
         content: "?";
         float: left;
-        width: 1em;
-        height: 1em;
         margin-right: .2em;
         border-radius: .5em;
-        font-family: Helvetica, Arial;
+        font-family: Helvetica, Arial, sans-serif;
         color: $orange;
         background: $white;
     }
@@ -33,8 +32,7 @@
         color: $white;
         .tabs {
             @include flex-center;
-            width: 6em;
-            height: 3.125em;
+            @include size(6em, 3.125em);
             font-size: 80%;
             text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
             &:hover {

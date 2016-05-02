@@ -1,3 +1,3 @@
-export const RADIO = "RADIO";
-export const CHECKBOX = "CHECKBOX";
-export const TEXT = "TEXT";
+export const RADIO = "单选";
+export const CHECKBOX = "多选";
+export const TEXT = "文本";
