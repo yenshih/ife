@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import { Header, Main } from "../";
 import styles from "./App.scss";
 import "../../styles/reset.css";
@@ -13,5 +13,9 @@ function App({ children }) {
         </div>
     );
 }
+
+App.propTypes = {
+    children: PropTypes.element.isRequired
+};
 
 export default App;

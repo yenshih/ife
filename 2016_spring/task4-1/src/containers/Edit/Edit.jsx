@@ -1,22 +1,26 @@
 import React, { Component, PropTypes } from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
-import { Input, Calendar } from "../../components";
+import { Input, Dialog, Calendar } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
+import * as DialogActions from "../../actions/dialog";
 import * as CalendarActions from "../../actions/calendar";
 import { RADIO, CHECKBOX, TEXT } from "../../constants/QuestionTypes";
 import styles from "./Edit.scss";
 
 const mapStateToProps = state => ({
     questionnaires: state.questionnaires,
+    dialog: state.dialog,
     calendar: state.calendar
 });
 
 const mapDispatchToProps = dispatch => ({
     actions: Object.assign({},
         bindActionCreators(QuestionnaireActions, dispatch),
+        bindActionCreators(DialogActions, dispatch),
         bindActionCreators(CalendarActions, dispatch)
     )
 });
@@ -51,13 +55,11 @@ class Edit extends Component {
     }
     handleChooseType() {
         const { chooseType } = this.props.actions;
-        chooseType(true, true, false);
-        setTimeout(() => chooseType(false, true, false), 300);
+        chooseType();
     }
     handleAddQuestion(event) {
         const { chooseType, addQuestion } = this.props.actions;
-        chooseType(false, true, true);
-        setTimeout(() => chooseType(false, false, false), 300);
+        chooseType();
         [RADIO, CHECKBOX, TEXT].forEach((element) => event.target === this.refs[element] && addQuestion(element));
     }
     handleRemoveQuestion(question) {
@@ -85,11 +87,24 @@ class Edit extends Component {
         return event => toggleRequirement(question);
     }
     handleSaveQuestionnaire() {
-        localStorage.questionnaires = this.props.questionnaires;
+        const { saveQuestionnaire } = this.props.actions;
+        saveQuestionnaire();
     }
-    handleReleaseQuestionnaire() {
-        const { releaseQuestionnaire } = this.props.actions;
-        releaseQuestionnaire();
+    handleReleaseQuestionnaire(event) {
+        const { dialog: { status }, actions: { switchDialog, releaseQuestionnaire } } = this.props;
+        if (status ^ 1 && status ^ 3) {
+            if (event.target === this.refs["release-btn"]) {
+                switchDialog();
+                setTimeout(() => switchDialog(), 300)
+            }
+            else if (status === 2) {
+                if (event.target === this.refs["confirm-btn"]) {
+                    releaseQuestionnaire();
+                }
+                switchDialog();
+                setTimeout(() => switchDialog(), 300);
+            }
+        }
     }
     renderQuestionnaireTitle() {
         const { questionnaires: { list, editing } } = this.props;
@@ -104,7 +119,7 @@ class Edit extends Component {
             )
         }
         else {
-            const title = list[editing.questionnaire].title;
+            const title = editing.title;
             return (
                 <h1
                     className={styles["questionnaire-title"]}
@@ -128,11 +143,11 @@ class Edit extends Component {
             );
         }
         else {
-            const title = list[editing.questionnaire].questions[question].title;
+            const { type, title } = editing.questions[question];
             return (
                 <div
                     className={styles["question-title"]}
-                    onClick={this.handleEditText(question, -1, title)}
+                    onClick={type === TEXT ? () => {} : this.handleEditText(question, -1, title)}
                 >
                     {title}
                 </div>
@@ -152,7 +167,7 @@ class Edit extends Component {
             );
         }
         else {
-            const content = list[editing.questionnaire].questions[question].options[option];
+            const content = editing.questions[question].options[option];
             return (
                 <span
                     onClick={this.handleEditText(question, option, content)}
@@ -163,10 +178,10 @@ class Edit extends Component {
         }
     }
     renderQuestions() {
-        const { questionnaires: { list, editing: { questionnaire, type: { leave } } } } = this.props;
-        const last = list[questionnaire].questions.length - 1;
+        const { questionnaires: { editing } } = this.props;
+        const last = editing.questions.length - 1;
         return (
-            list[questionnaire].questions.map((question, questionIndex) =>
+            editing.questions.map((question, questionIndex) =>
                 <div
                     key={questionIndex}
                     className={styles.question}
@@ -257,15 +272,11 @@ class Edit extends Component {
         );
     }
     renderTypes() {
-        const { questionnaires: { editing: { type: { enter, visible, leave } } } } = this.props;
-        if (visible) {
+        const { questionnaires: { editing: { type } } } = this.props;
+        if (type) {
             return (
                 <div 
-                    className={classNames({
-                        [styles["pull-down"]]: enter,
-                        [styles["type-wrap"]]: visible,
-                        [styles["pull-up"]]: leave
-                    })}
+                    className={styles["type-wrap"]}
                     onClick={this.handleAddQuestion}
                 >
                     <div ref={RADIO} className={classNames(styles.type, styles.radio)}>{RADIO}</div>
@@ -285,6 +296,43 @@ class Edit extends Component {
             />
         );
     }
+    renderDialog() {
+        const { dialog, questionnaires: { editing } } = this.props;
+        const time = new Date(editing.time);
+        const [year, month, date] = [time.getFullYear(), time.getMonth() + 1, time.getDate()];
+        let [btnTop, btnLeft] = [0, 0];
+        if (dialog.status) {
+            const { top, right, bottom, left } = this.refs["release-btn"].getBoundingClientRect();
+            [btnTop, btnLeft] = [top + bottom >> 1, left + right >> 1];
+        }
+        return (
+            <Dialog
+                dialog={dialog}
+                top={btnTop}
+                left={btnLeft}
+                onLeave={this.handleReleaseQuestionnaire}
+                title={"提示"}
+            >
+                <p>{`是否发布问卷？`}</p>
+                <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
+                <Link to="/" className={styles.link}>
+                    <input
+                        ref="confirm-btn" 
+                        type="button"
+                        value="确定"
+                        className={styles.btn}
+                        onClick={this.handleReleaseQuestionnaire}
+                    />
+                </Link>
+                <input
+                    type="button"
+                    value="取消"
+                    className={styles.btn}
+                    onClick={this.handleReleaseQuestionnaire}
+                />
+            </Dialog>
+        );
+    }
     render() {
         return (
             <div>
@@ -294,7 +342,13 @@ class Edit extends Component {
                     {this.renderQuestions()}
                 </div>
                 <div className={styles["add-question"]}>
-                    {this.renderTypes()}
+                    <ReactCSSTransitionGroup
+                        transitionName={styles}
+                        transitionEnterTimeout={300}
+                        transitionLeaveTimeout={300}
+                    >
+                        {this.renderTypes()}
+                    </ReactCSSTransitionGroup>
                     <div
                         className={styles["add-question-btn"]}
                         onClick={this.handleChooseType}
@@ -314,14 +368,14 @@ class Edit extends Component {
                         className={styles.btn}
                         onClick={this.handleSaveQuestionnaire}
                     />
-                    <Link to="/" className={styles.link}>
-                        <input
-                            type="button"
-                            value="发布问卷"
-                            className={styles.btn}
-                            onClick={this.handleReleaseQuestionnaire}
-                        />
-                    </Link>
+                    <input
+                        ref="release-btn"
+                        type="button"
+                        value="发布问卷"
+                        className={styles.btn}
+                        onClick={this.handleReleaseQuestionnaire}
+                    />
+                    {this.renderDialog()}
                 </div>
             </div>
         );

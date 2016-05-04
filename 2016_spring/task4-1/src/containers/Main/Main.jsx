@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import styles from "./Main.scss";
 
 function Main({ children }) {
@@ -8,5 +8,9 @@ function Main({ children }) {
         </div>
     );
 }
+
+Main.propTypes = {
+    children: PropTypes.element.isRequired
+};
 
 export default Main;

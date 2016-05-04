@@ -21,10 +21,15 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.handleAddQuestionnaire = this.handleAddQuestionnaire.bind(this);
+        this.handleEditQuestionnaire = this.handleEditQuestionnaire.bind(this);
     }
     handleAddQuestionnaire() {
         const { addQuestionnaire } = this.props.actions;
         addQuestionnaire();
+    }
+    handleEditQuestionnaire(questionnaire) {
+        const { editQuestionnaire } = this.props.actions;
+        return event => editQuestionnaire(questionnaire);
     }
     render() {
         const { questionnaires } = this.props;
@@ -39,13 +44,19 @@ class Home extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {questionnaires.list.map(questionnaire => 
+                    {questionnaires.list.map((questionnaire, questionnaireIndex) => 
                         <tr>
                             <td>{questionnaire.title}</td>
                             <td>{questionnaire.time}</td>
                             <td>{questionnaire.status}</td>
                             <td>
-                                <Link to="/edit"><input type="button" value="编辑" /></Link>
+                                <Link to="/edit">
+                                    <input
+                                        type="button"
+                                        value="编辑"
+                                        onClick={this.handleEditQuestionnaire(questionnaireIndex)}
+                                    />
+                                </Link>
                                 <input type="button" value="删除" />
                                 <Link to="/check"><input type="button" value="查看问卷" /></Link>
                             </td>

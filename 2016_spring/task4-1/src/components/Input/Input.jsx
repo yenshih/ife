@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from "react";
+import classNames from "classnames";
+import styles from "./Input.scss";
 
 class Input extends Component {
     static propTypes = {
@@ -6,7 +8,7 @@ class Input extends Component {
         className: PropTypes.string.isRequired,
         onEdit: PropTypes.func.isRequired,
         onSave: PropTypes.func.isRequired
-    }
+    };
     constructor(props) {
         super(props);
         this.handleEditText = this.handleEditText.bind(this);
@@ -32,7 +34,7 @@ class Input extends Component {
                 ref="input"
                 type="text"
                 value={content}
-                className={className}
+                className={classNames(className, styles.input)}
                 onChange={this.handleEditText}
                 onKeyDown={this.handleSaveText}
                 onBlur={this.handleSaveText}

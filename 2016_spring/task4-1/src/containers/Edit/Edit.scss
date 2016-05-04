@@ -8,6 +8,7 @@
     @include flex-center;
     @include size(90%, 3em);
     margin: 0 auto 1em;
+    font-weight: 700;
     font-size: 100%;
     color: $gray-dark;
     &:hover {
@@ -84,7 +85,7 @@
         }
         .add-option-btn {
             @include flex-center;
-            width: calc(100% - 4.8em);
+            @include size(calc(100% - 4.8em - 2px), calc(1.5em - 4px));
             margin: .25em auto;
             &::before {
                 @include iconfont($add, .8em);
@@ -185,6 +186,28 @@
             @include iconfont($text, .8em, .8em);
         }
     }
+    .enter {
+        height: 0;
+        transform: scale3d(1, 0, 1);
+        opacity: 0;
+        transition: height $edit-transition-timeout, transform $edit-transition-timeout, opacity $edit-transition-timeout;
+    }
+    .enter.enterActive {
+        height: 5em;
+        transform: scale3d(1, 1, 1);
+        opacity: 1;
+    }
+    .leave {
+        height: 5em;
+        transform: scale3d(1, 1, 1);
+        opacity: 1;
+        transition: height $edit-transition-timeout, transform $edit-transition-timeout, opacity $edit-transition-timeout;
+    }
+    .leave.leaveActive {
+        height: 0;
+        transform: scale3d(1, 0, 1);
+        opacity: 0;
+    }
     .add-question-btn {
         @include flex-center;
         height: 5em;
@@ -198,26 +221,6 @@
             padding-right: 1em;
         }
     }
-}
-@keyframes pull-down {
-    from {
-        height: 0;
-        opacity: 0;
-        transform: scaleY(0);
-    }
-}
-@keyframes pull-up {
-    to {
-        height: 0;
-        opacity: 0;
-        transform: scaleY(0);
-    }
-}
-.pull-down {
-    animation: pull-down $edit-pull-duration;
-}
-.pull-up {
-    animation: pull-up $edit-pull-duration;
 }
 .footer {
     margin-top: 2em;

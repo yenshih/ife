@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { SELECT_DATE, SLIDE_CALENDAR, ZOOM_CALENDAR } from "../constants/CalendarActionTypes";
+import * as Types from "../constants/CalendarActionTypes";
 import { LEFT, RIGHT, IN, OUT } from "../constants/CalendarDirectionTypes";
 
 const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()], initialState = {
@@ -7,18 +7,20 @@ const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth()
     end: { year: 2270, month: 11, date: 28 },
     current: { year, month, date },
     selected: { year, month, date },
-    animation: { direction: "", year, month, date, outside: false },
-    display: 0
+    next: { year, month, date },
+    direction: "",
+    display: 0,
+    isOutside: false
 };
 
 const calendar = handleActions({
-    SELECT_DATE(state, action) {
+    [Types.SELECT_DATE](state, action) {
         const { year, month, date, display } = action.payload;
         return Object.assign({}, state, { selected: { year, month, date }, display });
     },
-    SLIDE_CALENDAR(state, action) {
+    [Types.SLIDE_CALENDAR](state, action) {
         const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        const { direction, display, outside } = action.payload;
+        const { direction, display, isOutside } = action.payload;
         let { year, month, date } = action.payload;
         switch (direction) {
             case LEFT: {
@@ -40,14 +42,14 @@ const calendar = handleActions({
                 break;
             }
         }
-        return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
+        return Object.assign({}, state, { next: { year, month, date }, direction, isOutside });
     },
-    ZOOM_CALENDAR(state, action) {
-        const { direction, year, month, date, outside } = action.payload;
+    [Types.ZOOM_CALENDAR](state, action) {
+        const { direction, year, month, date, isOutside } = action.payload;
         switch (direction) {
-            case IN: return Object.assign({}, state, { selected: { year, month, date }, animation : { direction, year, month, date, outside } });
-            case OUT: return Object.assign({}, state, { animation: { direction, year, month, date, outside } });
-            default: return Object.assign({}, state, { animation: { direction: "", year, month, date, outside } });
+            case IN: return Object.assign({}, state, { selected: { year, month, date }, next : { year, month, date }, direction, isOutside });
+            case OUT: return Object.assign({}, state, { next: { year, month, date }, direction, isOutside });
+            default: return Object.assign({}, state, { next: { year, month, date }, direction: "", isOutside });
         }
     }
 }, initialState);

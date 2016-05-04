@@ -9,17 +9,17 @@ class Mask extends Component {
     };
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleLeave = this.handleLeave.bind(this);
     }
-    handleClick() {
-        this.props.onLeave();
+    handleLeave(event) {
+        this.props.onLeave(event);
     }
     renderMask() {
         if (this.props.isVisible) {
             return (
                 <div
                     className={styles.mask}
-                    onClick={this.handleClick}
+                    onClick={this.handleLeave}
                 />
             );
         }
@@ -27,9 +27,9 @@ class Mask extends Component {
     render() {
         return (
             <ReactCSSTransitionGroup
+                transitionName={styles}
                 transitionEnterTimeout={300}
                 transitionLeaveTimeout={300}
-                transitionName={styles}
             >
                 {this.renderMask()}
             </ReactCSSTransitionGroup>

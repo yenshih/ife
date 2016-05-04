@@ -1,0 +1,56 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
+@import "../../styles/mixins/flex-center.scss";
+@import "../../styles/mixins/iconfont.scss";
+
+.dialog {
+    @include size(30em, 15em);
+    position: fixed;
+    overflow: hidden;
+    border: 1px solid $gray;
+    border-radius: .5em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    transform-origin: 0 0;
+    background: $white;
+    .header {
+    	@include flex-center;
+        height: 2.5em;
+        font-weight: 700;
+        color: $gray-dark;
+        background: $gray-lighter;
+        .title {
+        	margin-right: calc(100% - 5em);
+        }
+        .close {
+        	&::before {
+                @include iconfont($remove, 1em);
+            }
+            &:hover {
+            	cursor: pointer;
+            }
+        }
+    }
+}
+@media screen and (max-width: $small-page-max-width) {
+	.dialog {
+		@include size(16em, 8em);
+	}
+}
+@keyframes zoom-in {
+    from {
+        transform: scale3d(.05, .05, 1);
+        opacity: 0;
+    }
+}
+@keyframes zoom-out {
+    to {
+        transform: scale3d(.05, .05, 1);
+        opacity: 0;
+    }
+}
+.enter {
+    animation: zoom-in $dialog-zoom-duration;
+}
+.leave {
+    animation: zoom-out $dialog-zoom-duration;
+}

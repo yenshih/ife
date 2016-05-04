@@ -1,0 +1,1 @@
+export const SWITCH_DIALOG = "SWITCH_DIALOG";

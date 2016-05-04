@@ -3,63 +3,105 @@ import * as Types from "../constants/QuestionnaireActionTypes";
 import { UNRELEASED, RELEASED, CLOSED } from "../constants/QuestionnaireStatusTypes";
 import { RADIO, CHECKBOX, TEXT } from "../constants/QuestionTypes";
 
-const initialState = localStorage.questionnaires || {
-    list: [],
-    editing: {
-        questionnaire: -1,
-        question: -1,
-        option: -1,
-        text: { typing: false, content: "" },
-        time: 0,
-        type: { enter: false, visible: false, leave: false }
-    } // list[i] = { title, time, status, questions = [{ type, title, options = [], content ="", data = [] }] }
+const isArray = array => Object.prototype.toString.call(array) === "[object Array]";
+const isDate = date => Object.prototype.toString.call(date) === "[object Date]";
+
+const cloneObject = (src) => {
+    let tar = new src.constructor();
+    for (let key of Object.keys(src)) {
+        switch (typeof src[key]) {
+            case "number":
+            case "string":
+            case "boolean": tar[key] = src[key]; break;
+            case "object": {
+                switch (true) {
+                    case isArray(key): tar[key] = src[key].slice(0); break;
+                    case isDate(key): tar[key] = new Date(src[key].valueOf()); break;
+                    default: tar[key] = cloneObject(src[key]);
+                }
+                break;
+            }
+        }
+    }
+    return tar;
+};
+
+const list = localStorage.list ? JSON.parse(localStorage.list) : [];
+const initialEditing = {
+    questionnaire: -1,
+    title: "这里是标题",
+    time: 0,
+    questions: [],
+    type: false,
+    question: -1,
+    option: -1,
+    text: { typing: false, content: "" }
+};
+const initialState =  {
+    list,
+    editing: cloneObject(initialEditing)
 };
 
 const questionnaires = handleActions({
     [Types.ADD_QUESTIONNAIRE](state, action) {
-        const { list, editing } = state;
-        list.push({ title: "这里是标题", time: 0, status: UNRELEASED, questions: [] });
-        return Object.assign({}, state, { list, editing: { ...editing, questionnaire: list.length - 1 } });
+        const { list } = state;
+        return Object.assign({}, state, { ...cloneObject(initialEditing), questionnaire: list.length });
     },
     [Types.EDIT_QUESTIONNAIRE](state, action) {
-        return Object.assign({}, state);
+        const { list } = state;
+        const questionnaire = action.payload;
+        const { title, time } = list[questionnaire];
+        const questions = cloneObject(list[questionnaire].questions);
+        const editing = { ...cloneObject(initialEditing), questionnaire, title, time, questions };
+        return Object.assign({}, state, { editing });
     },
     [Types.REMOVE_QUESTIONNAIRE](state, action) {
-        return Object.assign({}, state);
+        const { list } = state;
+        const { questionnaire } = action.payload;
+        list.splice(questionnaire, 1);
+        return Object.assign({}, state, { list });
+    },
+    [Types.SAVE_QUESTIONNAIRE](state, action) {
+        const { list, editing: { questionnaire, title, time, questions } } = state;
+        list[questionnaire] = { title, time, status: UNRELEASED, questions: cloneObject(questions) };
+        localStorage.list = JSON.stringify(list);
+        return Object.assign({}, state, { list });
     },
     [Types.RELEASE_QUESTIONNAIRE](state, action) {
         const { list, editing } = state;
-        list[editing.questionnaire].status = RELEASED;
+        const { questionnaire, title, time, questions } = editing;
+        list[questionnaire] = { title, time, status: RELEASED, questions: questions.slice(0) };
+        return Object.assign({}, state, { list });
     },
     [Types.EDIT_TEXT](state, action) {
-        const { list, editing } = state;
+        const { editing } = state;
         const { content, question, option } = action.payload;
-        if (question !== -1 && option !== -1 && list[editing.questionnaire].questions[question].type === TEXT) {
-            list[editing.questionnaire].questions[question].content = content;
-            return Object.assign({}, state, { list, editing });
+        if (question !== -1 && option !== -1 && editing.questions[question].type === TEXT) {
+            editing.questions[question].content = content;
+            return Object.assign({}, state, { editing });
         }
         else {
             return Object.assign({}, state, { editing: { ...editing, question, option, text: { typing: true, content } } });
         }
     },
     [Types.SAVE_TEXT](state, action) {
-        const { list, editing } = state;
+        const { editing } = state;
         const { questionnaire, question, option } = editing;
         const content = action.payload;
         switch (true) {
-            case question === -1: list[questionnaire].title = content; break;
-            case option === -1: list[questionnaire].questions[question].title = content; break;
-            default: list[questionnaire].questions[question].options[option] = content;
+            case question === -1: editing.title = content; break;
+            case option === -1: editing.questions[question].title = content; break;
+            default: editing.questions[question].options[option] = content;
         }
-        return Object.assign({}, state, { list, editing: { ...editing, question: -1, option: -1, text: { typing: false, content: "" } } });
+        return Object.assign({}, state, { editing: { ...editing, question: -1, option: -1, text: { typing: false, content: "" } } });
     },
     [Types.CHOOSE_TYPE](state, action) {
         const { editing } = state;
-        const { enter, visible, leave } = action.payload;
-        return Object.assign({}, state, { editing: { ...editing, type: { enter, visible, leave } } });
+        const type = editing.type ^ 1;
+        return Object.assign({}, state, { editing: { ...editing, type } });
     },
     [Types.ADD_QUESTION](state, action) {
-        const { list, editing } = state;
+        const { editing } = state;
         const type = action.payload;
         let question;
         switch (type) {
@@ -68,53 +110,53 @@ const questionnaires = handleActions({
             case TEXT: question = { type, title: "文本题", content: "", isRequired: false }; break;
             default: question = {};
         } 
-        list[editing.questionnaire].questions.push(question);
-        return Object.assign({}, state, { list, editing: { ...editing, question: list[editing.questionnaire].questions.length - 1 } });
+        editing.questions.push(question);
+        return Object.assign({}, state, { editing });
     },
     [Types.REMOVE_QUESTION](state, action) {
-        const { list, editing: { questionnaire } } = state;
+        const { editing } = state;
         const question = action.payload;
-        list[questionnaire].questions.splice(question, 1);
-        return Object.assign({}, state, { list });
+        editing.questions.splice(question, 1);
+        return Object.assign({}, state, { editing });
     },
     [Types.SHIFT_QUESTION](state, action) {
-        const { list, editing: { questionnaire } } = state;
+        const { editing } = state;
         const { question, direction } = action.payload;
-        list[questionnaire].questions.splice(question + direction, 0, list[questionnaire].questions.splice(question, 1)[0]);
-        return Object.assign({}, state, { list });
+        editing.questions.splice(question + direction, 0, editing.questions.splice(question, 1)[0]);
+        return Object.assign({}, state, { editing });
     },
     [Types.COPY_QUESTION](state, action) {
-        const { list, editing: { questionnaire } } = state;
+        const { editing } = state;
         const question = action.payload;
-        const copy = Object.assign({}, list[questionnaire].questions[question]);
-        if (list[questionnaire].questions[question].type !== TEXT) {
+        const copy = Object.assign({}, editing.questions[question]);
+        if (editing.questions[question].type !== TEXT) {
             copy.options = copy.options.slice(0);
         }
-        list[questionnaire].questions.splice(question + 1, 0, copy);
-        return Object.assign({}, state, { list });
+        editing.questions.splice(question + 1, 0, copy);
+        return Object.assign({}, state, { editing });
     },
     [Types.ADD_OPTION](state, action) {
-        const { list, editing: { questionnaire } } = state;
+        const { editing } = state;
         const question = action.payload;
-        list[questionnaire].questions[question].options.push(`选项${list[questionnaire].questions[question].options.length + 1}`);
-        return Object.assign({}, state, { list });
+        editing.questions[question].options.push(`选项${editing.questions[question].options.length + 1}`);
+        return Object.assign({}, state, { editing });
     },
     [Types.REMOVE_OPTION](state, action) {
-        const { list, editing: { questionnaire} } = state;
+        const { editing } = state;
         const { question, option } = action.payload;
-        list[questionnaire].questions[question].options.splice(option, 1);
-        return Object.assign({}, state, { list });
+        editing.questions[question].options.splice(option, 1);
+        return Object.assign({}, state, { editing });
     },
     [Types.TOGGLE_REQUIREMENT](state, action) {
-        const { list, editing: { questionnaire } } = state;
+        const { editing } = state;
         const question = action.payload;
-        list[questionnaire].questions[question].isRequired ^= 1;
-        return Object.assign({}, state, { list });
+        editing.questions[question].isRequired ^= 1;
+        return Object.assign({}, state, { editing });
     },
     [Types.SAVE_TIME](state, action) {
         const { editing } = state;
         const { year, month, date } = action.payload;
-        editing.time = new Date(year, month, date).getTime();
+        editing.time = new Date(year, month - 1, date).getTime();
         return Object.assign({}, state, { editing })
     }
 }, initialState);
