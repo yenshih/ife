@@ -4,9 +4,9 @@ import { Mask } from "../";
 import { LEFT, RIGHT, IN, OUT } from "../../constants/CalendarDirectionTypes";
 import styles from "./Calendar.scss";
 
-function testDate(prop) {
-    if (prop.hasOwnProperty("year") && prop.hasOwnProperty("month") && prop.hasOwnProperty("date")) {
-        const { year, month, date } = prop;
+function testDate(props, key, componentName, location, propFullName) {
+    if (props.hasOwnProperty("year") && props.hasOwnProperty("month") && props.hasOwnProperty("date")) {
+        const { year, month, date } = props;
         if (typeof year === "number") {
             const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             if (typeof month === "number" && typeof date === "number" && month >= 1 && month <= 12 && date >= 1 && date <= count[month]) {
@@ -14,7 +14,7 @@ function testDate(prop) {
             }
         }
     }
-    return new Error(`Invalid prop '${prop}' supplied to Calendar. Validation failed.`);
+    return new Error(`Invalid prop '${propFullName}' supplied to ${componentName}. Validation failed.`);
 }
 
 class Calendar extends Component {

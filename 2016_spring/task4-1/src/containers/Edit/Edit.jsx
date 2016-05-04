@@ -9,7 +9,25 @@ import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
 import * as CalendarActions from "../../actions/calendar";
 import { RADIO, CHECKBOX, TEXT } from "../../constants/QuestionTypes";
+import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatusTypes";
 import styles from "./Edit.scss";
+
+const isArray = array => Object.prototype.toString.call(array) === "[object Array]";
+
+const testQuestion = (props, key, componentName, location, propFullName) => {
+    if (!(typeof props.content === "string"
+        && ((props.type === RADIO || props.type === CHECKBOX)
+                && props.options && isArray(props.options) && props.options.every((option) => typeof option === "string")
+            || props.type === TEXT && typeof props.isRequired === "bool"))) {
+        return new Error(`Invalid prop '${propFullName}' supplied to ${componentName}. Validation failed.`);
+    }
+};
+
+const testIndex = (props, propName, componentName) => {
+    if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
+    }
+}
 
 const mapStateToProps = state => ({
     questionnaires: state.questionnaires,
@@ -28,7 +46,44 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class Edit extends Component {
     static propTypes = {
-
+        questionnaires: PropTypes.shape({
+            list: PropTypes.arrayOf(PropTypes.shape({
+                title: PropTypes.string.isRequired,
+                time: PropTypes.number.isRequired,
+                status: PropTypes.oneOf([UNRELEASED, RELEASED, CLOSED]).isRequired,
+                questions: PropTypes.arrayOf(PropTypes.objectOf(testQuestion).isRequired).isRequired
+            })).isRequired,
+            editing: PropTypes.shape({
+                questionnaire: testIndex,
+                title: PropTypes.string.isRequired,
+                time: PropTypes.number.isRequired,
+                questions: PropTypes.arrayOf(PropTypes.objectOf(testQuestion).isRequired).isRequired,
+                type: PropTypes.bool.isRequired,
+                question: testIndex,
+                option: testIndex,
+                text: PropTypes.shape({
+                    typing: PropTypes.bool.isRequired,
+                    content: PropTypes.string.isRequired
+                }).isRequired
+            }).isRequired
+        }).isRequired,
+        dialog: PropTypes.object.isRequired,
+        calendar: PropTypes.object.isRequired,
+        actions: PropTypes.shape({
+            editText: PropTypes.func.isRequired,
+            saveText: PropTypes.func.isRequired,
+            chooseType: PropTypes.func.isRequired,
+            addQuestion: PropTypes.func.isRequired,
+            removeQuestion: PropTypes.func.isRequired,
+            shiftQuestion: PropTypes.func.isRequired,
+            copyQuestion: PropTypes.func.isRequired,
+            addOption: PropTypes.func.isRequired,
+            removeOption: PropTypes.func.isRequired,
+            toggleRequirement: PropTypes.func.isRequired,
+            saveQuestionnaire: PropTypes.func.isRequired,
+            releaseQuestionnaire: PropTypes.func.isRequired,
+            switchDialog: PropTypes.func.isRequired
+        }).isRequired
     };
     constructor(props) {
         super(props);
@@ -130,28 +185,38 @@ class Edit extends Component {
             )
         }
     }
-    renderQuestionTitle(question) {
+    renderQuestionContent(question) {
         const { questionnaires: { list, editing } } = this.props;
         if (editing.text.typing && editing.question === question && editing.option === -1) {
             return (
                 <Input 
                     content={editing.text.content}
-                    className={styles["edit-question-title"]}
+                    className={styles["edit-question-content"]}
                     onEdit={this.handleEditText(editing.question, -1)}
                     onSave={this.handleSaveText}
                 />
             );
         }
         else {
-            const { type, title } = editing.questions[question];
-            return (
-                <div
-                    className={styles["question-title"]}
-                    onClick={type === TEXT ? () => {} : this.handleEditText(question, -1, title)}
-                >
-                    {title}
-                </div>
-            );
+            const { type } = editing.questions[question];
+            if (type === TEXT) {
+                return (
+                    <div className={styles["question-content"]}>
+                        <span>{`${TEXT}题`}</span>
+                    </div>
+                );
+            }
+            else {
+                const { content } = editing.questions[question];
+                return (
+                    <div
+                        className={styles["question-content"]}
+                        onClick={this.handleEditText(question, -1, content)}
+                    >
+                        {content}
+                    </div>
+                );
+            }
         }
     }
     renderOption(question, option) {
@@ -188,7 +253,7 @@ class Edit extends Component {
                 >
                     <div>
                         <span>{`Q${questionIndex + 1}`}</span>
-                        {this.renderQuestionTitle(questionIndex)}
+                        {this.renderQuestionContent(questionIndex)}
                     </div>
                     {question.type !== TEXT ? (
                         <div>

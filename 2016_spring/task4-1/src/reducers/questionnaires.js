@@ -15,7 +15,7 @@ const cloneObject = (src) => {
             case "boolean": tar[key] = src[key]; break;
             case "object": {
                 switch (true) {
-                    case isArray(key): tar[key] = src[key].slice(0); break;
+                    case isArray(key): tar[key] = [...src[key]]; break;
                     case isDate(key): tar[key] = new Date(src[key].valueOf()); break;
                     default: tar[key] = cloneObject(src[key]);
                 }
@@ -45,7 +45,7 @@ const initialState =  {
 const questionnaires = handleActions({
     [Types.ADD_QUESTIONNAIRE](state, action) {
         const { list } = state;
-        return Object.assign({}, state, { ...cloneObject(initialEditing), questionnaire: list.length });
+        return Object.assign({}, state, { editing: { ...cloneObject(initialEditing), questionnaire: list.length } });
     },
     [Types.EDIT_QUESTIONNAIRE](state, action) {
         const { list } = state;
@@ -89,8 +89,8 @@ const questionnaires = handleActions({
         const { questionnaire, question, option } = editing;
         const content = action.payload;
         switch (true) {
-            case question === -1: editing.title = content; break;
-            case option === -1: editing.questions[question].title = content; break;
+            case question === -1: editing.content = content; break;
+            case option === -1: editing.questions[question].content = content; break;
             default: editing.questions[question].options[option] = content;
         }
         return Object.assign({}, state, { editing: { ...editing, question: -1, option: -1, text: { typing: false, content: "" } } });
@@ -105,9 +105,9 @@ const questionnaires = handleActions({
         const type = action.payload;
         let question;
         switch (type) {
-            case RADIO: question = { type, title: "单选题", options: ["选项1", "选项2"] }; break;
-            case CHECKBOX: question = { type, title: "多选题", options: ["选项1", "选项2", "选项3", "选项4"] }; break;
-            case TEXT: question = { type, title: "文本题", content: "", isRequired: false }; break;
+            case RADIO: question = { type, content: "单选题", options: ["选项1", "选项2"] }; break;
+            case CHECKBOX: question = { type, content: "多选题", options: ["选项1", "选项2", "选项3", "选项4"] }; break;
+            case TEXT: question = { type, content: "", isRequired: false }; break;
             default: question = {};
         } 
         editing.questions.push(question);

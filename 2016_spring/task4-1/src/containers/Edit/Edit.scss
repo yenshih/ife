@@ -43,13 +43,13 @@
                 visibility: visible;
             }
         }
-        .question-title,
-        .edit-question-title {
+        .question-content,
+        .edit-question-content {
             @include size(calc(100% - 4.8em), calc(1.5em - 4px));
             display: inline-block;
             margin-left: 1em;
         }
-        .edit-question-title {
+        .edit-question-content {
             margin-left: calc(1em - 2px);
             background: inherit;
         }
