@@ -13,28 +13,28 @@
     transform-origin: 0 0;
     background: $white;
     .header {
-    	@include flex-center;
+        @include flex-center;
         height: 2.5em;
         font-weight: 700;
         color: $gray-dark;
         background: $gray-lighter;
         .title {
-        	margin-right: calc(100% - 5em);
+            margin-right: calc(100% - 5em);
         }
         .close {
-        	&::before {
+            &::before {
                 @include iconfont($remove, 1em);
             }
             &:hover {
-            	cursor: pointer;
+                cursor: pointer;
             }
         }
     }
 }
 @media screen and (max-width: $small-page-max-width) {
-	.dialog {
-		@include size(16em, 8em);
-	}
+    .dialog {
+        @include size(16em, 8em);
+    }
 }
 @keyframes zoom-in {
     from {

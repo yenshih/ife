@@ -4,25 +4,27 @@ import { Mask } from "../";
 import { LEFT, RIGHT, IN, OUT } from "../../constants/CalendarDirectionTypes";
 import styles from "./Calendar.scss";
 
-function testDate(props, key, componentName, location, propFullName) {
-    if (props.hasOwnProperty("year") && props.hasOwnProperty("month") && props.hasOwnProperty("date")) {
+const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
+
+const testDate = (props, key, componentName, location, propFullName) => {
+    let validation = false;
+    if (props.year && props.month && props.date) {
         const { year, month, date } = props;
-        if (typeof year === "number") {
-            const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            if (typeof month === "number" && typeof date === "number" && month >= 1 && month <= 12 && date >= 1 && date <= count[month]) {
-                return;
-            }
+        const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        switch (key) {
+            case "year": validation = isInteger(year); break;
+            case "month": validation = isInteger(month) && month >= 1 && month <= 12; break;
+            case "date": validation = isInteger(date) && date >= 1 && date <= count[month]; break;
         }
     }
-    return new Error(`Invalid prop '${propFullName}' supplied to ${componentName}. Validation failed.`);
+    if (!validation) {
+        return new Error(`Invalid prop '${propFullName}' supplied to ${componentName}. Validation failed.`);
+    }
 }
 
 class Calendar extends Component {
     static propTypes = {
         calendar: PropTypes.shape({
-            begin: PropTypes.objectOf(testDate).isRequired,
-            end: PropTypes.objectOf(testDate).isRequired,
-            current: PropTypes.objectOf(testDate).isRequired,
             selected: PropTypes.objectOf(testDate).isRequired,
             next: PropTypes.objectOf(testDate).isRequired,
             direction: PropTypes.oneOf(["", LEFT, RIGHT, IN, OUT]).isRequired,
@@ -34,7 +36,11 @@ class Calendar extends Component {
             slideCalendar: PropTypes.func.isRequired,
             zoomCalendar: PropTypes.func.isRequired,
             saveTime: PropTypes.func.isRequired
-        }).isRequired
+        }).isRequired,
+        begin: PropTypes.objectOf(testDate).isRequired,
+        end: PropTypes.objectOf(testDate).isRequired,
+        current: PropTypes.objectOf(testDate).isRequired,
+        time: PropTypes.number.isRequired
     };
     constructor(props) {
         super(props);
@@ -45,10 +51,16 @@ class Calendar extends Component {
         this.handleDataClick = this.handleDataClick.bind(this);
         this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
+    componentDidMount() {
+        const { current: { year, month, date }, actions: { selectDate } } = this.props;
+        selectDate(year, month, date, 0);
+    }
     handleShow() {
         const { calendar: { selected: { year, month, date }, display }, actions: { selectDate, saveTime } } = this.props;
-        saveTime(1970, 1, 1);
-        display ? display : selectDate(year, month, date, 1);
+        if (!display) {
+            saveTime(1970, 1, 1);
+            selectDate(year, month, date, 1);
+        }
     }
     handleSave() {
         const { calendar: { selected: { year, month, date }, display }, actions: { selectDate, saveTime } } = this.props;
@@ -126,11 +138,10 @@ class Calendar extends Component {
         }
     }
     isForbidden(direction, display) {
-        const { calendar: {
+        const { calendar: { selected: { year, month, date } },
             begin: { year: beginYear, month: beginMonth, date: beginDate },
-            end: { year: endYear, month: endMonth, date: endDate},
-            selected: { year, month, date }
-        } } = this.props;
+            end: { year: endYear, month: endMonth, date: endDate}
+        } = this.props;
         const count = [, 31, !(year & 3) && ((year % 100) || !(year % 400)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         const begin = new Date(beginYear, beginMonth - 1, beginDate), end = new Date(endYear, endMonth - 1, endDate);
         switch (direction) {
@@ -153,13 +164,12 @@ class Calendar extends Component {
         }
     }
     isHidden(element, display, i, j, isNext) {
-        const { calendar: { 
-            begin: { year: beginYear, month: beginMonth, date: beginDate },
-            end: { year: endYear, month: endMonth, date: endDate },
-            selected: { year: selectedYear, month: selectedMonth },
-            next: { year: nextYear, month: nextMonth },
-            direction, isOutside
-        } } = this.props;
+        const { calendar: {
+                selected: { year: selectedYear, month: selectedMonth },
+                next: { year: nextYear, month: nextMonth }, direction, isOutside
+            }, begin: { year: beginYear, month: beginMonth, date: beginDate },
+            end: { year: endYear, month: endMonth, date: endDate }
+        } = this.props;
         const begin = new Date(beginYear, beginMonth - 1, beginDate), end = new Date(endYear, endMonth - 1, endDate);
         switch (display) {
             case 1: {
@@ -189,10 +199,10 @@ class Calendar extends Component {
     }
     isCurrent(element, display, i, isNext, isNotThisMonth) {
         const { calendar: {
-            current: { year: currentYear, month: currentMonth, date: currentDate },
-            selected: { year: selectedYear, month: selectedMonth },
-            next: { year: nextYear, month: nextMonth }
-        } } = this.props;
+                selected: { year: selectedYear, month: selectedMonth },
+                next: { year: nextYear, month: nextMonth } 
+            }, current: { year: currentYear, month: currentMonth, date: currentDate }
+        } = this.props;
         return display === 1 && element === currentDate && !isNotThisMonth(i, element)
             && (isNext ? nextYear === currentYear && nextMonth === currentMonth
                 : selectedYear === currentYear && selectedMonth === currentMonth);
@@ -435,8 +445,8 @@ class Calendar extends Component {
         }
     }
     render() {
-        const { calendar, time } = this.props;
-        const { current, selected, next, direction, display } = calendar;
+        const { calendar, current, time } = this.props;
+        const { selected, next, direction, display } = calendar;
         const { caption, head, body } = this.getTable(selected, display, false);
         const { caption: nextCaption, head: nextHead, body: nextBody } = this.getNextTable(next, direction, display);
         const isNotThisMonth = this.isNotThisMonth(), isOutsideThisRange = this.isOutsideThisRange();

@@ -1,30 +1,8 @@
 import { handleActions } from "redux-actions";
+import { cloneObject } from "../scripts/util"
 import * as Types from "../constants/QuestionnaireActionTypes";
 import { UNRELEASED, RELEASED, CLOSED } from "../constants/QuestionnaireStatusTypes";
 import { RADIO, CHECKBOX, TEXT } from "../constants/QuestionTypes";
-
-const isArray = array => Object.prototype.toString.call(array) === "[object Array]";
-const isDate = date => Object.prototype.toString.call(date) === "[object Date]";
-
-const cloneObject = (src) => {
-    let tar = new src.constructor();
-    for (let key of Object.keys(src)) {
-        switch (typeof src[key]) {
-            case "number":
-            case "string":
-            case "boolean": tar[key] = src[key]; break;
-            case "object": {
-                switch (true) {
-                    case isArray(key): tar[key] = [...src[key]]; break;
-                    case isDate(key): tar[key] = new Date(src[key].valueOf()); break;
-                    default: tar[key] = cloneObject(src[key]);
-                }
-                break;
-            }
-        }
-    }
-    return tar;
-};
 
 const list = localStorage.list ? JSON.parse(localStorage.list) : [];
 const initialEditing = {
@@ -57,8 +35,9 @@ const questionnaires = handleActions({
     },
     [Types.REMOVE_QUESTIONNAIRE](state, action) {
         const { list } = state;
-        const { questionnaire } = action.payload;
+        const questionnaire = action.payload;
         list.splice(questionnaire, 1);
+        localStorage.list = JSON.stringify(list);
         return Object.assign({}, state, { list });
     },
     [Types.SAVE_QUESTIONNAIRE](state, action) {
@@ -68,10 +47,9 @@ const questionnaires = handleActions({
         return Object.assign({}, state, { list });
     },
     [Types.RELEASE_QUESTIONNAIRE](state, action) {
-        const { list, editing } = state;
-        const { questionnaire, title, time, questions } = editing;
-        list[questionnaire] = { title, time, status: RELEASED, questions: questions.slice(0) };
-        return Object.assign({}, state, { list });
+        const { list, editing: { questionnaire } } = state;
+        list[questionnaire].status = RELEASED;
+        return Object.assign({}, state, { list, editing: cloneObject(initialEditing) });
     },
     [Types.EDIT_TEXT](state, action) {
         const { editing } = state;
@@ -89,7 +67,7 @@ const questionnaires = handleActions({
         const { questionnaire, question, option } = editing;
         const content = action.payload;
         switch (true) {
-            case question === -1: editing.content = content; break;
+            case question === -1: editing.title = content; break;
             case option === -1: editing.questions[question].content = content; break;
             default: editing.questions[question].options[option] = content;
         }
@@ -97,7 +75,7 @@ const questionnaires = handleActions({
     },
     [Types.CHOOSE_TYPE](state, action) {
         const { editing } = state;
-        const type = editing.type ^ 1;
+        const type = !!(editing.type ^ 1);
         return Object.assign({}, state, { editing: { ...editing, type } });
     },
     [Types.ADD_QUESTION](state, action) {
@@ -150,7 +128,7 @@ const questionnaires = handleActions({
     [Types.TOGGLE_REQUIREMENT](state, action) {
         const { editing } = state;
         const question = action.payload;
-        editing.questions[question].isRequired ^= 1;
+        editing.questions[question].isRequired = !!(editing.questions[question].isRequired ^ 1);
         return Object.assign({}, state, { editing });
     },
     [Types.SAVE_TIME](state, action) {

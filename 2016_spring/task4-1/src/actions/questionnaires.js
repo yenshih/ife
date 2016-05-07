@@ -3,7 +3,7 @@ import * as Types from "../constants/QuestionnaireActionTypes";
 
 export const addQuestionnaire = createAction(Types.ADD_QUESTIONNAIRE);
 export const editQuestionnaire = createAction(Types.EDIT_QUESTIONNAIRE, questionnaire => questionnaire);
-export const removeQuestionnaire = createAction(Types.REMOVE_QUESTIONNAIRE);
+export const removeQuestionnaire = createAction(Types.REMOVE_QUESTIONNAIRE, questionnaire => questionnaire);
 export const saveQuestionnaire = createAction(Types.SAVE_QUESTIONNAIRE);
 export const releaseQuestionnaire = createAction(Types.RELEASE_QUESTIONNAIRE);
 export const editText = createAction(Types.EDIT_TEXT, (content, question, option) => ({ content, question, option }));

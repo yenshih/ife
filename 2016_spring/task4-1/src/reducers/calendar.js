@@ -3,9 +3,6 @@ import * as Types from "../constants/CalendarActionTypes";
 import { LEFT, RIGHT, IN, OUT } from "../constants/CalendarDirectionTypes";
 
 const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()], initialState = {
-    begin: { year, month, date },
-    end: { year: 2270, month: 11, date: 28 },
-    current: { year, month, date },
     selected: { year, month, date },
     next: { year, month, date },
     direction: "",

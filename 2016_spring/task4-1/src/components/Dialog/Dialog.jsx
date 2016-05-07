@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component, PropTypes, isValidElement } from "react";
 import classNames from "classnames";
 import { Mask } from "../";
 import styles from "./Dialog.scss";
@@ -6,12 +6,15 @@ import styles from "./Dialog.scss";
 class Dialog extends Component {
     static propTypes = {
         dialog: PropTypes.shape({
-            status: PropTypes.oneOf([0, 1, 2, 3]).isRequired
+            status: PropTypes.oneOf([0, 1, 2, 3]).isRequired,
+            id: PropTypes.string.isRequired
         }).isRequired,
+        id: PropTypes.string.isRequired,
         top: PropTypes.number.isRequired,
         left: PropTypes.number.isRequired,
         onLeave: PropTypes.func.isRequired,
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
+        children: PropTypes.element.isRequired
     };
     constructor(props) {
         super(props);
@@ -33,8 +36,8 @@ class Dialog extends Component {
         }
         return dialogStyle;
     }
-    renderDialog(status) {
-        if (status) {
+    renderDialog(status, id) {
+        if (status && id === this.props.id) {
             const { title, children } = this.props;
             return (
                 <div
@@ -52,20 +55,20 @@ class Dialog extends Component {
                             onClick={this.handleLeave} 
                         />
                     </div>
-                    {children}
+                    {isValidElement(children) && children}
                 </div>
             );
         }
     }
     render() {
-        const { dialog: { status }, onLeave } = this.props;
+        const { dialog: { status, id }, onLeave } = this.props;
         return (
             <div>
                 <Mask
-                    isVisible={!!status}
+                    isVisible={!!(status && id === this.props.id)}
                     onLeave={onLeave}
                 />
-                {this.renderDialog(status)}
+                {this.renderDialog(status, id)}
             </div>
         );
     }

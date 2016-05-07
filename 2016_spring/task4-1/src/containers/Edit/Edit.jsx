@@ -14,12 +14,15 @@ import styles from "./Edit.scss";
 
 const isArray = array => Object.prototype.toString.call(array) === "[object Array]";
 
-const testQuestion = (props, key, componentName, location, propFullName) => {
-    if (!(typeof props.content === "string"
-        && ((props.type === RADIO || props.type === CHECKBOX)
-                && props.options && isArray(props.options) && props.options.every((option) => typeof option === "string")
-            || props.type === TEXT && typeof props.isRequired === "bool"))) {
-        return new Error(`Invalid prop '${propFullName}' supplied to ${componentName}. Validation failed.`);
+const testOptions = (props, propName, componentName) => {
+    if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
+    }
+};
+
+const testIsRequired = (props, propName, componentName) => {
+    if (props.type === TEXT && typeof props.isRequired !== "boolean") {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
 
@@ -27,7 +30,7 @@ const testIndex = (props, propName, componentName) => {
     if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
-}
+};
 
 const mapStateToProps = state => ({
     questionnaires: state.questionnaires,
@@ -51,13 +54,23 @@ class Edit extends Component {
                 title: PropTypes.string.isRequired,
                 time: PropTypes.number.isRequired,
                 status: PropTypes.oneOf([UNRELEASED, RELEASED, CLOSED]).isRequired,
-                questions: PropTypes.arrayOf(PropTypes.objectOf(testQuestion).isRequired).isRequired
+                questions: PropTypes.arrayOf(PropTypes.shape({
+                    content: PropTypes.string.isRequired,
+                    type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
+                    options: testOptions,
+                    isRequired: testIsRequired
+                }).isRequired).isRequired
             })).isRequired,
             editing: PropTypes.shape({
                 questionnaire: testIndex,
                 title: PropTypes.string.isRequired,
                 time: PropTypes.number.isRequired,
-                questions: PropTypes.arrayOf(PropTypes.objectOf(testQuestion).isRequired).isRequired,
+                questions: PropTypes.arrayOf(PropTypes.shape({
+                    content: PropTypes.string.isRequired,
+                    type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
+                    options: testOptions,
+                    isRequired: testIsRequired
+                }).isRequired).isRequired,
                 type: PropTypes.bool.isRequired,
                 question: testIndex,
                 option: testIndex,
@@ -141,23 +154,36 @@ class Edit extends Component {
         const { toggleRequirement } = this.props.actions;
         return event => toggleRequirement(question);
     }
-    handleSaveQuestionnaire() {
-        const { saveQuestionnaire } = this.props.actions;
-        saveQuestionnaire();
+    handleSaveQuestionnaire(event) {
+        const { dialog: { status }, actions: { saveQuestionnaire, switchDialog } } = this.props;
+        const id = "save-btn";
+        if (status ^ 1 && status ^ 3) {
+            if (event.target === this.refs[id]) {
+                saveQuestionnaire();
+                switchDialog(id);
+                setTimeout(() => switchDialog(id), 290);
+            }
+            else if (status === 2) {
+                switchDialog(id);
+                setTimeout(() => switchDialog(id), 290);
+            }
+        }
     }
     handleReleaseQuestionnaire(event) {
-        const { dialog: { status }, actions: { switchDialog, releaseQuestionnaire } } = this.props;
+        const { dialog: { status }, actions: { releaseQuestionnaire, saveQuestionnaire, switchDialog } } = this.props;
+        const id = "release-btn";
         if (status ^ 1 && status ^ 3) {
-            if (event.target === this.refs["release-btn"]) {
-                switchDialog();
-                setTimeout(() => switchDialog(), 300)
+            if (event.target === this.refs[id]) {
+                switchDialog(id);
+                setTimeout(() => switchDialog(id), 290)
             }
             else if (status === 2) {
                 if (event.target === this.refs["confirm-btn"]) {
+                    saveQuestionnaire();
                     releaseQuestionnaire();
                 }
-                switchDialog();
-                setTimeout(() => switchDialog(), 300);
+                switchDialog(id);
+                setTimeout(() => switchDialog(id), 290);
             }
         }
     }
@@ -294,30 +320,26 @@ class Edit extends Component {
                                 })}
                                 onClick={this.handleToggleRequirement(questionIndex)}
                             >
-                                此题是否必填
+                                <span>此题是否必填</span>
                             </div>
                         </div>
                     )}
                     <div className={styles["operation-wrap"]}>
-                        {questionIndex > 0 ? (
+                        {questionIndex > 0 && (
                             <div
                                 className={styles.operation}
                                 onClick={this.handleShiftQuestion(questionIndex, -1)}
                             >
                                 <span>上移</span>
                             </div>
-                        ) : (
-                            <span />
                         )}
-                        {questionIndex < last ? (
+                        {questionIndex < last && (
                             <div
                                 className={styles.operation}
                                 onClick={this.handleShiftQuestion(questionIndex, 1)}
                             >
                                 <span>下移</span>
                             </div>
-                        ) : (
-                            <span />
                         )}
                         <div
                             className={styles.operation}
@@ -353,52 +375,42 @@ class Edit extends Component {
     }
     renderCalendar() {
         const { questionnaires: { editing: { time } }, calendar, actions } = this.props;
+        const now = new Date(), [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()];
         return (
             <Calendar
                 calendar={calendar}
                 actions={actions}
+                begin={{ year, month, date }}
+                end={{ year: 2270, month: 11, date: 28 }}
+                current={{ year, month, date }}
                 time={time}
             />
         );
     }
-    renderDialog() {
-        const { dialog, questionnaires: { editing } } = this.props;
-        const time = new Date(editing.time);
-        const [year, month, date] = [time.getFullYear(), time.getMonth() + 1, time.getDate()];
+    renderDialog(id, onLeave, children) {
+        const { dialog } = this.props;
         let [btnTop, btnLeft] = [0, 0];
-        if (dialog.status) {
-            const { top, right, bottom, left } = this.refs["release-btn"].getBoundingClientRect();
+        if (dialog.status && dialog.id === id) {
+            const { top, right, bottom, left } = this.refs[id].getBoundingClientRect();
             [btnTop, btnLeft] = [top + bottom >> 1, left + right >> 1];
         }
         return (
             <Dialog
                 dialog={dialog}
+                id={id}
                 top={btnTop}
                 left={btnLeft}
-                onLeave={this.handleReleaseQuestionnaire}
+                onLeave={onLeave}
                 title={"提示"}
             >
-                <p>{`是否发布问卷？`}</p>
-                <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
-                <Link to="/" className={styles.link}>
-                    <input
-                        ref="confirm-btn" 
-                        type="button"
-                        value="确定"
-                        className={styles.btn}
-                        onClick={this.handleReleaseQuestionnaire}
-                    />
-                </Link>
-                <input
-                    type="button"
-                    value="取消"
-                    className={styles.btn}
-                    onClick={this.handleReleaseQuestionnaire}
-                />
+                {children}
             </Dialog>
         );
     }
     render() {
+        const { questionnaires: { editing }, actions: { switchDialog } } = this.props;
+        const time = new Date(editing.time);
+        const [year, month, date] = [time.getFullYear(), time.getMonth() + 1, time.getDate()];
         return (
             <div>
                 {this.renderQuestionnaireTitle()}
@@ -409,8 +421,8 @@ class Edit extends Component {
                 <div className={styles["add-question"]}>
                     <ReactCSSTransitionGroup
                         transitionName={styles}
-                        transitionEnterTimeout={300}
-                        transitionLeaveTimeout={300}
+                        transitionEnterTimeout={290}
+                        transitionLeaveTimeout={290}
                     >
                         {this.renderTypes()}
                     </ReactCSSTransitionGroup>
@@ -428,6 +440,7 @@ class Edit extends Component {
                         {this.renderCalendar()}
                     </div>
                     <input
+                        ref="save-btn"
                         type="button"
                         value="保存问卷"
                         className={styles.btn}
@@ -440,7 +453,60 @@ class Edit extends Component {
                         className={styles.btn}
                         onClick={this.handleReleaseQuestionnaire}
                     />
-                    {this.renderDialog()}
+                    {this.renderDialog("save-btn", this.handleSaveQuestionnaire, (
+                        <div className={styles.dialog}>
+                            <div className={styles.hint}>
+                                <p>{`问卷已保存`}</p>
+                            </div>
+                            <div className={styles["btn-wrap"]}>
+                                <input
+                                    type="button"
+                                    value="确定"
+                                    className={styles.btn}
+                                    onClick={this.handleSaveQuestionnaire}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, year === 1970 ? (
+                        <div className={styles.dialog}>
+                            <div className={styles.hint}>
+                                <p>{`请填写问卷截止日期`}</p>
+                            </div>
+                            <div className={styles["btn-wrap"]}>
+                                <input
+                                    type="button"
+                                    value="确定"
+                                    className={styles.btn}
+                                    onClick={this.handleReleaseQuestionnaire}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={styles.dialog}>
+                            <div className={styles.hint}>
+                                <p>{`是否发布问卷？`}</p>
+                                <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
+                            </div>
+                            <div className={styles["btn-wrap"]}>
+                                <Link to="/" className={styles.link}>
+                                    <input
+                                        ref="confirm-btn"
+                                        type="button"
+                                        value="确定"
+                                        className={styles.btn}
+                                        onClick={this.handleReleaseQuestionnaire}
+                                    />
+                                </Link>
+                                <input
+                                    type="button"
+                                    value="取消"
+                                    className={styles.btn}
+                                    onClick={this.handleReleaseQuestionnaire}
+                                />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         );

@@ -1,5 +1,6 @@
 @import "../../styles/variables.scss";
 @import "../../styles/mixins/size.scss";
+@import "../../styles/mixins/button.scss";
 @import "../../styles/mixins/flex-center.scss";
 @import "../../styles/mixins/iconfont.scss";
 
@@ -244,19 +245,22 @@
         color: inherit;
     }
     .btn {
-        @include size(6em, 1.8em);
+        @include button;
         display: inline-block;
         margin: 0 .6em;
-        border: 1px solid $gray;
-        border-radius: .2em;
-        box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
-        color: inherit;
-        cursor: pointer;
-        background: $white;
-        &:hover {
-            border-color: $orange;
-            color: $white;
-            background: $orange;
+    }
+    .dialog {
+        position: relative;
+        width: calc(100% - 5em);
+        height: calc(100% - 7em);
+        margin: 2em auto 2.5em;
+        line-height: 1.5;
+        .btn-wrap {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 100%;
+            transform: translateX(-50%);
         }
     }
 }

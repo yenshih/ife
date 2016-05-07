@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from "react";
-import classNames from "classnames";
-import styles from "./Input.scss";
 
 class Input extends Component {
     static propTypes = {
@@ -34,7 +32,7 @@ class Input extends Component {
                 ref="input"
                 type="text"
                 value={content}
-                className={classNames(className, styles.input)}
+                className={className}
                 onChange={this.handleEditText}
                 onKeyDown={this.handleSaveText}
                 onBlur={this.handleSaveText}
