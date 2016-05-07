@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import { syncHistoryWithStore } from "react-router-redux";
-import { App, Home, Edit } from "./containers";
+import { App, Home, Edit, Fill } from "./containers";
 import configure from "./store/configure";
 
 const store = configure();
@@ -15,6 +15,7 @@ render(
             <Route path="/" component={App}>
                 <IndexRoute component={Home} />
                 <Route path="edit" component={Edit} />
+                <Route path="fill" component={Fill} />
             </Route>
         </Router>
     </Provider>,

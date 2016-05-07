@@ -3,11 +3,31 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
+import { isArray } from "../../scripts/util";
 import { Dialog, Table, Column, SortableTh } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
+import { RADIO, CHECKBOX, TEXT } from "../../constants/QuestionTypes";
 import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatusTypes";
 import styles from "./Home.scss"
+
+const testOptions = (props, propName, componentName) => {
+    if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
+    }
+};
+
+const testIsRequired = (props, propName, componentName) => {
+    if (props.type === TEXT && typeof props.isRequired !== "boolean") {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
+    }
+};
+
+const testIndex = (props, propName, componentName) => {
+    if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
+        return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
+    }
+};
 
 const mapStateToProps = state => ({
     questionnaires: state.questionnaires,
@@ -24,7 +44,57 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class Home extends Component {
     static propTypes = {
-
+        questionnaires: PropTypes.shape({
+            list: PropTypes.arrayOf(PropTypes.shape({
+                title: PropTypes.string.isRequired,
+                time: PropTypes.number.isRequired,
+                status: PropTypes.oneOf([UNRELEASED, RELEASED, CLOSED]).isRequired,
+                questions: PropTypes.arrayOf(PropTypes.shape({
+                    type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
+                    content: PropTypes.string.isRequired,
+                    options: testOptions,
+                    isRequired: testIsRequired
+                }).isRequired).isRequired,
+                data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([
+                    testIndex,
+                    PropTypes.instanceOf(Set),
+                    PropTypes.string
+                ]).isRequired).isRequired).isRequired
+            })).isRequired,
+            editing: PropTypes.shape({
+                questionnaire: testIndex,
+                title: PropTypes.string.isRequired,
+                time: PropTypes.number.isRequired,
+                questions: PropTypes.arrayOf(PropTypes.shape({
+                    content: PropTypes.string.isRequired,
+                    type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
+                    options: testOptions,
+                    isRequired: testIsRequired
+                }).isRequired).isRequired,
+                type: PropTypes.bool.isRequired,
+                question: testIndex,
+                option: testIndex,
+                text: PropTypes.shape({
+                    typing: PropTypes.bool.isRequired,
+                    content: PropTypes.string.isRequired
+                }).isRequired,
+                data: PropTypes.arrayOf(PropTypes.oneOfType([
+                    testIndex,
+                    PropTypes.instanceOf(Set),
+                    PropTypes.string
+                ]).isRequired).isRequired
+            }).isRequired
+        }).isRequired,
+        dialog: PropTypes.shape({
+            status: PropTypes.oneOf([0, 1, 2, 3]).isRequired,
+            id: PropTypes.string.isRequired
+        }).isRequired,
+        actions: PropTypes.shape({
+            addQuestionnaire: PropTypes.func.isRequired,
+            editQuestionnaire: PropTypes.func.isRequired,
+            removeQuestionnaire: PropTypes.func.isRequired,
+            switchDialog: PropTypes.func.isRequired
+        }).isRequired
     };
     constructor(props) {
         super(props);
@@ -65,6 +135,10 @@ class Home extends Component {
                 }
             }
         }
+    }
+    handleFillQuestionnaire(questionnaire) {
+        const { fillQuestionnaire } = this.props.actions;
+        return event => fillQuestionnaire(questionnaire);
     }
     renderDialog(id, onLeave, children) {
         const { dialog } = this.props;
@@ -166,7 +240,7 @@ class Home extends Component {
                                     />
                                     {this.renderDialog(`remove-btn-${rowIndex}`, this.handleRemoveQuestionnaire(rowIndex), (
                                         <div className={styles.dialog}>
-                                            <div className={styles.hint}>
+                                            <div>
                                                 <p>{`确认删除此问卷？`}</p>
                                             </div>
                                             <div className={styles["btn-wrap"]}>
@@ -196,6 +270,7 @@ class Home extends Component {
                                             type="button"
                                             value="填写问卷"
                                             className={styles.btn}
+                                            onClick={this.handleFillQuestionnaire(rowIndex)}
                                         />
                                     </Link>
                                     <Link to="/check" className={styles.link}>

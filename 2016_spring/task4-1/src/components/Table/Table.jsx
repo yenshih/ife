@@ -43,14 +43,14 @@ const renderTds = (columns, data, row, rowIndex) => columns.map((col, colIndex) 
     );
 });
 
-const renderTrs = (columns, data) => data.map((row, rowIndex) => (
+const renderTrs = (columns, data) => data.map((row, rowIndex) =>
     <tr
         key={`tr-${rowIndex}`}
         className={styles["table-tbody-tr"]}
     >
         {renderTds(columns, data, row, rowIndex)}
     </tr>
-));
+);
 
 class Table extends Component {
     static propTypes = {

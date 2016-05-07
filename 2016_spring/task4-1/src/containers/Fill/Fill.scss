@@ -1,0 +1,108 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
+@import "../../styles/mixins/button.scss";
+@import "../../styles/mixins/flex-center.scss";
+@import "../../styles/mixins/iconfont.scss";
+
+.questionnaire-title {
+    @include flex-center;
+    @include size(90%, 3em);
+    margin: 0 auto 1em;
+    font-weight: 700;
+    font-size: 100%;
+    color: $gray-dark;
+    &:hover {
+        background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
+    }
+}
+.line {
+    width: 93.5%;
+    border-top: 2px solid $gray-light;
+    margin: 0 auto;
+}
+.question-wrap {
+    width: 90%;
+    margin: 1.875em auto;
+    font-size: 80%;
+    .question {
+        padding: 1em 1.5em;
+        line-height: 1.5;
+        &:hover {
+            background: $pink;
+            .caption {
+                font-weight: 700;
+            }
+            .text {
+                background: inherit;
+            }
+        }
+        .question-content {
+            @include size(calc(100% - 4.8em), calc(1.5em - 4px));
+            display: inline-block;
+            margin-left: 1em;
+        }
+        .option-wrap {
+            padding-left: 2.4em;
+            &:hover {
+                cursor: pointer;
+                background: linear-gradient(transparent, rgba(0, 0, 0, .05));
+            }
+            .radio-option-icon::before {
+                @include iconfont($radio-option, .8em, 1em);
+            }
+            .radio-icon::before {
+                @include iconfont($radio, .8em, 1em);
+                color: $orange;
+            }
+            .checkbox-option-icon::before {
+                @include iconfont($checkbox-option, .8em, 1em);
+            }
+            .checkbox-icon::before {
+                @include iconfont($checkbox, .8em, 1em);
+                color: $orange;
+            }
+        }
+        .text {
+            @include size(calc(100% - 4.8em), 5em);
+            margin-top: .25em;
+            margin-left: 2.4em;
+        }
+        .hint {
+            margin-left: 2.4em;
+        }
+    }
+}
+.footer {
+    margin-top: 2em;
+    font-size: 80%;
+    text-align: center;
+    color: $gray;
+    .submit-btn {
+        @include button;
+        display: block;
+        margin: 0 auto;
+    }
+    .dialog {
+        position: relative;
+        width: calc(100% - 5em);
+        height: calc(100% - 7em);
+        margin: 2em auto 2.5em;
+        line-height: 1.5;
+        .btn-wrap {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 100%;
+            transform: translateX(-50%);
+            .link {
+                text-decoration: none;
+                color: inherit;
+            }
+            .btn {
+                @include button;
+                display: inline-block;
+                margin: 0 .6em;
+            }
+        }
+    }
+}

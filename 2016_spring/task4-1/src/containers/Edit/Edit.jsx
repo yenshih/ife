@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
+import { isArray } from "../../scripts/util";
 import { Input, Dialog, Calendar } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
@@ -11,8 +12,6 @@ import * as CalendarActions from "../../actions/calendar";
 import { RADIO, CHECKBOX, TEXT } from "../../constants/QuestionTypes";
 import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatusTypes";
 import styles from "./Edit.scss";
-
-const isArray = array => Object.prototype.toString.call(array) === "[object Array]";
 
 const testOptions = (props, propName, componentName) => {
     if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
@@ -55,11 +54,16 @@ class Edit extends Component {
                 time: PropTypes.number.isRequired,
                 status: PropTypes.oneOf([UNRELEASED, RELEASED, CLOSED]).isRequired,
                 questions: PropTypes.arrayOf(PropTypes.shape({
-                    content: PropTypes.string.isRequired,
                     type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
+                    content: PropTypes.string.isRequired,
                     options: testOptions,
                     isRequired: testIsRequired
-                }).isRequired).isRequired
+                }).isRequired).isRequired,
+                data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([
+                    testIndex,
+                    PropTypes.instanceOf(Set),
+                    PropTypes.string
+                ]).isRequired).isRequired).isRequired
             })).isRequired,
             editing: PropTypes.shape({
                 questionnaire: testIndex,
@@ -77,10 +81,18 @@ class Edit extends Component {
                 text: PropTypes.shape({
                     typing: PropTypes.bool.isRequired,
                     content: PropTypes.string.isRequired
-                }).isRequired
+                }).isRequired,
+                data: PropTypes.arrayOf(PropTypes.oneOfType([
+                    testIndex,
+                    PropTypes.instanceOf(Set),
+                    PropTypes.string
+                ]).isRequired).isRequired
             }).isRequired
         }).isRequired,
-        dialog: PropTypes.object.isRequired,
+        dialog: PropTypes.shape({
+            status: PropTypes.oneOf([0, 1, 2, 3]).isRequired,
+            id: PropTypes.string.isRequired
+        }).isRequired,
         calendar: PropTypes.object.isRequired,
         actions: PropTypes.shape({
             editText: PropTypes.func.isRequired,
@@ -188,7 +200,7 @@ class Edit extends Component {
         }
     }
     renderQuestionnaireTitle() {
-        const { questionnaires: { list, editing } } = this.props;
+        const { questionnaires: { editing } } = this.props;
         if (editing.text.typing && editing.question === -1 && editing.option === -1) {
             return (
                 <Input
@@ -212,7 +224,7 @@ class Edit extends Component {
         }
     }
     renderQuestionContent(question) {
-        const { questionnaires: { list, editing } } = this.props;
+        const { questionnaires: { editing } } = this.props;
         if (editing.text.typing && editing.question === question && editing.option === -1) {
             return (
                 <Input 
@@ -246,7 +258,7 @@ class Edit extends Component {
         }
     }
     renderOption(question, option) {
-        const { questionnaires: { list, editing } } = this.props;
+        const { questionnaires: { editing } } = this.props;
         if (editing.text.typing && editing.question === question && editing.option === option) {
             return (
                 <Input
@@ -277,7 +289,7 @@ class Edit extends Component {
                     key={questionIndex}
                     className={styles.question}
                 >
-                    <div>
+                    <div className={styles.caption}>
                         <span>{`Q${questionIndex + 1}`}</span>
                         {this.renderQuestionContent(questionIndex)}
                     </div>
@@ -455,7 +467,7 @@ class Edit extends Component {
                     />
                     {this.renderDialog("save-btn", this.handleSaveQuestionnaire, (
                         <div className={styles.dialog}>
-                            <div className={styles.hint}>
+                            <div>
                                 <p>{`问卷已保存`}</p>
                             </div>
                             <div className={styles["btn-wrap"]}>
@@ -470,7 +482,7 @@ class Edit extends Component {
                     ))}
                     {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, year === 1970 ? (
                         <div className={styles.dialog}>
-                            <div className={styles.hint}>
+                            <div>
                                 <p>{`请填写问卷截止日期`}</p>
                             </div>
                             <div className={styles["btn-wrap"]}>
@@ -484,7 +496,7 @@ class Edit extends Component {
                         </div>
                     ) : (
                         <div className={styles.dialog}>
-                            <div className={styles.hint}>
+                            <div>
                                 <p>{`是否发布问卷？`}</p>
                                 <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
                             </div>

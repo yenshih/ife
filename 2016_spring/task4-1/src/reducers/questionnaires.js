@@ -13,7 +13,8 @@ const initialEditing = {
     type: false,
     question: -1,
     option: -1,
-    text: { typing: false, content: "" }
+    text: { typing: false, content: "" },
+    data: []
 };
 const initialState =  {
     list,
@@ -42,13 +43,32 @@ const questionnaires = handleActions({
     },
     [Types.SAVE_QUESTIONNAIRE](state, action) {
         const { list, editing: { questionnaire, title, time, questions } } = state;
-        list[questionnaire] = { title, time, status: UNRELEASED, questions: cloneObject(questions) };
+        list[questionnaire] = { title, time, status: UNRELEASED, questions: cloneObject(questions), data: [] };
         localStorage.list = JSON.stringify(list);
         return Object.assign({}, state, { list });
     },
     [Types.RELEASE_QUESTIONNAIRE](state, action) {
         const { list, editing: { questionnaire } } = state;
         list[questionnaire].status = RELEASED;
+        localStorage.list = JSON.stringify(list);
+        return Object.assign({}, state, { list, editing: cloneObject(initialEditing) });
+    },
+    [Types.FILL_QUESTIONNAIRE](state, action) {
+        const { list } = state;
+        const questionnaire = action.payload;
+        let data = [];
+        list[questionnaire].questions.forEach((question, questionIndex) => {
+            switch (question.type) {
+                case RADIO: data.push(-1); break;
+                case CHECKBOX: data.push(new Set()); break;
+                case TEXT: data.push(""); break;
+            }
+        });
+        return Object.assign({}, state, { list, editing: { ...cloneObject(initialEditing), questionnaire, data } })
+    },
+    [Types.SUBMIT_QUESTIONNAIRE](state, action) {
+        const { list, editing: { questionnaire, data } } = state;
+        list[questionnaire].data.push(cloneObject(data));
         return Object.assign({}, state, { list, editing: cloneObject(initialEditing) });
     },
     [Types.EDIT_TEXT](state, action) {
@@ -72,6 +92,12 @@ const questionnaires = handleActions({
             default: editing.questions[question].options[option] = content;
         }
         return Object.assign({}, state, { editing: { ...editing, question: -1, option: -1, text: { typing: false, content: "" } } });
+    },
+    [Types.FILL_TEXT](state, action) {
+        const { editing } = state;
+        const { content, question } = action.payload;
+        editing.data[question] = content;
+        return Object.assign({}, state, { editing });
     },
     [Types.CHOOSE_TYPE](state, action) {
         const { editing } = state;
@@ -123,6 +149,18 @@ const questionnaires = handleActions({
         const { editing } = state;
         const { question, option } = action.payload;
         editing.questions[question].options.splice(option, 1);
+        return Object.assign({}, state, { editing });
+    },
+    [Types.CHOOSE_OPTION](state, action) {
+        const { editing } = state;
+        const { question, option } = action.payload;
+        editing.data[question] = option;
+        return Object.assign({}, state, { editing });
+    },
+    [Types.TOGGLE_OPTION](state, action) {
+        const { editing } = state;
+        const { question, option } = action.payload;
+        editing.data[question].has(option) ? editing.data[question].delete(option) : editing.data[question].add(option);
         return Object.assign({}, state, { editing });
     },
     [Types.TOGGLE_REQUIREMENT](state, action) {
