@@ -468,7 +468,7 @@ class Calendar extends Component {
                 />
                 <div
                     className={classNames({
-                        [styles.wrap]: display
+                        [styles["table-wrap"]]: display
                     })}
                 >
                     <table className={styles.table}>

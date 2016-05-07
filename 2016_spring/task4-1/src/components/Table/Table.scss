@@ -4,9 +4,9 @@
     height: 3em;
 }
 .table-tbody-tr {
-	&:hover {
+    &:hover {
         background: $pink;
-	}
+    }
     .table-td {
         height: 3em;
         border-bottom: 1px solid $gray-light;
