@@ -3,7 +3,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
-import { isArray } from "../../scripts/util";
+import { isArray, isInteger } from "../../scripts/util";
 import { Dialog } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
@@ -12,7 +12,8 @@ import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatu
 import styles from "./Fill.scss";
 
 const testOptions = (props, propName, componentName) => {
-    if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
+    if (props.type !== TEXT
+        && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -24,7 +25,7 @@ const testIsRequired = (props, propName, componentName) => {
 };
 
 const testIndex = (props, propName, componentName) => {
-    if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
+    if (!(isInteger(props[propName]) && props[propName] >= -1)) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -57,7 +58,7 @@ class Fill extends Component {
                 }).isRequired).isRequired,
                 data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired).isRequired
             })).isRequired,
@@ -80,7 +81,7 @@ class Fill extends Component {
                 }).isRequired,
                 data: PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired
             }).isRequired
@@ -110,7 +111,7 @@ class Fill extends Component {
                 case RADIO: chooseOption(question, option); break;
                 case CHECKBOX: toggleOption(question, option); break;
             }
-        }
+        };
     }
     handleFillText(question) {
         const { actions: { fillText } } = this.props;
@@ -127,11 +128,26 @@ class Fill extends Component {
             else if (status === 2) {
                 if (event.target === this.refs["confirm-btn"]) {
                     submitQuestionnaire();
+                    switchDialog("");
+                    switchDialog("");
                 }
-                switchDialog(id);
-                setTimeout(() => switchDialog(id), 290);
+                else {
+                    switchDialog(id);
+                    setTimeout(() => switchDialog(id), 290);
+                }
             }
         }
+    }
+    isFilled() {
+        const { questionnaires: { list, editing: { questionnaire, data } } } = this.props;
+        return data.every((datum, questionIndex) => {
+            const question = list[questionnaire].questions[questionIndex];
+            switch (question.type) {
+                case RADIO: return datum ^ -1;
+                case CHECKBOX: return datum.length;
+                case TEXT: return !question.isRequired || datum;
+            }
+        });
     }
     renderDialog(id, onLeave, children) {
         const { dialog } = this.props;
@@ -184,10 +200,14 @@ class Fill extends Component {
                                         >
                                             <span
                                                 className={classNames({
-                                                    [styles["radio-option-icon"]]: question.type === RADIO && data[questionIndex] !== optionIndex,
-                                                    [styles["radio-icon"]]: question.type === RADIO && data[questionIndex] === optionIndex,
-                                                    [styles["checkbox-option-icon"]]: question.type === CHECKBOX && !data[questionIndex].has(optionIndex),
-                                                    [styles["checkbox-icon"]]: question.type === CHECKBOX && data[questionIndex].has(optionIndex)
+                                                    [styles["radio-option-icon"]]: question.type === RADIO
+                                                        && data[questionIndex] !== optionIndex,
+                                                    [styles["radio-icon"]]: question.type === RADIO
+                                                        && data[questionIndex] === optionIndex,
+                                                    [styles["checkbox-option-icon"]]: question.type === CHECKBOX
+                                                        && !data[questionIndex].includes(optionIndex),
+                                                    [styles["checkbox-icon"]]: question.type === CHECKBOX
+                                                        && data[questionIndex].includes(optionIndex)
                                                 })}
                                             />
                                             <span>{option}</span>
@@ -202,11 +222,7 @@ class Fill extends Component {
                                         onChange={this.handleFillText(questionIndex)}
                                     />
                                     <div className={styles.hint}>
-                                        {question.isRequired ? (
-                                            <span>此题为必填</span>
-                                        ) : (
-                                            <span>此题为选填</span>
-                                        )}
+                                        <span>{question.isRequired ? "此题为必填" : "此题为选填"}</span>
                                     </div>
                                 </div>
                             )}
@@ -222,9 +238,9 @@ class Fill extends Component {
                         className={styles["submit-btn"]}
                         onClick={this.handleSubmitQuestionnaire}
                     />
-                    {this.renderDialog("submit-btn", this.handleSubmitQuestionnaire, (
+                    {this.renderDialog("submit-btn", this.handleSubmitQuestionnaire, this.isFilled() ? (
                         <div className={styles.dialog}>
-                            <div className={styles.hint}>
+                            <div>
                                 <p>{`确认提交问卷？`}</p>
                             </div>
                             <div className={styles["btn-wrap"]}>
@@ -245,10 +261,24 @@ class Fill extends Component {
                                 />
                             </div>
                         </div>
+                    ) : (
+                        <div className={styles.dialog}>
+                            <div>
+                                <p>{`请完整填写问卷。`}</p>
+                            </div>
+                            <div className={styles["btn-wrap"]}>
+                                <input
+                                    type="button"
+                                    value="确定"
+                                    className={styles.btn}
+                                    onClick={this.handleSubmitQuestionnaire}
+                                />
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
-        )
+        );
     }
 }
 

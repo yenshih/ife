@@ -6,6 +6,10 @@ export const isArray = isType("Array");
 export const isDate = isType("Date");
 export const isFunction = isType("Function");
 
+export const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
+
+export const removeDuplicates = array => Array.from(new Set(array));
+
 export const cloneObject = (src) => {
     let tar = new src.constructor();
     for (let key of Object.keys(src)) {
@@ -30,4 +34,21 @@ export const mapChildrenToArray = (children) => {
     const array = [];
     Children.forEach(children, child => array.push(child));
     return array;
-}
+};
+
+export const mapHsvToRgb = (h, s, v) => {
+    const i = Math.floor(h * 6);
+    const f = h * 6 - i;
+    const [p, q, t] = [v * (1 - s), v * (1 - f * s), v * (1 - (1 - f) * s)];
+    let [r, g, b] = [0, 0, 0];
+    switch (i) {
+        case 0: [r, g, b] = [v, t, p]; break;
+        case 1: [r, g, b] = [q, v, p]; break;
+        case 2: [r, g, b] = [p, v, t]; break;
+        case 3: [r, g, b] = [p, q, v]; break;
+        case 4: [r, g, b] = [t, p, v]; break;
+        case 5: [r, g, b] = [v, p, q]; break;
+    }
+    [r, g, b] = [r, g, b].map(e => Math.floor(e * 256));
+    return `rgb(${r}, ${g}, ${b})`;
+};

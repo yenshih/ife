@@ -8,6 +8,7 @@ export const saveQuestionnaire = createAction(Types.SAVE_QUESTIONNAIRE);
 export const releaseQuestionnaire = createAction(Types.RELEASE_QUESTIONNAIRE);
 export const fillQuestionnaire = createAction(Types.FILL_QUESTIONNAIRE, questionnaire => questionnaire);
 export const submitQuestionnaire = createAction(Types.SUBMIT_QUESTIONNAIRE);
+export const closeQuestionnaire = createAction(Types.CLOSE_QUESTIONNAIRE, questionnaire => questionnaire);
 export const editText = createAction(Types.EDIT_TEXT, (content, question, option) => ({ content, question, option }));
 export const saveText = createAction(Types.SAVE_TEXT, content => content);
 export const fillText = createAction(Types.FILL_TEXT, (content, question) => ({ content, question }));
@@ -22,3 +23,4 @@ export const chooseOption = createAction(Types.CHOOSE_OPTION, (question, option)
 export const toggleOption = createAction(Types.TOGGLE_OPTION, (question, option) => ({ question, option }));
 export const toggleRequirement = createAction(Types.TOGGLE_REQUIREMENT, question => question);
 export const saveTime = createAction(Types.SAVE_TIME, (year, month, date) => ({ year, month, date }));
+export const checkData = createAction(Types.CHECK_DATA, questionnaire => questionnaire);

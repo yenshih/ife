@@ -1,0 +1,57 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins/size.scss";
+@import "../../styles/mixins/button.scss";
+@import "../../styles/mixins/flex-center.scss";
+@import "../../styles/mixins/iconfont.scss";
+
+.questionnaire-title {
+    @include flex-center;
+    @include size(90%, 3em);
+    margin: 0 auto 1em;
+    font-weight: 700;
+    font-size: 100%;
+    color: $gray-dark;
+    &:hover {
+        background: $pink linear-gradient(rgba(255, 255, 255, .2), transparent);
+    }
+}
+.line {
+    width: 93.5%;
+    border-top: 2px solid $gray-light;
+    margin: 0 auto;
+}
+.statistic {
+    width: 90%;
+    margin: 1.875em auto;
+    font-size: 80%;
+    .question {
+        padding: 1em 1.5em;
+        line-height: 1.5;
+        &:hover {
+            background: $pink;
+            .caption {
+                font-weight: 700;
+            }
+        }
+        .question-content {
+            @include size(calc(100% - 4.8em), calc(1.5em - 4px));
+            display: inline-block;
+            margin-left: 1em;
+        }
+    }
+}
+.footer {
+    margin-top: 2em;
+    font-size: 80%;
+    text-align: center;
+    color: $gray;
+    .link {
+        text-decoration: none;
+        color: inherit;
+    }
+    .back-btn {
+        @include button;
+        display: block;
+        margin: 0 auto;
+    }
+}

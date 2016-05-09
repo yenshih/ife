@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
-import { isArray } from "../../scripts/util";
+import { isArray, isInteger } from "../../scripts/util";
 import { Input, Dialog, Calendar } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
@@ -14,7 +14,8 @@ import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatu
 import styles from "./Edit.scss";
 
 const testOptions = (props, propName, componentName) => {
-    if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
+    if (props.type !== TEXT
+        && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -26,7 +27,7 @@ const testIsRequired = (props, propName, componentName) => {
 };
 
 const testIndex = (props, propName, componentName) => {
-    if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
+    if (!(isInteger(props[propName]) && props[propName] >= -1)) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -61,7 +62,7 @@ class Edit extends Component {
                 }).isRequired).isRequired,
                 data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired).isRequired
             })).isRequired,
@@ -84,7 +85,7 @@ class Edit extends Component {
                 }).isRequired,
                 data: PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired
             }).isRequired
@@ -126,11 +127,11 @@ class Edit extends Component {
         this.handleReleaseQuestionnaire = this.handleReleaseQuestionnaire.bind(this);
     }
     handleEditText(question, option, content) {
-        const { actions: { editText } } = this.props;
+        const { editText } = this.props.actions;
         return event => editText(content || event.target.value, question, option);
     }
     handleSaveText(event) {
-        const { actions: { saveText } } = this.props;
+        const { saveText } = this.props.actions;
         saveText(event.target.value.trim());
     }
     handleChooseType() {
@@ -193,9 +194,13 @@ class Edit extends Component {
                 if (event.target === this.refs["confirm-btn"]) {
                     saveQuestionnaire();
                     releaseQuestionnaire();
+                    switchDialog("");
+                    switchDialog("");
                 }
-                switchDialog(id);
-                setTimeout(() => switchDialog(id), 290);
+                else {
+                    switchDialog(id);
+                    setTimeout(() => switchDialog(id), 290);
+                }
             }
         }
     }
@@ -433,8 +438,8 @@ class Edit extends Component {
                 <div className={styles["add-question"]}>
                     <ReactCSSTransitionGroup
                         transitionName={styles}
-                        transitionEnterTimeout={290}
-                        transitionLeaveTimeout={290}
+                        transitionEnterTimeout={300}
+                        transitionLeaveTimeout={300}
                     >
                         {this.renderTypes()}
                     </ReactCSSTransitionGroup>
@@ -468,7 +473,7 @@ class Edit extends Component {
                     {this.renderDialog("save-btn", this.handleSaveQuestionnaire, (
                         <div className={styles.dialog}>
                             <div>
-                                <p>{`问卷已保存`}</p>
+                                <p>{`问卷已保存。`}</p>
                             </div>
                             <div className={styles["btn-wrap"]}>
                                 <input
@@ -483,7 +488,7 @@ class Edit extends Component {
                     {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, year === 1970 ? (
                         <div className={styles.dialog}>
                             <div>
-                                <p>{`请填写问卷截止日期`}</p>
+                                <p>{`请填写问卷截止日期。`}</p>
                             </div>
                             <div className={styles["btn-wrap"]}>
                                 <input

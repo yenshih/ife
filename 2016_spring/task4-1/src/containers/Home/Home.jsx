@@ -3,7 +3,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import classNames from "classnames";
-import { isArray } from "../../scripts/util";
+import { isArray, isInteger } from "../../scripts/util";
 import { Dialog, Table, Column, SortableTh } from "../../components";
 import * as QuestionnaireActions from "../../actions/questionnaires";
 import * as DialogActions from "../../actions/dialog";
@@ -12,7 +12,8 @@ import { UNRELEASED, RELEASED, CLOSED } from "../../constants/QuestionnaireStatu
 import styles from "./Home.scss"
 
 const testOptions = (props, propName, componentName) => {
-    if (props.type !== TEXT && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
+    if (props.type !== TEXT
+        && !(props.options && isArray(props.options) && props.options.every((option) => typeof option === "string"))) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -24,7 +25,7 @@ const testIsRequired = (props, propName, componentName) => {
 };
 
 const testIndex = (props, propName, componentName) => {
-    if (!(typeof props[propName] === "number" && parseInt(props[propName], 10) === props[propName] && props[propName] >= -1)) {
+    if (!(isInteger(props[propName]) && props[propName] >= -1)) {
         return new Error(`Invalid prop '${propName}' supplied to ${componentName}. Validation failed.`);
     }
 };
@@ -57,7 +58,7 @@ class Home extends Component {
                 }).isRequired).isRequired,
                 data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired).isRequired
             })).isRequired,
@@ -80,7 +81,7 @@ class Home extends Component {
                 }).isRequired,
                 data: PropTypes.arrayOf(PropTypes.oneOfType([
                     testIndex,
-                    PropTypes.instanceOf(Set),
+                    PropTypes.arrayOf(testIndex),
                     PropTypes.string
                 ]).isRequired).isRequired
             }).isRequired
@@ -101,6 +102,14 @@ class Home extends Component {
         this.handleAddQuestionnaire = this.handleAddQuestionnaire.bind(this);
         this.handleEditQuestionnaire = this.handleEditQuestionnaire.bind(this);
         this.handleRemoveQuestionnaire = this.handleRemoveQuestionnaire.bind(this);
+        this.handleCheckData = this.handleCheckData.bind(this);
+    }
+    componentWillMount() {
+        const { questionnaires: { list }, actions: { closeQuestionnaire } } = this.props;
+        const now = new Date().getTime() - 86400000;
+        list.forEach((questionnaire, questionnaireIndex) =>
+            questionnaire.status === RELEASED && questionnaire.time < now && closeQuestionnaire(questionnaireIndex)
+        );
     }
     componentDidMount() {
         this.table = this.refs["table"];
@@ -139,6 +148,10 @@ class Home extends Component {
     handleFillQuestionnaire(questionnaire) {
         const { fillQuestionnaire } = this.props.actions;
         return event => fillQuestionnaire(questionnaire);
+    }
+    handleCheckData(questionnaire) {
+        const { checkData } = this.props.actions;
+        return event => checkData(questionnaire);
     }
     renderDialog(id, onLeave, children) {
         const { dialog } = this.props;
@@ -191,7 +204,7 @@ class Home extends Component {
                         dataKey="status"
                         width="10%"
                         align="center"
-                        td={({ data, row, dataKey, rowIndex, colIndex }) => (
+                        td={({ data, row, dataKey, rowIndex, colIndex }) => 
                             <div
                                 className={classNames({
                                     [styles.released]: row[dataKey] === RELEASED,
@@ -200,14 +213,14 @@ class Home extends Component {
                             >
                                 {row[dataKey]}
                             </div>
-                        )}
+                        }
                     />
                     <Column
                         name="操作"
                         dataKey=""
                         width="40%"
                         align="center"
-                        th={({ name, dataKey, colIndex }) => (
+                        th={({ name, dataKey, colIndex }) =>
                             <div>
                                 <span className={styles["btn-hint"]}>{name}</span>
                                 <Link to="/edit" className={styles.link}>
@@ -219,51 +232,9 @@ class Home extends Component {
                                     />
                                 </Link>
                             </div>
-                        )}
+                        }
                         td={({ data, row, dataKey, rowIndex, colIndex }) => 
-                            row.status === UNRELEASED ? (
-                                <div>
-                                    <Link to="/edit" className={styles.link}>
-                                        <input
-                                            type="button"
-                                            value="编辑问卷"
-                                            className={styles.btn}
-                                            onClick={this.handleEditQuestionnaire(rowIndex)}
-                                        />
-                                    </Link>
-                                    <input
-                                        ref={`remove-btn-${rowIndex}`}
-                                        type="button"
-                                        value="删除问卷"
-                                        className={styles.btn}
-                                        onClick={this.handleRemoveQuestionnaire(rowIndex)}
-                                    />
-                                    {this.renderDialog(`remove-btn-${rowIndex}`, this.handleRemoveQuestionnaire(rowIndex), (
-                                        <div className={styles.dialog}>
-                                            <div>
-                                                <p>{`确认删除此问卷？`}</p>
-                                            </div>
-                                            <div className={styles["btn-wrap"]}>
-                                                <Link to="/" className={styles.link}>
-                                                    <input
-                                                        ref="confirm-btn"
-                                                        type="button"
-                                                        value="确定"
-                                                        className={styles.btn}
-                                                        onClick={this.handleRemoveQuestionnaire(rowIndex)}
-                                                    />
-                                                </Link>
-                                                <input
-                                                    type="button"
-                                                    value="取消"
-                                                    className={styles.btn}
-                                                    onClick={this.handleRemoveQuestionnaire(rowIndex)}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
+                            row.status === RELEASED ? (
                                 <div>
                                     <Link to="/fill" className={styles.link}>
                                         <input
@@ -278,9 +249,65 @@ class Home extends Component {
                                             type="button"
                                             value="查看数据"
                                             className={styles.btn}
+                                            onClick={this.handleCheckData(rowIndex)}
                                         />
                                     </Link>
                                 </div>
+                            ) : (
+                                <div>
+                                    {row.status === UNRELEASED ? (
+	                                    <Link to="/edit" className={styles.link}>
+	                                        <input
+	                                            type="button"
+	                                            value="编辑问卷"
+	                                            className={styles.btn}
+	                                            onClick={this.handleEditQuestionnaire(rowIndex)}
+	                                        />
+	                                    </Link>
+	                                ) : (
+		                                <Link to="/check" className={styles.link}>
+	                                        <input
+	                                            type="button"
+	                                            value="查看数据"
+	                                            className={styles.btn}
+	                                        />
+	                                    </Link>
+	                                )}
+                                    <input
+                                        ref={`remove-btn-${rowIndex}`}
+                                        type="button"
+                                        value="删除问卷"
+                                        className={styles.btn}
+                                        onClick={this.handleRemoveQuestionnaire(rowIndex)}
+                                    />
+                                    {this.renderDialog(`remove-btn-${rowIndex}`,
+                                        this.handleRemoveQuestionnaire(rowIndex), (
+                                            <div className={styles.dialog}>
+                                                <div>
+                                                    <p>{`确认删除此问卷？`}</p>
+                                                </div>
+                                                <div className={styles["btn-wrap"]}>
+                                                    <Link to="/" className={styles.link}>
+                                                        <input
+                                                            ref="confirm-btn"
+                                                            type="button"
+                                                            value="确定"
+                                                            className={styles.btn}
+                                                            onClick={this.handleRemoveQuestionnaire(rowIndex)}
+                                                        />
+                                                    </Link>
+                                                    <input
+                                                        type="button"
+                                                        value="取消"
+                                                        className={styles.btn}
+                                                        onClick={this.handleRemoveQuestionnaire(rowIndex)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+
                             )
                         }
                     />

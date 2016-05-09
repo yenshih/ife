@@ -60,7 +60,7 @@ const questionnaires = handleActions({
         list[questionnaire].questions.forEach((question, questionIndex) => {
             switch (question.type) {
                 case RADIO: data.push(-1); break;
-                case CHECKBOX: data.push(new Set()); break;
+                case CHECKBOX: data.push([]); break;
                 case TEXT: data.push(""); break;
             }
         });
@@ -69,7 +69,15 @@ const questionnaires = handleActions({
     [Types.SUBMIT_QUESTIONNAIRE](state, action) {
         const { list, editing: { questionnaire, data } } = state;
         list[questionnaire].data.push(cloneObject(data));
+        localStorage.list = JSON.stringify(list);
         return Object.assign({}, state, { list, editing: cloneObject(initialEditing) });
+    },
+    [Types.CLOSE_QUESTIONNAIRE](state, action) {
+        const { list } = state;
+        const questionnaire = action.payload;
+        list[questionnaire].status = CLOSED;
+        localStorage.list = JSON.stringify(list);
+        return Object.assign({}, state, { list });
     },
     [Types.EDIT_TEXT](state, action) {
         const { editing } = state;
@@ -160,7 +168,8 @@ const questionnaires = handleActions({
     [Types.TOGGLE_OPTION](state, action) {
         const { editing } = state;
         const { question, option } = action.payload;
-        editing.data[question].has(option) ? editing.data[question].delete(option) : editing.data[question].add(option);
+        const index = editing.data[question].indexOf(option);
+        index ^ -1 ? editing.data[question].splice(index, 1) : editing.data[question].push(option);
         return Object.assign({}, state, { editing });
     },
     [Types.TOGGLE_REQUIREMENT](state, action) {
@@ -174,6 +183,10 @@ const questionnaires = handleActions({
         const { year, month, date } = action.payload;
         editing.time = new Date(year, month - 1, date).getTime();
         return Object.assign({}, state, { editing })
+    },
+    [Types.CHECK_DATA](state, action) {
+        const questionnaire = action.payload;
+        return Object.assign({}, state, { editing: { ...cloneObject(initialEditing), questionnaire } });
     }
 }, initialState);
 

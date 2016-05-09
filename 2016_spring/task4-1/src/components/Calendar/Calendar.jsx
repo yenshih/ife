@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from "react";
 import classNames from "classnames";
+import { isInteger } from "../../scripts/util";
 import { Mask } from "../";
 import { LEFT, RIGHT, IN, OUT } from "../../constants/CalendarDirectionTypes";
 import styles from "./Calendar.scss";
-
-const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
 
 const testDate = (props, key, componentName, location, propFullName) => {
     let validation = false;
