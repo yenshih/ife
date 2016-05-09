@@ -8,8 +8,6 @@ export const isFunction = isType("Function");
 
 export const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
 
-export const removeDuplicates = array => Array.from(new Set(array));
-
 export const cloneObject = (src) => {
     let tar = new src.constructor();
     for (let key of Object.keys(src)) {

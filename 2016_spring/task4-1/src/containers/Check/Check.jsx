@@ -81,15 +81,15 @@ class Check extends Component {
             }).isRequired
         }).isRequired,
         actions: {
-        	checkData: PropTypes.func.isRequired
+            checkData: PropTypes.func.isRequired
         }
     };
     constructor(props) {
-    	super(props);
-    	this.handleBack = this.handleBack.bind(this);
+        super(props);
+        this.handleBack = this.handleBack.bind(this);
     }
     handleBack() {
-    	const { checkData } = this.props.actions;
+        const { checkData } = this.props.actions;
         checkData(-1);
     }
     getColor() {
@@ -173,9 +173,9 @@ class Check extends Component {
                 );
             }
             case TEXT: {
-            	const { content } = question;
-            	const value = "有效回答占比";
-            	const statistic = { name: "文本题", [value]: 0 };
+                const { content } = question;
+                const value = "有效回答占比";
+                const statistic = { name: "文本题", [value]: 0 };
                 data.forEach(answer => answer[questionIndex] && statistic[value]++);
                 const rate = statistic[value] / data.length * 100;
                 statistic[value] = isInteger(rate) ? rate : Number(rate.toFixed(2));

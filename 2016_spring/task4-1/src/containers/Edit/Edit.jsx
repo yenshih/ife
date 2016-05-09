@@ -204,6 +204,12 @@ class Edit extends Component {
             }
         }
     }
+    isLegal() {
+        const { questionnaires: { editing: { title, time, questions } } } = this.props;
+        return title && new Date(time).getFullYear !== 1970 && questions.length && questions.every(question =>
+            question.content && (question.type === TEXT || question.options.length && question.options.every(option => option))
+        );
+    }
     renderQuestionnaireTitle() {
         const { questionnaires: { editing } } = this.props;
         if (editing.text.typing && editing.question === -1 && editing.option === -1) {
@@ -485,21 +491,7 @@ class Edit extends Component {
                             </div>
                         </div>
                     ))}
-                    {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, year === 1970 ? (
-                        <div className={styles.dialog}>
-                            <div>
-                                <p>{`请填写问卷截止日期。`}</p>
-                            </div>
-                            <div className={styles["btn-wrap"]}>
-                                <input
-                                    type="button"
-                                    value="确定"
-                                    className={styles.btn}
-                                    onClick={this.handleReleaseQuestionnaire}
-                                />
-                            </div>
-                        </div>
-                    ) : (
+                    {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, this.isLegal() ? (
                         <div className={styles.dialog}>
                             <div>
                                 <p>{`是否发布问卷？`}</p>
@@ -518,6 +510,20 @@ class Edit extends Component {
                                 <input
                                     type="button"
                                     value="取消"
+                                    className={styles.btn}
+                                    onClick={this.handleReleaseQuestionnaire}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={styles.dialog}>
+                            <div>
+                                <p>{year === 1970 ? `请设置问卷截止日期。` : `请合理设置问卷内容`}</p>
+                            </div>
+                            <div className={styles["btn-wrap"]}>
+                                <input
+                                    type="button"
+                                    value="确定"
                                     className={styles.btn}
                                     onClick={this.handleReleaseQuestionnaire}
                                 />
