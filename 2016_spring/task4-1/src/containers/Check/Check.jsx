@@ -111,7 +111,6 @@ class Check extends Component {
                     const value = isInteger(rate) ? rate : Number(rate.toFixed(2));
                     statistic[optionIndex] = { name: option, value };
                 });
-                console.log(statistic);
                 return (
                     <PieChart
                         width={350}

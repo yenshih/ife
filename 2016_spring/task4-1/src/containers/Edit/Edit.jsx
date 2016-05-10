@@ -207,7 +207,7 @@ class Edit extends Component {
     isLegal() {
         const { questionnaires: { editing: { title, time, questions } } } = this.props;
         return title && new Date(time).getFullYear !== 1970 && questions.length && questions.every(question =>
-            question.content && (question.type === TEXT || question.options.length && question.options.every(option => option))
+            question.content && (question.type === TEXT || question.options.length > 1 && question.options.every(option => option))
         );
     }
     renderQuestionnaireTitle() {
@@ -283,9 +283,7 @@ class Edit extends Component {
         else {
             const content = editing.questions[question].options[option];
             return (
-                <span
-                    onClick={this.handleEditText(question, option, content)}
-                >
+                <span onClick={this.handleEditText(question, option, content)}>
                     {content}
                 </span>
             );
@@ -311,12 +309,10 @@ class Edit extends Component {
                                     key={optionIndex}
                                     className={styles["option-wrap"]}
                                 >
-                                    <span
-                                        className={classNames({
-                                            [styles["radio-option-icon"]]: question.type === RADIO,
-                                            [styles["checkbox-option-icon"]]: question.type === CHECKBOX
-                                        })}
-                                    />
+                                    <span className={classNames({
+                                        [styles["radio-option-icon"]]: question.type === RADIO,
+                                        [styles["checkbox-option-icon"]]: question.type === CHECKBOX
+                                    })} />
                                     {this.renderOption(questionIndex, optionIndex)}
                                     <span
                                         className={styles["remove-option-btn"]}

@@ -1,10 +1,10 @@
 import { Children } from "react";
 
-const isType = type => element => Object.prototype.toString.call(element) === `[object ${type}]`;
+const isInstanceOf = type => element => Object.prototype.toString.call(element) === `[object ${type}]`;
 
-export const isArray = isType("Array");
-export const isDate = isType("Date");
-export const isFunction = isType("Function");
+export const isArray = isInstanceOf("Array");
+export const isDate = isInstanceOf("Date");
+export const isFunction = isInstanceOf("Function");
 
 export const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
 
