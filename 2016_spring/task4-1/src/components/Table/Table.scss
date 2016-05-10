@@ -2,6 +2,9 @@
 
 .table-th {
     height: 3em;
+    &:hover {
+    	background: $pink;
+    }
 }
 .table-tbody-tr {
     &:hover {

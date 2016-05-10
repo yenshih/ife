@@ -6,6 +6,7 @@ export const editQuestionnaire = createAction(Types.EDIT_QUESTIONNAIRE, question
 export const removeQuestionnaire = createAction(Types.REMOVE_QUESTIONNAIRE, questionnaire => questionnaire);
 export const saveQuestionnaire = createAction(Types.SAVE_QUESTIONNAIRE);
 export const releaseQuestionnaire = createAction(Types.RELEASE_QUESTIONNAIRE);
+export const sortQuestionnaire = createAction(Types.SORT_QUESTIONNAIRE, dataKey => dataKey);
 export const fillQuestionnaire = createAction(Types.FILL_QUESTIONNAIRE, questionnaire => questionnaire);
 export const submitQuestionnaire = createAction(Types.SUBMIT_QUESTIONNAIRE);
 export const closeQuestionnaire = createAction(Types.CLOSE_QUESTIONNAIRE, questionnaire => questionnaire);

@@ -94,6 +94,8 @@ class Home extends Component {
             addQuestionnaire: PropTypes.func.isRequired,
             editQuestionnaire: PropTypes.func.isRequired,
             removeQuestionnaire: PropTypes.func.isRequired,
+            sortQuestionnaire: PropTypes.func.isRequired,
+            fillQuestionnaire: PropTypes.func.isRequired,
             switchDialog: PropTypes.func.isRequired
         }).isRequired
     };
@@ -102,6 +104,8 @@ class Home extends Component {
         this.handleAddQuestionnaire = this.handleAddQuestionnaire.bind(this);
         this.handleEditQuestionnaire = this.handleEditQuestionnaire.bind(this);
         this.handleRemoveQuestionnaire = this.handleRemoveQuestionnaire.bind(this);
+        this.handleSortQuestionnaire = this.handleSortQuestionnaire.bind(this);
+        this.handleFillQuestionnaire = this.handleFillQuestionnaire.bind(this);
         this.handleCheckData = this.handleCheckData.bind(this);
     }
     componentWillMount() {
@@ -145,6 +149,10 @@ class Home extends Component {
             }
         }
     }
+    handleSortQuestionnaire(dataKey) {
+        const { sortQuestionnaire } = this.props.actions;
+        return event => sortQuestionnaire(dataKey);
+    }
     handleFillQuestionnaire(questionnaire) {
         const { fillQuestionnaire } = this.props.actions;
         return event => fillQuestionnaire(questionnaire);
@@ -174,12 +182,12 @@ class Home extends Component {
         );
     }
     render() {
-        const { questionnaires } = this.props;
-        return questionnaires.list.length ? (
+        const { questionnaires: { list } } = this.props;
+        return list.length ? (
             <div>
                 <Table
                     ref="table"
-                    data={questionnaires.list}
+                    data={list}
                     className={styles.table}
                 >
                     <Column
@@ -193,6 +201,7 @@ class Home extends Component {
                         dataKey="time"
                         width="20%"
                         align="center"
+                        th={(<SortableTh onSort={this.handleSortQuestionnaire} />)}
                         td={({ data, row, dataKey, rowIndex, colIndex }) => {
                             const time = new Date(row[dataKey]);
                             const [year, month, date] = [time.getFullYear(), time.getMonth() + 1, time.getDate()];
@@ -233,7 +242,7 @@ class Home extends Component {
                                 </Link>
                             </div>
                         }
-                        td={({ data, row, dataKey, rowIndex, colIndex }) => 
+                        td={({ data, row, dataKey, rowIndex, colIndex }) =>
                             row.status === RELEASED ? (
                                 <div>
                                     <Link to="/fill" className={styles.link}>
@@ -307,7 +316,6 @@ class Home extends Component {
                                         )
                                     )}
                                 </div>
-
                             )
                         }
                     />

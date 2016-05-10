@@ -1,24 +1,26 @@
 import React, { Component, PropTypes } from "react";
-import classNames from "classnames";
+import styles from "./SortableTh.scss";
 
 class SortableTh extends Component {
     static propTypes = {
-
+        onSort: PropTypes.func.isRequired
     };
     constructor(props) {
         super(props);
-        handleSort = this.handleSort.bind(this);
+        this.handleSort = this.handleSort.bind(this);
+    }
+    componentDidMount() {
+        const { dataKey, onSort } = this.props;
+        this.onSort = onSort(dataKey);
     }
     handleSort() {
-
+        this.onSort();
     }
     render() {
         const { name } = this.props;
         return (
             <div
-                className={classnaes({
-                    [styles["sortable-th"]]: true
-                })}
+                className={styles.content}
                 onClick={this.handleSort}
             >
                 <span>{name}</span>
@@ -26,3 +28,5 @@ class SortableTh extends Component {
         );
     }
 }
+
+export default SortableTh;

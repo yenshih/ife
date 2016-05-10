@@ -304,7 +304,7 @@ class Edit extends Component {
                     </div>
                     {question.type !== TEXT ? (
                         <div>
-                            {question.options.map((option, optionIndex) => 
+                            {question.options.map((option, optionIndex) =>
                                 <div
                                     key={optionIndex}
                                     className={styles["option-wrap"]}

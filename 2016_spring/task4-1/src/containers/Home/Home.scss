@@ -49,6 +49,13 @@
             font-size: 80%;
         }
     }
+    @media screen and (max-width: $medium-page-max-width) {
+        .btn,
+        .btn-hint,
+        .link {
+            margin: 0;
+        }
+    }
     .dialog {
         position: relative;
         width: calc(100% - 5em);

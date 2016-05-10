@@ -9,6 +9,7 @@ const initialEditing = {
     questionnaire: -1,
     title: "这里是标题",
     time: 0,
+    order: 0,
     questions: [],
     type: false,
     question: -1,
@@ -52,6 +53,13 @@ const questionnaires = handleActions({
         list[questionnaire].status = RELEASED;
         localStorage.list = JSON.stringify(list);
         return Object.assign({}, state, { list, editing: cloneObject(initialEditing) });
+    },
+    [Types.SORT_QUESTIONNAIRE](state, action) {
+        const { list, editing } = state;
+        const dataKey = action.payload;
+        editing.order ^= 1;
+        list.sort((a, b) => (editing.order || -1) * (a[dataKey] - b[dataKey]));
+        return Object.assign({}, state, { list, editing });
     },
     [Types.FILL_QUESTIONNAIRE](state, action) {
         const { list } = state;
