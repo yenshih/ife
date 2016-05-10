@@ -60,6 +60,7 @@ class Check extends Component {
                 questionnaire: testIndex,
                 title: PropTypes.string.isRequired,
                 time: PropTypes.number.isRequired,
+                order: PropTypes.oneOf([0, 1]).isRequired,
                 questions: PropTypes.arrayOf(PropTypes.shape({
                     content: PropTypes.string.isRequired,
                     type: PropTypes.oneOf([RADIO, CHECKBOX, TEXT]).isRequired,
