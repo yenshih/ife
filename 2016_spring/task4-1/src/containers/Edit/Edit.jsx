@@ -207,7 +207,7 @@ class Edit extends Component {
     }
     isLegal() {
         const { questionnaires: { editing: { title, time, questions } } } = this.props;
-        return title && new Date(time).getFullYear !== 1970 && questions.length && questions.every(question =>
+        return title && new Date(time).getFullYear() !== 1970 && questions.length && questions.every(question =>
             question.content && (question.type === TEXT || question.options.length > 1 && question.options.every(option => option))
         );
     }
