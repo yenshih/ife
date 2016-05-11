@@ -26,6 +26,7 @@
                 @include iconfont($remove, 1em);
             }
             &:hover {
+                color: $orange;
                 cursor: pointer;
             }
         }

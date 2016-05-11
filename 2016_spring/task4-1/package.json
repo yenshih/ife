@@ -5,7 +5,7 @@
   "main": "index.jsx",
   "scripts": {
     "dev": "webpack-dev-server -d --history-api-fallback --hot --inline --progress --colors --port 3000",
-    "build": "NODE_ENV=production && webpack --progress --colors"
+    "build": "webpack --progress --colors"
   },
   "repository": {
     "type": "git",
