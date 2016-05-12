@@ -162,28 +162,8 @@ class Home extends Component {
         const { checkData } = this.props.actions;
         return event => checkData(questionnaire);
     }
-    renderDialog(id, onLeave, children) {
-        const { dialog } = this.props;
-        let [btnTop, btnLeft] = [0, 0];
-        if (dialog.status && dialog.id === id) {
-            const { top, right, bottom, left } = this.table.refs[id].getBoundingClientRect();
-            [btnTop, btnLeft] = [top + bottom >> 1, left + right >> 1];
-        }
-        return (
-            <Dialog
-                dialog={dialog}
-                id={id}
-                top={btnTop}
-                left={btnLeft}
-                onLeave={onLeave}
-                title={"提示"}
-            >
-                {children}
-            </Dialog>
-        );
-    }
     render() {
-        const { questionnaires: { list } } = this.props;
+        const { questionnaires: { list }, dialog } = this.props;
         return list.length ? (
             <div>
                 <Table
@@ -290,32 +270,36 @@ class Home extends Component {
                                         className={styles.btn}
                                         onClick={this.handleRemoveQuestionnaire(rowIndex)}
                                     />
-                                    {this.renderDialog(`remove-btn-${rowIndex}`,
-                                        this.handleRemoveQuestionnaire(rowIndex), (
-                                            <div className={styles.dialog}>
-                                                <div>
-                                                    <p>{`确认删除此问卷？`}</p>
-                                                </div>
-                                                <div className={styles["btn-wrap"]}>
-                                                    <Link to="/" className={styles.link}>
-                                                        <input
-                                                            ref="confirm-btn"
-                                                            type="button"
-                                                            value="确定"
-                                                            className={styles.btn}
-                                                            onClick={this.handleRemoveQuestionnaire(rowIndex)}
-                                                        />
-                                                    </Link>
+                                    <Dialog
+                                        dialog={dialog}
+                                        self={this.table || {}}
+                                        id={`remove-btn-${rowIndex}`}
+                                        onLeave={this.handleRemoveQuestionnaire(rowIndex)}
+                                        title={"提示"}
+                                    >
+                                        <div className={styles.dialog}>
+                                            <div>
+                                                <p>{`确认删除此问卷？`}</p>
+                                            </div>
+                                            <div className={styles["btn-wrap"]}>
+                                                <Link to="/" className={styles.link}>
                                                     <input
+                                                        ref="confirm-btn"
                                                         type="button"
-                                                        value="取消"
+                                                        value="确定"
                                                         className={styles.btn}
                                                         onClick={this.handleRemoveQuestionnaire(rowIndex)}
                                                     />
-                                                </div>
+                                                </Link>
+                                                <input
+                                                    type="button"
+                                                    value="取消"
+                                                    className={styles.btn}
+                                                    onClick={this.handleRemoveQuestionnaire(rowIndex)}
+                                                />
                                             </div>
-                                        )
-                                    )}
+                                        </div>
+                                    </Dialog>
                                 </div>
                             )
                         }

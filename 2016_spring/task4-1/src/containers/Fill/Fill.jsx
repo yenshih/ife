@@ -150,28 +150,8 @@ class Fill extends Component {
             }
         });
     }
-    renderDialog(id, onLeave, children) {
-        const { dialog } = this.props;
-        let [btnTop, btnLeft] = [0, 0];
-        if (dialog.status && dialog.id === id) {
-            const { top, right, bottom, left } = this.refs[id].getBoundingClientRect();
-            [btnTop, btnLeft] = [top + bottom >> 1, left + right >> 1];
-        }
-        return (
-            <Dialog
-                dialog={dialog}
-                id={id}
-                top={btnTop}
-                left={btnLeft}
-                onLeave={onLeave}
-                title={"提示"}
-            >
-                {children}
-            </Dialog>
-        );
-    }
     render() {
-        const { questionnaires: { list, editing: { questionnaire, data } } } = this.props;
+        const { questionnaires: { list, editing: { questionnaire, data } }, dialog } = this.props;
         const { title, questions } = list[questionnaire];
         return (
             <div>
@@ -239,44 +219,52 @@ class Fill extends Component {
                         className={styles["submit-btn"]}
                         onClick={this.handleSubmitQuestionnaire}
                     />
-                    {this.renderDialog("submit-btn", this.handleSubmitQuestionnaire, this.isFilled() ? (
-                        <div className={styles.dialog}>
-                            <div>
-                                <p>{`确认提交问卷？`}</p>
-                            </div>
-                            <div className={styles["btn-wrap"]}>
-                                <Link to="/" className={styles.link}>
+                    <Dialog
+                        dialog={dialog}
+                        self={this}
+                        id={"submit-btn"}
+                        onLeave={this.handleSubmitQuestionnaire}
+                        title={"提示"}
+                    >
+                        {this.isFilled() ? (
+                            <div className={styles.dialog}>
+                                <div>
+                                    <p>{`确认提交问卷？`}</p>
+                                </div>
+                                <div className={styles["btn-wrap"]}>
+                                    <Link to="/" className={styles.link}>
+                                        <input
+                                            ref="confirm-btn"
+                                            type="button"
+                                            value="确定"
+                                            className={styles.btn}
+                                            onClick={this.handleSubmitQuestionnaire}
+                                        />
+                                    </Link>
                                     <input
-                                        ref="confirm-btn"
+                                        type="button"
+                                        value="取消"
+                                        className={styles.btn}
+                                        onClick={this.handleSubmitQuestionnaire}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={styles.dialog}>
+                                <div>
+                                    <p>{`请完整填写问卷。`}</p>
+                                </div>
+                                <div className={styles["btn-wrap"]}>
+                                    <input
                                         type="button"
                                         value="确定"
                                         className={styles.btn}
                                         onClick={this.handleSubmitQuestionnaire}
                                     />
-                                </Link>
-                                <input
-                                    type="button"
-                                    value="取消"
-                                    className={styles.btn}
-                                    onClick={this.handleSubmitQuestionnaire}
-                                />
+                                </div>
                             </div>
-                        </div>
-                    ) : (
-                        <div className={styles.dialog}>
-                            <div>
-                                <p>{`请完整填写问卷。`}</p>
-                            </div>
-                            <div className={styles["btn-wrap"]}>
-                                <input
-                                    type="button"
-                                    value="确定"
-                                    className={styles.btn}
-                                    onClick={this.handleSubmitQuestionnaire}
-                                />
-                            </div>
-                        </div>
-                    ))}
+                        )}
+                    </Dialog>
                 </div>
             </div>
         );

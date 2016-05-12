@@ -9,9 +9,8 @@ class Dialog extends Component {
             status: PropTypes.oneOf([0, 1, 2, 3]).isRequired,
             id: PropTypes.string.isRequired
         }).isRequired,
+        self: PropTypes.object.isRequired,
         id: PropTypes.string.isRequired,
-        top: PropTypes.number.isRequired,
-        left: PropTypes.number.isRequired,
         onLeave: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         children: PropTypes.element.isRequired
@@ -20,11 +19,18 @@ class Dialog extends Component {
         super(props);
         this.handleLeave = this.handleLeave.bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        const { dialog, self, id } = nextProps;
+        if (dialog.id === id) {
+            const { top, right, bottom, left } = self.refs[id].getBoundingClientRect();
+            [this.top, this.left] = [top + bottom >> 1, left + right >> 1];            
+        }
+    }
     handleLeave(event) {
         this.props.onLeave(event);
     }
     getDialogStyles(status) {
-        const { top, left } = this.props;
+        const { top, left } = this;
         const dialogStyle = (status && status ^ 2) ? {
             top,
             left,

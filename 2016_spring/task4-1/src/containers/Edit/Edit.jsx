@@ -221,7 +221,7 @@ class Edit extends Component {
                     onEdit={this.handleEditText(-1, -1)}
                     onSave={this.handleSaveText}
                 />
-            )
+            );
         }
         else {
             const title = editing.title;
@@ -232,7 +232,7 @@ class Edit extends Component {
                 >
                     {title}
                 </h1>
-            )
+            );
         }
     }
     renderQuestionContent(question) {
@@ -407,28 +407,8 @@ class Edit extends Component {
             />
         );
     }
-    renderDialog(id, onLeave, children) {
-        const { dialog } = this.props;
-        let [btnTop, btnLeft] = [0, 0];
-        if (dialog.status && dialog.id === id) {
-            const { top, right, bottom, left } = this.refs[id].getBoundingClientRect();
-            [btnTop, btnLeft] = [top + bottom >> 1, left + right >> 1];
-        }
-        return (
-            <Dialog
-                dialog={dialog}
-                id={id}
-                top={btnTop}
-                left={btnLeft}
-                onLeave={onLeave}
-                title={"提示"}
-            >
-                {children}
-            </Dialog>
-        );
-    }
     render() {
-        const { questionnaires: { editing }, actions: { switchDialog } } = this.props;
+        const { questionnaires: { editing }, dialog, actions: { switchDialog } } = this.props;
         const time = new Date(editing.time);
         const [year, month, date] = [time.getFullYear(), time.getMonth() + 1, time.getDate()];
         return (
@@ -473,7 +453,13 @@ class Edit extends Component {
                         className={styles.btn}
                         onClick={this.handleReleaseQuestionnaire}
                     />
-                    {this.renderDialog("save-btn", this.handleSaveQuestionnaire, (
+                    <Dialog
+                        dialog={dialog}
+                        self={this}
+                        id={"save-btn"}
+                        onLeave={this.handleSaveQuestionnaire}
+                        title={"提示"}
+                    >
                         <div className={styles.dialog}>
                             <div>
                                 <p>{`问卷已保存。`}</p>
@@ -487,46 +473,54 @@ class Edit extends Component {
                                 />
                             </div>
                         </div>
-                    ))}
-                    {this.renderDialog("release-btn", this.handleReleaseQuestionnaire, this.isLegal() ? (
-                        <div className={styles.dialog}>
-                            <div>
-                                <p>{`是否发布问卷？`}</p>
-                                <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
-                            </div>
-                            <div className={styles["btn-wrap"]}>
-                                <Link to="/" className={styles.link}>
+                    </Dialog>
+                    <Dialog
+                        dialog={dialog}
+                        self={this}
+                        id={"release-btn"}
+                        onLeave={this.handleReleaseQuestionnaire}
+                        title={"提示"}
+                    >
+                        {this.isLegal() ? (
+                            <div className={styles.dialog}>
+                                <div>
+                                    <p>{`是否发布问卷？`}</p>
+                                    <p>{`（本问卷截止日期为${year}-${month}-${date}）`}</p>
+                                </div>
+                                <div className={styles["btn-wrap"]}>
+                                    <Link to="/" className={styles.link}>
+                                        <input
+                                            ref="confirm-btn"
+                                            type="button"
+                                            value="确定"
+                                            className={styles.btn}
+                                            onClick={this.handleReleaseQuestionnaire}
+                                        />
+                                    </Link>
                                     <input
-                                        ref="confirm-btn"
+                                        type="button"
+                                        value="取消"
+                                        className={styles.btn}
+                                        onClick={this.handleReleaseQuestionnaire}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={styles.dialog}>
+                                <div>
+                                    <p>{year === 1970 ? `请设置问卷截止日期。` : `请合理设置问卷内容`}</p>
+                                </div>
+                                <div className={styles["btn-wrap"]}>
+                                    <input
                                         type="button"
                                         value="确定"
                                         className={styles.btn}
                                         onClick={this.handleReleaseQuestionnaire}
                                     />
-                                </Link>
-                                <input
-                                    type="button"
-                                    value="取消"
-                                    className={styles.btn}
-                                    onClick={this.handleReleaseQuestionnaire}
-                                />
+                                </div>
                             </div>
-                        </div>
-                    ) : (
-                        <div className={styles.dialog}>
-                            <div>
-                                <p>{year === 1970 ? `请设置问卷截止日期。` : `请合理设置问卷内容`}</p>
-                            </div>
-                            <div className={styles["btn-wrap"]}>
-                                <input
-                                    type="button"
-                                    value="确定"
-                                    className={styles.btn}
-                                    onClick={this.handleReleaseQuestionnaire}
-                                />
-                            </div>
-                        </div>
-                    ))}
+                        )}
+                    </Dialog>
                 </div>
             </div>
         );
