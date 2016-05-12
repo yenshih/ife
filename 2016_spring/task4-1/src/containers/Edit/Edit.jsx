@@ -508,7 +508,7 @@ class Edit extends Component {
                         ) : (
                             <div className={styles.dialog}>
                                 <div>
-                                    <p>{year === 1970 ? `请设置问卷截止日期。` : `请合理设置问卷内容`}</p>
+                                    <p>{year === 1970 ? `请设置问卷截止日期。` : `请合理设置问卷内容。`}</p>
                                 </div>
                                 <div className={styles["btn-wrap"]}>
                                     <input
