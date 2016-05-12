@@ -260,6 +260,7 @@ class Home extends Component {
 	                                            type="button"
 	                                            value="查看数据"
 	                                            className={styles.btn}
+                                                onClick={this.handleCheckData(rowIndex)}
 	                                        />
 	                                    </Link>
 	                                )}
