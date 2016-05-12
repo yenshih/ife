@@ -3,8 +3,13 @@
 @import "../../styles/mixins/flex-center.scss";
 
 .header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
     display: flex;
     align-items: center;
+    z-index: 1;
     height: 2.5em;
     font-size: $font-size-base;
     color: $white;

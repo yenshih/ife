@@ -13,6 +13,7 @@
     position: absolute;
     right: 0;
     bottom: 2.25em;
+    z-index: 2;
     width: $calendar-width-base;
     padding: .25em;
     border: 1px solid $gray;
