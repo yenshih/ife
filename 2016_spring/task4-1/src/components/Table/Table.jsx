@@ -1,5 +1,4 @@
 import React, { Component, PropTypes, isValidElement, cloneElement } from "react";
-import { Column } from "../";
 import { isFunction, mapChildrenToArray } from "../../scripts/util";
 import styles from "./Table.scss";
 

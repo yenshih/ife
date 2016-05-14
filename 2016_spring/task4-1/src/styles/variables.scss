@@ -33,3 +33,7 @@ $calendar-zoom-duration:  .5s !default;
 $edit-transition-timeout: .3s !default;
 
 $dialog-zoom-duration:    .3s !default;
+
+$surface-z-index:         2 !default;
+$mask-z-index:            1 !default;
+$background-z-index:      -1 !default;

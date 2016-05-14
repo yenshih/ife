@@ -70,8 +70,7 @@
             .remove-option-btn {
                 display: none;
                 &::before {
-                    @include iconfont($remove, .8em);
-                    padding-left: 1em;
+                    @include iconfont($remove, .8em, 0, 1em);
                 }
                 &:hover {
                     cursor: pointer;
@@ -219,8 +218,7 @@
         background: $gray-lighter;
         cursor: pointer;
         &::before {
-            @include iconfont($add, 1.25em);
-            padding-right: 1em;
+            @include iconfont($add, 1.25em, 1em);
         }
     }
 }

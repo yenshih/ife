@@ -1,8 +1,9 @@
 @import "../variables.scss";
 
-@mixin iconfont($content, $size: $font-size-base, $padding: 0) {
+@mixin iconfont($content, $size: $font-size-base, $padding-right: 0, $padding-left: 0) {
     content: $content;
-    padding-right: $padding;
+    padding-right: $padding-right;
+    padding-left: $padding-left;
     font-family: "iconfont" !important;
     font-size: $size;
     font-style: normal;

@@ -23,7 +23,7 @@ class Dialog extends Component {
         const { dialog, self, id } = nextProps;
         if (dialog.id === id) {
             const { top, right, bottom, left } = self.refs[id].getBoundingClientRect();
-            [this.top, this.left] = [top + bottom >> 1, left + right >> 1];            
+            [this.top, this.left] = [top + bottom >> 1, left + right >> 1];
         }
     }
     handleLeave(event) {

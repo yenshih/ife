@@ -6,7 +6,7 @@
 .dialog {
     @include size(30em, 15em);
     position: fixed;
-    z-index: 2;
+    z-index: $surface-z-index;
     overflow: hidden;
     border: 1px solid $gray;
     border-radius: .5em;
