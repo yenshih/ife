@@ -246,24 +246,24 @@ class Home extends Component {
                             ) : (
                                 <div>
                                     {row.status === UNRELEASED ? (
-	                                    <Link to="/edit" className={styles.link}>
-	                                        <input
-	                                            type="button"
-	                                            value="编辑问卷"
-	                                            className={styles.btn}
-	                                            onClick={this.handleEditQuestionnaire(rowIndex)}
-	                                        />
-	                                    </Link>
-	                                ) : (
-		                                <Link to="/check" className={styles.link}>
-	                                        <input
-	                                            type="button"
-	                                            value="查看数据"
-	                                            className={styles.btn}
+                                        <Link to="/edit" className={styles.link}>
+                                            <input
+                                                type="button"
+                                                value="编辑问卷"
+                                                className={styles.btn}
+                                                onClick={this.handleEditQuestionnaire(rowIndex)}
+                                            />
+                                        </Link>
+                                    ) : (
+                                        <Link to="/check" className={styles.link}>
+                                            <input
+                                                type="button"
+                                                value="查看数据"
+                                                className={styles.btn}
                                                 onClick={this.handleCheckData(rowIndex)}
-	                                        />
-	                                    </Link>
-	                                )}
+                                            />
+                                        </Link>
+                                    )}
                                     <input
                                         ref={`remove-btn-${rowIndex}`}
                                         type="button"
