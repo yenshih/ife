@@ -120,21 +120,11 @@ class Calendar extends Component {
     }
     isNotThisMonth() {
         let memorize = [[], [], [], [], [], []];
-        return (i, date) => {
-            if (memorize[i][date] === undefined) {
-                memorize[i][date] = this.isPrevMonth(i, date) || this.isNextMonth(i, date);
-            }
-            return memorize[i][date];
-        }
+        return (i, date) => memorize[i][date] || (memorize[i][date] = this.isPrevMonth(i, date) || this.isNextMonth(i, date));
     }
     isOutsideThisRange() {
         let memorize = [[], [], []];
-        return (i, j) => {
-            if (memorize[i][j] === undefined) {
-                memorize[i][j] = !i && !j || (i === 2 && j === 3);
-            }
-            return memorize[i][j];
-        }
+        return (i, j) => memorize[i][j] || (memorize[i][j] = !i && !j || (i === 2 && j === 3));
     }
     isForbidden(direction, display) {
         const { calendar: { selected: { year, month, date } },
