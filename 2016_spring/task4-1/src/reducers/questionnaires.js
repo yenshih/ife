@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { cloneObject } from "../scripts/util"
+import { cloneObject } from "../scripts/util";
 import * as Types from "../constants/QuestionnaireActionTypes";
 import { UNRELEASED, RELEASED, CLOSED } from "../constants/QuestionnaireStatusTypes";
 import { RADIO, CHECKBOX, TEXT } from "../constants/QuestionTypes";

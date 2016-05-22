@@ -9,7 +9,7 @@ export const isFunction = isInstanceOf("Function");
 export const isInteger = num => typeof num === "number" && parseInt(num, 10) === num;
 
 export const cloneObject = (src) => {
-    let tar = new src.constructor();
+    let tar = {};
     for (let key of Object.keys(src)) {
         switch (typeof src[key]) {
             case "number":
