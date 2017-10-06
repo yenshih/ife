@@ -17,8 +17,8 @@ export const cloneObject = (src) => {
             case "boolean": tar[key] = src[key]; break;
             case "object": {
                 switch (true) {
-                    case isArray(key): tar[key] = [...src[key]]; break;
-                    case isDate(key): tar[key] = new Date(src[key].valueOf()); break;
+                    case isArray(src[key]): tar[key] = [...src[key]]; break;
+                    case isDate(src[key]): tar[key] = new Date(src[key].valueOf()); break;
                     default: tar[key] = cloneObject(src[key]);
                 }
                 break;
