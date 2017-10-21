@@ -1,60 +1,31 @@
 import RenderDeque from "./render"
 
-const ClassUtil = {
-    addClass(state, index, newClassName) {
-        state[index] += " " + newClassName;
-    },
-    removeClass(state, index, oldClassName) {
-        let pattern = new RegExp("(?:^|\\s*)" + oldClassName);
-        state[index] = state[index].replace(pattern, "");
-    }
-}
-
 const SortDisplay = {
-    *sort(l, r, deque) {
-        let [i, j] = [l, r], n = l + r >> 1, m = deque.data[n];
-        ClassUtil.addClass(deque.state, n, "mid");
-        yield RenderDeque.render(deque);
+    *sort(arr, l, r, compare) {
+        let [i, j] = [l, r], n = l + r >> 1, m = arr[n];
+        yield ["range", i, j];
+        yield ["mid", n];
         do {
-            ClassUtil.addClass(deque.state, i, "iterate");
-            ClassUtil.addClass(deque.state, j, "iterate");
-            yield RenderDeque.render(deque);
-            while (deque.data[i] < m) {
-                ClassUtil.removeClass(deque.state, i, "iterate");
-                i++;
-                ClassUtil.addClass(deque.state, i, "iterate");
-                yield RenderDeque.render(deque);
+            
+            yield ["iterate", i, j];
+            while (compare(arr[i], m) < 0) {
+                yield ["iterate", ++i, j];
             }
-            while (deque.data[j] > m) {
-                ClassUtil.removeClass(deque.state, j, "iterate");
-                j--;
-                ClassUtil.addClass(deque.state, j, "iterate");
-                yield RenderDeque.render(deque);
+            while (compare(arr[j], m) > 0) {
+                yield ["iterate", i, --j];
             }
             if (i <= j) {
-                ClassUtil.addClass(deque.state, i, "swap");
-                ClassUtil.addClass(deque.state, j, "swap");
-                ClassUtil.removeClass(deque.state, i, "iterate");
-                ClassUtil.removeClass(deque.state, j, "iterate");
-                yield RenderDeque.render(deque);
-                [deque.data[i], deque.data[j]] = [deque.data[j], deque.data[i]];
-                [deque.state[i], deque.state[j]] = [deque.state[j], deque.state[i]];
-                yield RenderDeque.render(deque);
-                ClassUtil.removeClass(deque.state, i, "swap");
-                ClassUtil.removeClass(deque.state, j, "swap");
-                i++;
-                j--;
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+                yield ["swap", i++, j--];
             }
         } while (i <= j);
-        deque.state.fill("", l, r + 1);
         if (l < j) {
-            yield *this.sort(l, j, deque);
+            yield *this.sort(arr, l, j, compare);
         }
         if (i < r) {
-            yield *this.sort(i, r, deque);
+            yield *this.sort(arr, i, r, compare);
         }
-        deque.state.fill("", l, r + 1);
-        yield RenderDeque.render(deque);
+        yield ["end", l, r];
     }
 }
 

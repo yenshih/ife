@@ -1,6 +1,6 @@
 export default {
     entry: {
-        index: "./src/scripts/index.jsx"
+        index: "./src/scripts/index.js"
     },
     output: {
         filename: "bundle.js"
